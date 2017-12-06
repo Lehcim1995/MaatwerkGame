@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 /**
  * TODO this
  */
-public class spaceShipTexturesHelper
+public class SpaceShipTexturesHelper
 {
     // Spaceship types
     public static final String GUNSHIPS = "gunships";
@@ -57,9 +57,9 @@ public class spaceShipTexturesHelper
             // Start 22
             {265, 886, 31, 33}, {265, 920, 28, 25}, {265, 945, 22, 25}};
 
-    public spaceShipTexturesHelper()
+    public SpaceShipTexturesHelper()
     {
-        this.ships = new Texture(Gdx.files.local("/core/assets/textures/spaceships.png")); // TODO make this use a static string
+        this.ships = new Texture(Gdx.files.internal("/core/assets/textures/spaceships.png")); // TODO make this use a static string
     }
 
     /*
