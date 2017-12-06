@@ -1,4 +1,4 @@
-package classes.gameObjects;
+package classes.gameobjects;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -9,16 +9,15 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import interfaces.IGameObject;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
 
-public class GameObject implements IGameObject, Serializable
+public abstract class GameObject implements IGameObject, Serializable
 {
-    private static float CollisionDistance = 1000;
-    private static float CollisionStayTime = 5; // in millisecs
+    private static float COLLISIONDISTANCE = 1000;
+    private static float COLLISIONSTAYTIME = 5; // in millisecs
 
     protected Vector2 position;
     protected float rotation;
@@ -65,7 +64,7 @@ public class GameObject implements IGameObject, Serializable
      * @param size Hit range
      * @return returns defaulthitbox using the pararm's size
      */
-    public static final Vector2[] defaultHitbox(float size)
+    public static Vector2[] defaultHitbox(float size)
     {
         return defaultHitbox(size, size);
     }
@@ -76,7 +75,7 @@ public class GameObject implements IGameObject, Serializable
      * @param size Hit range
      * @return returns default cercle hitbox using the pararm's size
      */
-    public static final Vector2[] circleHitbox(float size)
+    public static Vector2[] circleHitbox(float size)
     {
         return circleHitbox(size, 18);
     }
@@ -88,7 +87,7 @@ public class GameObject implements IGameObject, Serializable
      * @param vertices Vertices
      * @return returns default cercle hitbox using the pararm's size and vertices
      */
-    public static final Vector2[] circleHitbox(float size, int vertices)
+    public static Vector2[] circleHitbox(float size, int vertices)
     {
         Vector2[] vList = new Vector2[vertices];
         double rad = Math.toRadians((double) 360 / vertices);
@@ -112,7 +111,7 @@ public class GameObject implements IGameObject, Serializable
      * @param width  Width of the vector
      * @return returns Vector2 array of given params
      */
-    public static final Vector2[] defaultHitbox(float height, float width)
+    public static Vector2[] defaultHitbox(float height, float width)
     {
         float y = height / 2;
         float x = width / 2;
@@ -139,7 +138,7 @@ public class GameObject implements IGameObject, Serializable
     public void setHitbox(Polygon hitbox)
     {
         this.hitbox = hitbox;
-    }
+    } // TODO remove or change
 
     /**
      * Converts Vector2 Array to Polygon
@@ -168,10 +167,10 @@ public class GameObject implements IGameObject, Serializable
     public void setOrigin(Vector2 origin)
     {
         hitbox.setOrigin(origin.x, origin.y);
-    }
+    } // TODO remove
 
     @Override
-    public boolean isHit(IGameObject go)
+    public boolean isHit(IGameObject go) // TODO remove
     {
         Vector2 other = new Vector2();
         other.x = go.getHitbox().getX();
@@ -179,7 +178,7 @@ public class GameObject implements IGameObject, Serializable
 
         float dis = position.dst(other);
 
-        return !(dis > CollisionDistance) && isOverlap(hitbox, go.getHitbox());
+        return !(dis > COLLISIONDISTANCE) && isOverlap(hitbox, go.getHitbox());
     }
 
     @Override
@@ -362,16 +361,19 @@ public class GameObject implements IGameObject, Serializable
         font.draw(batch, layout, position.x, position.y);
     }
 
-    public IGameObject Instantiate(IGameObject template)
-    {
-        throw new NotImplementedException();
-    }
-
+    /**
+     *
+     * @return
+     */
     public Sprite getSprite()
     {
         return sprite;
     }
 
+    /**
+     *
+     * @param sprite
+     */
     public void setSprite(Sprite sprite)
     {
         this.sprite = sprite;
