@@ -1,5 +1,6 @@
-package Classes.Managers;
+package classes.managers;
 
 public class WorldManager
 {
+
 }

@@ -13,6 +13,8 @@ public class DesktopLauncher {
         // Game name
         // etc
 
+        config.title = "SpaceGame";
+
 		new LwjglApplication(new Main(), config);
 	}
 }
