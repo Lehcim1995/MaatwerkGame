@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import interfaces.IGameObject;
 
 import java.io.Serializable;
@@ -19,6 +20,7 @@ public abstract class GameObject implements IGameObject, Serializable
     private static float COLLISIONDISTANCE = 1000;
     private static float COLLISIONSTAYTIME = 5; // in millisecs
 
+    protected Fixture fixture;
     protected Vector2 position;
     protected float rotation;
     protected Polygon hitbox;
@@ -30,32 +32,7 @@ public abstract class GameObject implements IGameObject, Serializable
         id = this.hashCode();
         position = new Vector2();
         rotation = 0;
-        hitbox = VerticisToPolygon(circleHitbox(5));
-    }
-
-    protected GameObject(Vector2 position, float rotation, Polygon hitbox)
-    {
-        id = this.hashCode();
-        this.position = position;
-        this.rotation = rotation;
-        this.hitbox = hitbox;
-    }
-
-    protected GameObject(Vector2 position, float rotation)
-    {
-        id = this.hashCode();
-        this.position = position;
-        this.rotation = rotation;
-        setHitbox(defaultHitbox(10));
-    }
-
-    protected GameObject(Vector2 position, float rotation, Sprite sprite)
-    {
-        id = this.hashCode();
-        this.position = position;
-        this.rotation = rotation;
-        this.sprite = sprite;
-        this.sprite.setPosition(position.x, position.y);
+        hitbox = verticisToPolygon(circleHitbox(5));
     }
 
     /**
@@ -131,7 +108,7 @@ public abstract class GameObject implements IGameObject, Serializable
 
     public void setHitbox(Vector2[] verticis)
     {
-        hitbox = VerticisToPolygon(verticis);
+        hitbox = verticisToPolygon(verticis);
         hitbox.setOrigin(0, 0);
     }
 
@@ -146,7 +123,7 @@ public abstract class GameObject implements IGameObject, Serializable
      * @param vertices Vector2 vertices array
      * @return Polygon
      */
-    public Polygon VerticisToPolygon(Vector2[] vertices)
+    public Polygon verticisToPolygon(Vector2[] vertices)
     {
         if (vertices.length < 3)
         {
@@ -178,7 +155,7 @@ public abstract class GameObject implements IGameObject, Serializable
 
         float dis = position.dst(other);
 
-        return !(dis > COLLISIONDISTANCE) && isOverlap(hitbox, go.getHitbox());
+        return (dis <= COLLISIONDISTANCE) && isOverlap(hitbox, go.getHitbox());
     }
 
     @Override
