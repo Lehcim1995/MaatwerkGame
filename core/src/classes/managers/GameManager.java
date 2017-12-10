@@ -17,7 +17,7 @@ public class GameManager
         accumulator += frameTime;
         while (accumulator >= TIME_STEP)
         {
-            worldManager.getWorld().step(TIME_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
+            worldManager.world.step(TIME_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 
             accumulator -= TIME_STEP;
         }

@@ -3,23 +3,21 @@ package classes.managers;
 import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.physics.box2d.World;
 
+import static classes.Constants.GRAVITY;
+
 public class WorldManager
 {
-    private World world;
+    public World world;
 
-    private WorldManager(World world)
+    public WorldManager()
     {
         Box2D.init();
-        this.world = world;
+        world = new World(GRAVITY, false);
     }
 
-    public World getWorld()
+    public WorldManager(World world)
     {
-        return world;
-    }
-
-    public void setWorld(World world)
-    {
+        Box2D.init();
         this.world = world;
     }
 
@@ -29,6 +27,7 @@ public class WorldManager
         {
             world.dispose();
         }
-        // TODO add new world
+
+        world = new World(GRAVITY, false);
     }
 }

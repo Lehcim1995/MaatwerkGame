@@ -1,46 +1,27 @@
 package classes.gameobjects.playable;
 
-import classes.gameobjects.unplayble.Projectile;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
-import com.killer.app.KillerAppGame;
+import com.school.spacegame.Main;
 
 public class SpaceShip extends Ship
 {
 
-    private KillerAppGame killerAppGame;
-
-    protected SpaceShip()
-    {
-        super();
-    }
-
-    protected SpaceShip(Vector2 position, float rotation, Polygon hitbox)
-    {
-        super(position, rotation, hitbox);
-    }
-
-    protected SpaceShip(Vector2 position, float rotation)
-    {
-        super(position, rotation);
-    }
+    private Main main;
 
     public SpaceShip(Vector2 position, float rotation, Sprite sprite)
     {
-        super(position, rotation, sprite);
         setDefaults();
     }
 
-    public SpaceShip(Vector2 position, float rotation, Sprite sprite, KillerAppGame killerAppGame)
+    public SpaceShip(Vector2 position, float rotation, Sprite sprite, Main main)
     {
-        super(position, rotation, sprite);
-        this.killerAppGame = killerAppGame;
+        this.main = main;
         mass = sprite.getHeight() * sprite.getWidth();
         mass /= 10;
         setDefaults();
@@ -73,11 +54,11 @@ public class SpaceShip extends Ship
     {
         super.update();
 
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE))
-        {
-            Projectile projectile = new Projectile(new Vector2(position), rotation, 10000);
-            killerAppGame.addProjectile(projectile);
-        }
+//        if (Gdx.input.isKeyPressed(Input.Keys.SPACE))
+//        {
+//            Projectile projectile = new Projectile(new Vector2(position), rotation, 10000);
+//            main.addProjectile(projectile);
+//        }
 
         if (Gdx.input.isKeyPressed(Input.Keys.A))
         {
