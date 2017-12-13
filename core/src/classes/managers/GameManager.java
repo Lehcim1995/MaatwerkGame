@@ -23,7 +23,7 @@ public class GameManager
 
     public void update(float deltaTime)
     {
-
+        doPhysicsStep(deltaTime);
     }
 
     public void draw(float deltaTime)

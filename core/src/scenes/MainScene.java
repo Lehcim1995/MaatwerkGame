@@ -7,7 +7,7 @@ public class MainScene implements Screen
     @Override
     public void show()
     {
-
+        // init
     }
 
     @Override
