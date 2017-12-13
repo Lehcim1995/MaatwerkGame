@@ -1,5 +1,7 @@
 package classes.managers;
 
+import com.badlogic.gdx.Gdx;
+
 import static classes.Constants.*;
 
 public class GameManager
@@ -8,6 +10,26 @@ public class GameManager
     private SpaceShipTexturesHelper spaceShipTexturesHelper;
     private SceneManager sceneManager;
     private float accumulator;
+
+    public void update()
+    {
+        update(Gdx.graphics.getDeltaTime());
+    }
+
+    public void draw()
+    {
+        draw(Gdx.graphics.getDeltaTime());
+    }
+
+    public void update(float deltaTime)
+    {
+
+    }
+
+    public void draw(float deltaTime)
+    {
+
+    }
 
     private void doPhysicsStep(float deltaTime)
     {
@@ -22,5 +44,4 @@ public class GameManager
             accumulator -= TIME_STEP;
         }
     }
-
 }
