@@ -106,16 +106,16 @@ public abstract class GameObject implements IGameObject, Serializable
         return hitbox;
     }
 
+    public void setHitbox(Polygon hitbox)
+    {
+        this.hitbox = hitbox;
+    } // TODO remove or change
+
     public void setHitbox(Vector2[] verticis)
     {
         hitbox = verticisToPolygon(verticis);
         hitbox.setOrigin(0, 0);
     }
-
-    public void setHitbox(Polygon hitbox)
-    {
-        this.hitbox = hitbox;
-    } // TODO remove or change
 
     /**
      * Converts Vector2 Array to Polygon
@@ -339,7 +339,6 @@ public abstract class GameObject implements IGameObject, Serializable
     }
 
     /**
-     *
      * @return
      */
     public Sprite getSprite()
@@ -348,7 +347,6 @@ public abstract class GameObject implements IGameObject, Serializable
     }
 
     /**
-     *
      * @param sprite
      */
     public void setSprite(Sprite sprite)

@@ -129,7 +129,7 @@ public class Database implements IDatabase
 
     /**
      * @param preparedStatement The prepared statement that you want to escape
-     * @param arguments The arguments that you want to add to the statement
+     * @param arguments         The arguments that you want to add to the statement
      * @throws SQLException A SQLException
      */
     private void escapeSQL(PreparedStatement preparedStatement, Object... arguments) throws SQLException
@@ -157,12 +157,13 @@ public class Database implements IDatabase
     /**
      * reusable database function
      *
-     * @param sql The sql query
+     * @param sql            The sql query
      * @param returnFunction the function for query to restore the data
      * @return A list of objects of the specified object
      * @throws SQLException A SQLException
      */
-    public <T> List<T> getFromDatabase(String sql, DatabaseReturn<T> returnFunction, Object... arguments) throws SQLException
+    public <T> List<T> getFromDatabase(String sql, DatabaseReturn<T> returnFunction, Object... arguments)
+    throws SQLException
     {
         ArrayList<T> objList = new ArrayList<>();
 
@@ -210,8 +211,7 @@ public class Database implements IDatabase
 
     private boolean databaseConnection(String connection) throws SQLException
     {
-        @Nullable
-        Connection conn = null;
+        @Nullable Connection conn = null;
         Statement sta = null;
         try
         {

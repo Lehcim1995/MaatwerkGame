@@ -8,12 +8,13 @@ public interface IDatabase
     /**
      * reusable database function
      *
-     * @param sql The sql query
+     * @param sql            The sql query
      * @param returnFunction the function for query to restore the data
      * @return A list of objects of the specified object
      * @throws SQLException A SQLException
      */
-    <T> List<T> getFromDatabase(String sql, Database.DatabaseReturn<T> returnFunction, Object... arguments) throws SQLException;
+    <T> List<T> getFromDatabase(String sql, Database.DatabaseReturn<T> returnFunction, Object... arguments)
+    throws SQLException;
 
     /**
      * Makes a save SQL statement and executes it

@@ -9,55 +9,46 @@ import com.badlogic.gdx.math.Vector2;
 public interface IGameObject
 {
     /**
-     *
      * @return
      */
     Vector2 getPosition();
 
     /**
-     *
      * @param pos
      */
     void setPosition(Vector2 pos);
 
     /**
-     *
      * @param translate
      */
     void translate(Vector2 translate);
 
     /**
-     *
      * @return
      */
     float getRotation();
 
     /**
-     *
      * @param rot
      */
     void setRotation(float rot);
 
     /**
-     *
      * @param rot
      */
     void addRotation(float rot);
 
     /**
-     *
      * @param Other
      */
     void onCollisionEnter(IGameObject Other);
 
     /**
-     *
      * @param Other
      */
     void onCollisionExit(IGameObject Other);
 
     /**
-     *
      * @param Other
      */
     void onCollisionStay(IGameObject Other);
@@ -68,39 +59,33 @@ public interface IGameObject
     void update();
 
     /**
-     *
      * @param shapeRenderer
      */
     void Draw(ShapeRenderer shapeRenderer);
 
     /**
-     *
      * @param batch
      */
     void Draw(Batch batch);
 
     /**
-     *
      * @param shapeRenderer
      * @param batch
      */
     void Draw(ShapeRenderer shapeRenderer, Batch batch);
 
     /**
-     *
      * @param go2
      * @return
      */
     boolean isHit(IGameObject go2);
 
     /**
-     *
      * @return
      */
     long getID();
 
     /**
-     *
      * @return
      */
     Polygon getHitbox();
