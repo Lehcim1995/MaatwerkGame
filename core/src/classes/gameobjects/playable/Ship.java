@@ -1,10 +1,8 @@
 package classes.gameobjects.playable;
 
 import classes.gameobjects.GameObject;
-import classes.gameobjects.unplayble.Projectile;
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
-import interfaces.IGameObject;
 
 public class Ship extends GameObject
 {
@@ -19,42 +17,16 @@ public class Ship extends GameObject
     protected Vector2 currentSpeedVector;
 
     @Override
-    public void onCollisionEnter(IGameObject other)
+    public void update()
     {
-        if (other instanceof Ship)
-        {
-            //TODO fix slow method
+        this.position = fixture.getBody().getPosition();
+        this.rotation = (float) Math.toDegrees(fixture.getBody().getAngle());
+    }
 
-            Vector2 myPos = new Vector2(position);
-            Vector2 otherpos = new Vector2(other.getPosition());
-
-            float myKineticEnergy = getKineticEnergy();
-
-            float otherKineticEnergy = ((Ship) other).getKineticEnergy();
-
-            //TODO fix it, formula not right, need to calculate directions with it.
-            float myNewKineticEnergy = myKineticEnergy - otherKineticEnergy;
-
-            Vector2 diff = myPos.sub(otherpos).setLength(200 * Gdx.graphics.getDeltaTime());
-
-            //TODO remove sqrt, or atleast optimize it.
-            float vel = (float) StrictMath.sqrt((2 * Math.abs(myNewKineticEnergy)) / mass);
-
-            if (myNewKineticEnergy < 0)
-            {
-                currentSpeedVector.set(diff).setLength(vel);
-            }
-            else
-            {
-                currentSpeedVector.setLength(vel);
-            }
-        }
-
-        if (other instanceof Projectile)
-        {
-            //Do something
-            this.destroy();
-        }
+    @Override
+    public void Draw(Batch batch)
+    {
+        super.Draw(batch);
     }
 
     private void destroy()

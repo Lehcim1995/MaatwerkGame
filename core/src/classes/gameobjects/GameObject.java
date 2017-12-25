@@ -355,4 +355,14 @@ public abstract class GameObject implements IGameObject, Serializable
     {
         this.sprite = sprite;
     }
+
+    public Fixture getFixture()
+    {
+        return fixture;
+    }
+
+    public void setFixture(Fixture fixture)
+    {
+        this.fixture = fixture;
+    }
 }

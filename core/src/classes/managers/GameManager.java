@@ -1,6 +1,12 @@
 package classes.managers;
 
+import classes.gameobjects.playable.SpaceShip;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
+import interfaces.IGameObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static classes.Constants.*;
 
@@ -10,6 +16,16 @@ public class GameManager
     private SpaceShipTexturesHelper spaceShipTexturesHelper;
     private SceneManager sceneManager;
     private float accumulator;
+
+    private List<IGameObject> gameObjects;
+
+    public GameManager()
+    {
+        this.worldManager = new WorldManager();
+        this.spaceShipTexturesHelper = new SpaceShipTexturesHelper();
+        this.sceneManager = new SceneManager();
+        gameObjects = new ArrayList<>();
+    }
 
     public void update()
     {
@@ -24,6 +40,20 @@ public class GameManager
     public void update(float deltaTime)
     {
         doPhysicsStep(deltaTime);
+    }
+
+    public IGameObject CreateGameObject()
+    {
+        return null;
+    }
+
+    public SpaceShip createPlayer()
+    {
+        SpaceShip ship = new SpaceShip(new Vector2(0, 0), 0f, spaceShipTexturesHelper.getSpaceShipSprite(1));
+
+
+        gameObjects.add(ship);
+        return ship;
     }
 
     public void draw(float deltaTime)
@@ -43,5 +73,10 @@ public class GameManager
 
             accumulator -= TIME_STEP;
         }
+    }
+
+    public void dispose()
+    {
+
     }
 }
