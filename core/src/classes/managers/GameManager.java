@@ -2,6 +2,7 @@ package classes.managers;
 
 import classes.gameobjects.playable.SpaceShip;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import interfaces.IGameObject;
 
@@ -25,6 +26,8 @@ public class GameManager
         this.spaceShipTexturesHelper = new SpaceShipTexturesHelper();
         this.sceneManager = new SceneManager();
         gameObjects = new ArrayList<>();
+
+        createPlayer();
     }
 
     public void update()
@@ -32,10 +35,6 @@ public class GameManager
         update(Gdx.graphics.getDeltaTime());
     }
 
-    public void draw()
-    {
-        draw(Gdx.graphics.getDeltaTime());
-    }
 
     public void update(float deltaTime)
     {
@@ -49,16 +48,19 @@ public class GameManager
 
     public SpaceShip createPlayer()
     {
-        SpaceShip ship = new SpaceShip(new Vector2(0, 0), 0f, spaceShipTexturesHelper.getSpaceShipSprite(1));
+        SpaceShip ship = new SpaceShip(new Vector2(50, 50), 0f, spaceShipTexturesHelper.getSpaceShipSprite(1));
 
 
         gameObjects.add(ship);
         return ship;
     }
 
-    public void draw(float deltaTime)
+    public void draw(Batch batch)
     {
-
+        for (IGameObject go : gameObjects)
+        {
+            go.Draw(batch);
+        }
     }
 
     private void doPhysicsStep(float deltaTime)

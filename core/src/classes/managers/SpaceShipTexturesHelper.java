@@ -59,7 +59,7 @@ public class SpaceShipTexturesHelper
 
     public SpaceShipTexturesHelper()
     {
-        this.ships = new Texture(Gdx.files.internal("/core/assets/textures/spaceships.png")); // TODO make this use a static string
+        this.ships = new Texture(Gdx.files.internal("core/assets/textures/spaceships.png")); // TODO make this use a static string
     }
 
     /*

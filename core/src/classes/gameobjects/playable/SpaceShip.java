@@ -14,6 +14,7 @@ public class SpaceShip extends Ship
 
     public SpaceShip(Vector2 position, float rotation, Sprite sprite)
     {
+        this.sprite = sprite;
         setDefaults();
     }
 
@@ -22,6 +23,7 @@ public class SpaceShip extends Ship
         this.main = main;
         mass = sprite.getHeight() * sprite.getWidth();
         mass /= 10;
+        this.sprite = sprite;
         setDefaults();
     }
 
