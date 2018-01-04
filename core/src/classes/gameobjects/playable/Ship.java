@@ -21,6 +21,9 @@ public class Ship extends GameObject
     {
         this.position = fixture.getBody().getPosition();
         this.rotation = (float) Math.toDegrees(fixture.getBody().getAngle());
+
+        sprite.setPosition(position.x - sprite.getWidth() / 2, position.y - sprite.getHeight() / 2);
+        sprite.setRotation(rotation);
     }
 
     @Override

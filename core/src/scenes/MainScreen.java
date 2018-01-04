@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 
 public class MainScreen implements Screen
 {
@@ -22,6 +23,9 @@ public class MainScreen implements Screen
     // Background
     private Texture background;
 
+    //debug
+    private Box2DDebugRenderer box2DDebugRenderer;
+
     @Override
     public void show()
     {
@@ -29,8 +33,9 @@ public class MainScreen implements Screen
         gameManager = new GameManager();
         batch = new SpriteBatch();
         camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
+//        camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
+        box2DDebugRenderer = new Box2DDebugRenderer();
     }
 
     @Override
@@ -41,13 +46,15 @@ public class MainScreen implements Screen
         batch.setProjectionMatrix(camera.combined);
         camera.update();
 
-//        camera.position.set()
+        camera.position.set(gameManager.getPlayer().getPosition(), 0);
 
         gameManager.update(delta);
 
         batch.begin();
         gameManager.draw(batch);
         batch.end();
+
+        box2DDebugRenderer.render(gameManager.getWorldManager().world, camera.combined);
     }
 
     @Override

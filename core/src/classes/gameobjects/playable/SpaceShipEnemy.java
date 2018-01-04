@@ -30,6 +30,7 @@ public class SpaceShipEnemy extends Ship
 
     public SpaceShipEnemy(Vector2 position, float rotation, Sprite sprite, GameObject follow)
     {
+        this.sprite = sprite;
         mass = sprite.getHeight() * sprite.getWidth();
         mass /= 10;
         setDefaults();
