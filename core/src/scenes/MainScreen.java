@@ -10,12 +10,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class MainScene implements Screen
+public class MainScreen implements Screen
 {
 
     private GameManager gameManager;
     private Batch batch;
     private Camera camera;
+
+    private float zoomLevel = 5;
 
     // Background
     private Texture background;
@@ -26,7 +28,9 @@ public class MainScene implements Screen
         // init
         gameManager = new GameManager();
         batch = new SpriteBatch();
-        camera = new OrthographicCamera();
+        camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
+        camera.update();
     }
 
     @Override
@@ -36,6 +40,8 @@ public class MainScene implements Screen
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.setProjectionMatrix(camera.combined);
         camera.update();
+
+//        camera.position.set()
 
         gameManager.update(delta);
 
