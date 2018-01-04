@@ -1,6 +1,7 @@
 package classes.gameobjects.playable;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -14,16 +15,23 @@ public class SpaceShip extends Ship
 
     public SpaceShip(Vector2 position, float rotation, Sprite sprite)
     {
+
         this.sprite = sprite;
+        this.rotation = rotation;
+        this.position = position;
+
         setDefaults();
     }
 
     public SpaceShip(Vector2 position, float rotation, Sprite sprite, Main main)
     {
+        this.sprite = sprite;
+        this.rotation = rotation;
+        this.position = position;
         this.main = main;
         mass = sprite.getHeight() * sprite.getWidth();
         mass /= 10;
-        this.sprite = sprite;
+
         setDefaults();
     }
 
@@ -54,10 +62,30 @@ public class SpaceShip extends Ship
     public void update()
     {
         super.update();
-    }
 
-    private float getDeltaTime()
-    {
-        return Gdx.graphics.getDeltaTime();
+        if (Gdx.input.isKeyPressed(Input.Keys.W))
+        {
+            fixture.getBody().applyForceToCenter(getForward().scl(20000000), false);
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.S))
+        {
+            //TODO slow down spaceship
+            fixture.getBody().applyForceToCenter(getBackwards().scl(20000000), false);
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.A))
+        {
+            fixture.getBody().applyForce(getLeft().scl(200000), getForward().scl(sprite.getWidth() / 2), true);
+            fixture.getBody().applyForce(getRight().scl(200000), getBackwards().scl(sprite.getWidth() / 2), true);
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.D))
+        {
+            fixture.getBody().applyForce(getRight().scl(200000), getForward().scl(sprite.getWidth() / 2), true);
+            fixture.getBody().applyForce(getLeft().scl(200000), getBackwards().scl(sprite.getWidth() / 2), true);
+        }
+
+        //TODO add shooting
     }
 }

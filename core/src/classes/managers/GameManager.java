@@ -1,10 +1,10 @@
 package classes.managers;
 
-import classes.gameobjects.GameObject;
 import classes.gameobjects.playable.SpaceShip;
 import classes.gameobjects.playable.SpaceShipEnemy;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Fixture;
@@ -35,13 +35,17 @@ public class GameManager
         shapeFactory = new ShapeFactory(worldManager.world);
         gameObjects = new ArrayList<>();
 
-        createPlayer();
-        Fixture f = shapeFactory.CreateCube((int) getPlayer().getPosition().x, (int) getPlayer().getPosition().y, (int) getPlayer().getSprite().getWidth(), (int) getPlayer().getSprite().getHeight());
-        player.setFixture(f);
+        // TODO make simple
+        createPlayer(new Vector2(0, 0));
 
-        GameObject en = createEnemy(new Vector2(100, 100));
-        Fixture f2 = shapeFactory.CreateCube((int) getPlayer().getPosition().x, (int) getPlayer().getPosition().y, (int) getPlayer().getSprite().getWidth(), (int) getPlayer().getSprite().getHeight());
-        en.setFixture(f2);
+
+        for (int x = 0; x < 5; x++)
+        {
+            for (int y = 0; y < 5; y++)
+            {
+                createEnemy(new Vector2(x * 31 * 100, y * 33 * 100));
+            }
+        }
 
         Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
     }
@@ -66,9 +70,13 @@ public class GameManager
         return null;
     }
 
-    public SpaceShip createPlayer()
+    public SpaceShip createPlayer(Vector2 pos)
     {
-        SpaceShip ship = new SpaceShip(new Vector2(50, 50), 0f, spaceShipTexturesHelper.getSpaceShipSprite(1));
+        SpaceShip ship = new SpaceShip(pos, 0f, spaceShipTexturesHelper.getSpaceShipSprite(1));
+
+        Fixture fixture = shapeFactory.CreateCube((int) ship.getPosition().x, (int) ship.getPosition().y, (int) ship.getSprite().getWidth(), (int) ship.getSprite().getHeight());
+        ship.setFixture(fixture);
+//        fixture.getBody().setTransform(pos, 0);
 
         gameObjects.add(ship);
         player = ship;
@@ -77,7 +85,11 @@ public class GameManager
 
     public SpaceShipEnemy createEnemy(Vector2 pos)
     {
-        SpaceShipEnemy enemy = new SpaceShipEnemy(pos, 0, spaceShipTexturesHelper.getSpaceShipSprite(2), null);
+        SpaceShipEnemy enemy = new SpaceShipEnemy(pos, 0, spaceShipTexturesHelper.getSpaceShipSprite(22), player);
+
+        Fixture fixture = shapeFactory.CreateCube((int) enemy.getPosition().x, (int) enemy.getPosition().y, (int) enemy.getSprite().getWidth(), (int) enemy.getSprite().getHeight());
+        enemy.setFixture(fixture);
+//        fixture.getBody().setTransform(pos, 0);
 
         gameObjects.add(enemy);
         return enemy;
@@ -88,6 +100,14 @@ public class GameManager
         for (IGameObject go : gameObjects)
         {
             go.Draw(batch);
+        }
+    }
+
+    public void draw(ShapeRenderer shapeRenderer)
+    {
+        for (IGameObject go : gameObjects)
+        {
+            go.Draw(shapeRenderer);
         }
     }
 

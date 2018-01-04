@@ -22,7 +22,7 @@ public class Ship extends GameObject
         this.position = fixture.getBody().getPosition();
         this.rotation = (float) Math.toDegrees(fixture.getBody().getAngle());
 
-        sprite.setPosition(position.x - sprite.getWidth() / 2, position.y - sprite.getHeight() / 2);
+        sprite.setPosition(position.x - (sprite.getWidth() / 2), position.y - (sprite.getHeight() / 2));
         sprite.setRotation(rotation);
     }
 
@@ -37,23 +37,32 @@ public class Ship extends GameObject
 
     }
 
-    public float getSpeed()
+    public Vector2 getForward()
     {
-        return currentSpeedVector.len();
+        Vector2 forward = new Vector2(1, 0).rotate(rotation);
+
+        return forward;
     }
 
-    public float getMass()
+    public Vector2 getBackwards()
     {
-        return mass;
+        Vector2 backwards = new Vector2(-1, 0).rotate(rotation);
+
+        return backwards;
     }
 
-    public float getKineticEnergy()
+    public Vector2 getLeft()
     {
-        return 0.5f * mass * (currentSpeedVector.len() * currentSpeedVector.len());
+        Vector2 left = new Vector2(0, 1).rotate(rotation);
+
+        return left;
     }
 
-    public Vector2 getCurrentSpeedVector()
+    public Vector2 getRight()
     {
-        return currentSpeedVector;
+        Vector2 right = new Vector2(0, -1).rotate(rotation);
+
+        return right;
     }
+
 }

@@ -1,11 +1,10 @@
 package classes.gameobjects.playable;
 
 import classes.gameobjects.GameObject;
-import classes.managers.SpaceShipTexturesHelper;
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
 public class SpaceShipEnemy extends Ship
@@ -16,21 +15,12 @@ public class SpaceShipEnemy extends Ship
     {
     }
 
-    public SpaceShipEnemy(GameObject follow)
-    {
-        this(new Vector2(0, 0), 0, new SpaceShipTexturesHelper().getSpaceShipSprite(22), follow);
-        this.setHitbox(GameObject.defaultHitbox(sprite.getHeight(), sprite.getWidth()));
-    }
-
-    public SpaceShipEnemy(SpaceShipEnemy sse)
-    {
-        this(new Vector2(0, 0), 0, new Sprite(sse.sprite), sse.follow);
-        this.setHitbox(GameObject.defaultHitbox(sprite.getHeight(), sprite.getWidth()));
-    }
-
     public SpaceShipEnemy(Vector2 position, float rotation, Sprite sprite, GameObject follow)
     {
         this.sprite = sprite;
+        this.rotation = rotation;
+        this.position = position;
+
         mass = sprite.getHeight() * sprite.getWidth();
         mass /= 10;
         setDefaults();
@@ -56,37 +46,49 @@ public class SpaceShipEnemy extends Ship
     }
 
     @Override
-    public void update()
+    public void Draw(ShapeRenderer shapeRenderer)
     {
         if (follow != null)
         {
+//            shapeRenderer.setColor(Color.WHITE);
+//            shapeRenderer.line(position, follow.getPosition());
 
-            Vector2 otherPos = new Vector2(follow.getPosition());
-            Vector2 myPos = new Vector2(getPosition());
 
-            float rot = myPos.sub(otherPos).angle() - 180; // 180 because im lazy
-            // TODO add max rot speed
+            Vector2 disPlayerPos = new Vector2(position);
+            Vector2 disFollowPos = new Vector2(follow.getPosition());
 
-            setRotation(rot);
+            Vector2 towardsPlayer = disFollowPos.sub(disPlayerPos);
+            disPlayerPos.add(towardsPlayer.nor().scl(10));
+//            towardsPlayer;
 
-            float x = MathUtils.cosDeg(getRotation());
-            float y = MathUtils.sinDeg(getRotation());
-            Vector2 pos = new Vector2(x, y).setLength(speed * getDeltaTime());
+            shapeRenderer.setColor(Color.RED);
+            shapeRenderer.line(position, disPlayerPos);
 
-            currentSpeedVector.add(pos);
-
-            translate(currentSpeedVector);
-
-            if (currentSpeedVector.len() > maxSpaceshipSpeed)
-            {
-                currentSpeedVector.setLength(maxSpaceshipSpeed);
-            }
         }
     }
 
-    private float getDeltaTime()
+    @Override
+    public void update()
     {
-        return Gdx.graphics.getDeltaTime();
+        super.update();
+        if (follow != null)
+        {
+//            fixture.getBody().applyForceToCenter(getForward().scl(200000), false);
+//            fixture.getBody().applyForce(getLeft().scl(200000), getForward().scl(sprite.getWidth() / 2), true);
+
+            Vector2 disPlayerPos = new Vector2(position);
+            Vector2 disFollowPos = new Vector2(follow.getPosition());
+
+            Vector2 towardsPlayer = disFollowPos.sub(disPlayerPos);
+            towardsPlayer.nor();
+
+            fixture.getBody().applyForceToCenter(towardsPlayer.scl(200000), false);
+
+//            fixture.getBody().setAngularVelocity();
+
+
+//            follow.getPosition().angleRad(position)
+        }
     }
 
     public void setFollow(GameObject follow)
