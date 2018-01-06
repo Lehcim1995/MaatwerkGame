@@ -15,7 +15,7 @@ public class DesktopLauncher {
         // etc
 
         config.title = "SpaceGame";
-        config.useGL30 = true;
+//        config.useGL30 = true;
         config.vSyncEnabled = false;
         config.foregroundFPS = 60;
 //        config.fullscreen = true;

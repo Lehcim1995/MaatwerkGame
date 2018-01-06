@@ -50,8 +50,8 @@ public class SpaceShipEnemy extends Ship
     {
         if (follow != null)
         {
-//            shapeRenderer.setColor(Color.WHITE);
-//            shapeRenderer.line(position, follow.getPosition());
+            shapeRenderer.setColor(Color.WHITE);
+            shapeRenderer.line(position, follow.getPosition());
 
 
             Vector2 disPlayerPos = new Vector2(position);
@@ -59,7 +59,6 @@ public class SpaceShipEnemy extends Ship
 
             Vector2 towardsPlayer = disFollowPos.sub(disPlayerPos);
             disPlayerPos.add(towardsPlayer.nor().scl(10));
-//            towardsPlayer;
 
             shapeRenderer.setColor(Color.RED);
             shapeRenderer.line(position, disPlayerPos);
@@ -70,7 +69,13 @@ public class SpaceShipEnemy extends Ship
     @Override
     public void update()
     {
+//        this.position = fixture.getBody().getPosition();
+//
+//        sprite.setPosition(position.x - (sprite.getWidth() / 2), position.y - (sprite.getHeight() / 2));
+//        sprite.setRotation(rotation);
+
         super.update();
+
         if (follow != null)
         {
 //            fixture.getBody().applyForceToCenter(getForward().scl(200000), false);
@@ -84,10 +89,14 @@ public class SpaceShipEnemy extends Ship
 
             fixture.getBody().applyForceToCenter(towardsPlayer.scl(200000), false);
 
+//            rotation = (float) Math.toDegrees(towardsPlayer.angleRad());
+
+            //tODO add rotation
+
 //            fixture.getBody().setAngularVelocity();
 
 
-//            follow.getPosition().angleRad(position)
+            follow.getPosition().angleRad(towardsPlayer);
         }
     }
 

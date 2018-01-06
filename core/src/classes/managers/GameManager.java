@@ -85,7 +85,7 @@ public class GameManager
 
     public SpaceShipEnemy createEnemy(Vector2 pos)
     {
-        SpaceShipEnemy enemy = new SpaceShipEnemy(pos, 0, spaceShipTexturesHelper.getSpaceShipSprite(22), player);
+        SpaceShipEnemy enemy = new SpaceShipEnemy(pos, 0, spaceShipTexturesHelper.getSpaceShipSprite(16), player);
 
         Fixture fixture = shapeFactory.CreateCube((int) enemy.getPosition().x, (int) enemy.getPosition().y, (int) enemy.getSprite().getWidth(), (int) enemy.getSprite().getHeight());
         enemy.setFixture(fixture);

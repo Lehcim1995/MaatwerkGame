@@ -61,8 +61,6 @@ public class MainScreen implements Screen
     {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        batch.setProjectionMatrix(camera.combined);
-        shapeRenderer.setProjectionMatrix(camera.combined);
 
         camera.position.set(gameManager.getPlayer().getPosition(), 0);
         camera.update();
@@ -73,9 +71,9 @@ public class MainScreen implements Screen
         batch.end();
         gameManager.update(delta);
 
-//        shapeRenderer.begin();
-//        gameManager.draw(shapeRenderer);
-//        shapeRenderer.end();
+        shapeRenderer.begin();
+        gameManager.draw(shapeRenderer);
+        shapeRenderer.end();
 
         textBatch.begin();
         int fps = (int) (1 / delta);
@@ -91,7 +89,11 @@ public class MainScreen implements Screen
         gameManager.getPlayer().DrawText(textBatch, font, layout, "Fps: " + fps, pos);
         textBatch.end();
 
+        box2DDebugRenderer.setDrawBodies(false);
+        box2DDebugRenderer.setDrawVelocities(true);
         box2DDebugRenderer.render(gameManager.getWorldManager().world, camera.combined);
+        batch.setProjectionMatrix(camera.combined);
+        shapeRenderer.setProjectionMatrix(camera.combined);
     }
 
     @Override
