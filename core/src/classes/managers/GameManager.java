@@ -2,6 +2,7 @@ package classes.managers;
 
 import classes.gameobjects.playable.SpaceShip;
 import classes.gameobjects.playable.SpaceShipEnemy;
+import classes.gameobjects.unplayble.Laser;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -47,6 +48,8 @@ public class GameManager
             }
         }
 
+        fireLazer(new Vector2(0, 0), 0);
+
         Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
     }
 
@@ -54,7 +57,6 @@ public class GameManager
     {
         update(Gdx.graphics.getDeltaTime());
     }
-
 
     public void update(float deltaTime)
     {
@@ -65,7 +67,18 @@ public class GameManager
         }
     }
 
-    public IGameObject CreateGameObject()
+    public Laser fireLazer(Vector2 pos, float speed)
+    {
+        Laser laser = new Laser(pos, 0, null, speed);
+        Fixture fixture = shapeFactory.CreateCube(laser);
+        laser.setFixture(fixture);
+
+        gameObjects.add(laser);
+
+        return laser;
+    }
+
+    public IGameObject createGameObject()
     {
         return null;
     }

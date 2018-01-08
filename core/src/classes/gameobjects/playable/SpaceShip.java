@@ -64,36 +64,36 @@ public class SpaceShip extends Ship
         super.update();
 
         final float rotNewtons = fixture.getBody().getMass() * 100;
-        final float moveNewtons = fixture.getBody().getMass() * 100;
+        final float moveNewtons = fixture.getBody().getMass() * 1000;
 
         if (Gdx.input.isKeyPressed(Input.Keys.W))
         {
-            fixture.getBody().applyForceToCenter(getForward().scl(20000000), false);
+            fixture.getBody().applyForceToCenter(getForward().scl(moveNewtons), false);
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.S))
         {
             //TODO slow down spaceship
-            fixture.getBody().applyForceToCenter(getBackwards().scl(20000000), false);
+            fixture.getBody().applyForceToCenter(getBackwards().scl(moveNewtons), false);
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.A))
         {
-            fixture.getBody().applyForce(getLeft().scl(2000000), getForward().scl(sprite.getWidth() / 2), true);
-            fixture.getBody().applyForce(getRight().scl(2000000), getBackwards().scl(sprite.getWidth() / 2), true);
+            fixture.getBody().applyForce(getLeft().scl(rotNewtons), getForward().scl(sprite.getWidth() / 2), true);
+            fixture.getBody().applyForce(getRight().scl(rotNewtons), getBackwards().scl(sprite.getWidth() / 2), true);
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.D))
         {
-            fixture.getBody().applyForce(getRight().scl(2000000), getForward().scl(sprite.getWidth() / 2), true);
-            fixture.getBody().applyForce(getLeft().scl(2000000), getBackwards().scl(sprite.getWidth() / 2), true);
+            fixture.getBody().applyForce(getRight().scl(rotNewtons), getForward().scl(sprite.getWidth() / 2), true);
+            fixture.getBody().applyForce(getLeft().scl(rotNewtons), getBackwards().scl(sprite.getWidth() / 2), true);
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE))
         {
             Vector2 dir = new Vector2(fixture.getBody().getLinearVelocity()).rotate(180).nor();
 
-            fixture.getBody().applyForceToCenter(dir.scl(20000000), false);
+            fixture.getBody().applyForceToCenter(dir.scl(moveNewtons), false);
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.V))

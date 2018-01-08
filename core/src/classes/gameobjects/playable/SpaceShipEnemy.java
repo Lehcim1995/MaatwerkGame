@@ -76,6 +76,7 @@ public class SpaceShipEnemy extends Ship
 
         super.update();
 
+        //noinspection Duplicates
         if (follow != null)
         {
 //            fixture.getBody().applyForceToCenter(getForward().scl(200000), false);

@@ -1,5 +1,6 @@
 package classes.managers;
 
+import classes.gameobjects.GameObject;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
@@ -10,6 +11,8 @@ public class ShapeFactory
 {
 
     // https://en.wikipedia.org/wiki/Abstract_factory_pattern
+
+    //TODO fix duplicate code
 
     private World world;
 
@@ -83,6 +86,11 @@ public class ShapeFactory
         return fixture;
     }
 
+    public Fixture CreateCube(GameObject go)
+    {
+        return CreateCube((int) go.getPosition().x, (int) go.getPosition().y, (int) go.getSprite().getWidth(), (int) go.getSprite().getHeight());
+    }
+
     public Fixture CreateCube(int x, int y, int width, int height)
     {
         // First we create a body definition
@@ -98,7 +106,6 @@ public class ShapeFactory
         // Create a circle shape and set its radius to 6
         PolygonShape square = new PolygonShape();
         square.setAsBox(width / 2, height / 2);
-
 
         // Create a fixture definition to apply our shape to
         FixtureDef fixtureDef = new FixtureDef();
