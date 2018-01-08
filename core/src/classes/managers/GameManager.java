@@ -71,6 +71,7 @@ public class GameManager
         Laser laser = new Laser(pos, 0, null, speed);
         Fixture fixture = shapeFactory.CreateCube(laser);
         laser.setFixture(fixture);
+        laser.setSpeed(0f);
 
         gameObjects.add(laser);
 

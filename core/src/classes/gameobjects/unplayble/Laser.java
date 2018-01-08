@@ -12,12 +12,11 @@ public class Laser extends Projectile
     private final IGameObject follow;
     private final Texture Beams;
 
-
     public Laser(Vector2 position, float rotation, Sprite sprite, float speed)
     {
         follow = null;
         Beams = new Texture(Gdx.files.internal("core/assets/textures/beams.png"));
-        this.sprite = new Sprite(Beams, 20, 40, 40, 40);
+        this.sprite = new Sprite(Beams, 6, 7, 16, 22);
     }
 
     @Override

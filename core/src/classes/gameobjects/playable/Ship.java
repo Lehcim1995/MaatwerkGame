@@ -36,33 +36,4 @@ public class Ship extends GameObject
     {
 
     }
-
-    public Vector2 getForward()
-    {
-        Vector2 forward = new Vector2(1, 0).rotate(rotation);
-
-        return forward;
-    }
-
-    public Vector2 getBackwards()
-    {
-        Vector2 backwards = new Vector2(-1, 0).rotate(rotation);
-
-        return backwards;
-    }
-
-    public Vector2 getLeft()
-    {
-        Vector2 left = new Vector2(0, 1).rotate(rotation);
-
-        return left;
-    }
-
-    public Vector2 getRight()
-    {
-        Vector2 right = new Vector2(0, -1).rotate(rotation);
-
-        return right;
-    }
-
 }

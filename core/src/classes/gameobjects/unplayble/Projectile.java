@@ -41,4 +41,18 @@ public class Projectile extends GameObject
     {
         return Gdx.graphics.getDeltaTime();
     }
+
+    public void setSpeed(float speed)
+    {
+        this.speed = speed;
+        if (fixture != null)
+        {
+            fixture.getBody().setLinearVelocity(getForward());
+        }
+    }
+
+    public float getSpeed()
+    {
+        return speed;
+    }
 }

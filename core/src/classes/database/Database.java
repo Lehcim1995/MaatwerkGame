@@ -14,11 +14,12 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
+//import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
 
 /**
  * @author michel
  */
+//TODO refactor this code
 public class Database implements IDatabase
 {
 
@@ -143,10 +144,10 @@ public class Database implements IDatabase
             {
                 preparedStatement.setTimestamp(i, dateToTimestamp((Date) obj));
             }
-            else if (obj != null && obj.getClass() == String.class) // when the argument is a string then escap all html4 stuff
-            {
-                preparedStatement.setObject(i, escapeHtml4((String) obj));
-            }
+//            else if (obj != null && obj.getClass() == String.class) // when the argument is a string then escap all html4 stuff
+//            {
+//                preparedStatement.setObject(i, escapeHtml4((String) obj));
+//            }
             else
             {
                 preparedStatement.setObject(i, obj);

@@ -12,7 +12,6 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import interfaces.IGameObject;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 
 public abstract class GameObject implements IGameObject, Serializable
@@ -23,7 +22,7 @@ public abstract class GameObject implements IGameObject, Serializable
     protected Fixture fixture;
     protected Vector2 position;
     protected float rotation;
-    protected Polygon hitbox;
+    protected Polygon hitbox; // swap this with fixture
     protected long id;
     protected Sprite sprite;
 
@@ -109,7 +108,7 @@ public abstract class GameObject implements IGameObject, Serializable
     public void setHitbox(Polygon hitbox)
     {
         this.hitbox = hitbox;
-    } // TODO remove or change
+    } // TODO remove or change this to set the fixture of this object
 
     public void setHitbox(Vector2[] verticis)
     {
@@ -141,93 +140,10 @@ public abstract class GameObject implements IGameObject, Serializable
         return new Polygon(verticisList);
     }
 
-    public void setOrigin(Vector2 origin)
-    {
-        hitbox.setOrigin(origin.x, origin.y);
-    } // TODO remove
-
-    @Override
-    public boolean isHit(IGameObject go) // TODO remove
-    {
-        Vector2 other = new Vector2();
-        other.x = go.getHitbox().getX();
-        other.y = go.getHitbox().getY();
-
-        float dis = position.dst(other);
-
-        return (dis <= COLLISIONDISTANCE) && isOverlap(hitbox, go.getHitbox());
-    }
-
     @Override
     public long getID()
     {
         return id;
-    }
-
-
-    /**
-     * Static Methode to check if 2 polygons are intersecting
-     *
-     * @param a Polygon
-     * @param b Polygon
-     * @return Is overlapping or not.
-     */
-    public boolean isOverlap(Polygon a, Polygon b)
-    {
-        float[] verticesA = a.getTransformedVertices();
-        float[] verticesB = b.getTransformedVertices();
-        //Check vertices B  ----  Check vertices A
-        return checkIntersectLine(verticesB, a) || checkIntersectLine(verticesA, b);
-    }
-
-    /**
-     * Checks if line intersects other line
-     *
-     * @param vertices Array of float that has to be checked
-     * @param poly     Polygon that needs to be checked
-     * @return Is overlapping or not.
-     */
-    private boolean checkIntersectLine(float[] vertices, Polygon poly)
-    {
-        for (int i = 0; i < vertices.length; i += 2)
-        {
-            float x = vertices[i];
-            float y = vertices[i + 1];
-
-            if (isInside(x, y, poly))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean isInside(float x, float y, Polygon p)
-    {
-        int i;
-        int j;
-        boolean c = false;
-
-        ArrayList<Vector2> verList = new ArrayList<>();
-
-        //TODO make this nice (int i, j  ; i < bla ; j = i++)
-        for (int ver = 0; ver < p.getTransformedVertices().length; ver += 2)
-        {
-            Vector2 v = new Vector2();
-            v.x = p.getTransformedVertices()[ver];
-            v.y = p.getTransformedVertices()[ver + 1];
-
-            verList.add(v);
-        }
-
-        int verCount = verList.size();
-
-        for (i = 0, j = verCount - 1; i < verCount; j = i++)
-        {
-            if ((((verList.get(i).y <= y) && (y < verList.get(j).y)) || ((verList.get(j).y <= y) && (y < verList.get(i).y))) && (x < (verList.get(j).x - verList.get(i).x) * (y - verList.get(i).y) / (verList.get(j).y - verList.get(i).y) + verList.get(i).x))
-                c = !c;
-        }
-        return c;
     }
 
     @Override
@@ -362,5 +278,33 @@ public abstract class GameObject implements IGameObject, Serializable
     public void setFixture(Fixture fixture)
     {
         this.fixture = fixture;
+    }
+
+    public Vector2 getForward()
+    {
+        Vector2 forward = new Vector2(1, 0).rotate(rotation);
+
+        return forward;
+    }
+
+    public Vector2 getBackwards()
+    {
+        Vector2 backwards = new Vector2(-1, 0).rotate(rotation);
+
+        return backwards;
+    }
+
+    public Vector2 getLeft()
+    {
+        Vector2 left = new Vector2(0, 1).rotate(rotation);
+
+        return left;
+    }
+
+    public Vector2 getRight()
+    {
+        Vector2 right = new Vector2(0, -1).rotate(rotation);
+
+        return right;
     }
 }
