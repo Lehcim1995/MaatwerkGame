@@ -1,4 +1,4 @@
-package classes;
+package classes.managers;
 
 import classes.gameobjects.playable.SpaceShip;
 import com.badlogic.gdx.Input;

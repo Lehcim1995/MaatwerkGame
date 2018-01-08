@@ -1,17 +1,16 @@
 package classes.gameobjects.playable;
 
+import classes.managers.GameManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.school.spacegame.Main;
 
 public class SpaceShip extends Ship
 {
 
-    private Main main;
+    private GameManager gameManager;
 
     public SpaceShip(Vector2 position, float rotation, Sprite sprite)
     {
@@ -23,18 +22,17 @@ public class SpaceShip extends Ship
         setDefaults();
     }
 
-    public SpaceShip(Vector2 position, float rotation, Sprite sprite, Main main)
+    public SpaceShip(Vector2 position, float rotation, Sprite sprite, GameManager gameManager)
     {
         this.sprite = sprite;
         this.rotation = rotation;
         this.position = position;
-        this.main = main;
-        mass = sprite.getHeight() * sprite.getWidth();
-        mass /= 10;
+        this.gameManager = gameManager;
 
         setDefaults();
     }
 
+    // TODO translate these values to something useful.
     private void setDefaults()
     {
         maxSpeed = 10;
@@ -53,18 +51,14 @@ public class SpaceShip extends Ship
     }
 
     @Override
-    public void Draw(ShapeRenderer shapeRenderer)
-    {
-
-    }
-
-    @Override
     public void update()
     {
         super.update();
 
         final float rotNewtons = fixture.getBody().getMass() * 100;
         final float moveNewtons = fixture.getBody().getMass() * 1000;
+
+        // TODO add this to inputManager
 
         if (Gdx.input.isKeyPressed(Input.Keys.W))
         {
@@ -100,6 +94,5 @@ public class SpaceShip extends Ship
         {
             //TODO add shooting
         }
-
     }
 }

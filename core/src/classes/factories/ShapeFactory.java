@@ -1,4 +1,4 @@
-package classes.managers;
+package classes.factories;
 
 import classes.gameobjects.GameObject;
 import com.badlogic.gdx.math.Polygon;

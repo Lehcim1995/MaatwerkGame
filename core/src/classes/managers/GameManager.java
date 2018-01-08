@@ -1,5 +1,6 @@
 package classes.managers;
 
+import classes.factories.ShapeFactory;
 import classes.gameobjects.playable.SpaceShip;
 import classes.gameobjects.playable.SpaceShipEnemy;
 import classes.gameobjects.unplayble.Laser;
@@ -20,7 +21,6 @@ public class GameManager
 {
     private WorldManager worldManager;
     private SpaceShipTexturesHelper spaceShipTexturesHelper;
-    private SceneManager sceneManager;
     private ShapeFactory shapeFactory;
     private float accumulator;
 
@@ -32,7 +32,6 @@ public class GameManager
     {
         this.worldManager = new WorldManager();
         this.spaceShipTexturesHelper = new SpaceShipTexturesHelper();
-        this.sceneManager = new SceneManager();
         shapeFactory = new ShapeFactory(worldManager.world);
         gameObjects = new ArrayList<>();
 
