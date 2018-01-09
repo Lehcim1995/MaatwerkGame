@@ -5,7 +5,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import interfaces.IGameObject;
 
 public class SpaceShip extends Ship
 {
@@ -101,5 +103,29 @@ public class SpaceShip extends Ship
     public void setGameManager(GameManager gameManager)
     {
         this.gameManager = gameManager;
+    }
+
+    @Override
+    public void onCollisionEnter(IGameObject other)
+    {
+
+    }
+
+    @Override
+    public void onCollisionExit(IGameObject other)
+    {
+
+    }
+
+    @Override
+    public void onCollisionStay(IGameObject other)
+    {
+
+    }
+
+    @Override
+    public void Draw(ShapeRenderer shapeRenderer)
+    {
+
     }
 }

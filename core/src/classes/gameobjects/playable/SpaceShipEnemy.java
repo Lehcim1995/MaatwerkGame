@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import interfaces.IGameObject;
 
 public class SpaceShipEnemy extends Ship
 {
@@ -103,5 +104,23 @@ public class SpaceShipEnemy extends Ship
     public void setFollow(GameObject follow)
     {
         this.follow = follow;
+    }
+
+    @Override
+    public void onCollisionEnter(IGameObject other)
+    {
+
+    }
+
+    @Override
+    public void onCollisionExit(IGameObject other)
+    {
+
+    }
+
+    @Override
+    public void onCollisionStay(IGameObject other)
+    {
+
     }
 }

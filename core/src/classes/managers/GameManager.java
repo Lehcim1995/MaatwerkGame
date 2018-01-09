@@ -1,15 +1,14 @@
 package classes.managers;
 
 import classes.CollisionMasks;
-import classes.factories.ShapeFactory;
+import classes.factories.ShapeHelper;
+import classes.gameobjects.GameObject;
 import classes.gameobjects.playable.SpaceShip;
 import classes.gameobjects.playable.SpaceShipEnemy;
 import classes.gameobjects.unplayble.Laser;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import interfaces.IGameObject;
 
@@ -23,7 +22,7 @@ public class GameManager
 {
     private WorldManager worldManager;
     private SpaceShipTexturesHelper spaceShipTexturesHelper;
-    private ShapeFactory shapeFactory;
+    private ShapeHelper shapeHelper;
     private float accumulator;
 
     private List<IGameObject> gameObjects;
@@ -34,12 +33,10 @@ public class GameManager
     {
         this.worldManager = new WorldManager();
         this.spaceShipTexturesHelper = new SpaceShipTexturesHelper();
-        shapeFactory = new ShapeFactory(worldManager.world);
+        shapeHelper = new ShapeHelper(worldManager.world);
         gameObjects = new CopyOnWriteArrayList<>();
 
-        // TODO make simple
         createPlayer(new Vector2(0, 0));
-
 
         for (int x = 0; x < 5; x++)
         {
@@ -48,13 +45,6 @@ public class GameManager
                 createEnemy(new Vector2(x * 31 * 100, y * 33 * 100));
             }
         }
-
-        Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
-    }
-
-    public void update()
-    {
-        update(Gdx.graphics.getDeltaTime());
     }
 
     public void update(float deltaTime)
@@ -65,12 +55,26 @@ public class GameManager
             IGameObject gameObject = it.next();
             gameObject.update();
         }
+
+        // TODO delete objects with the delete flag/boolean
+
+        for (Iterator<IGameObject> it = gameObjects.iterator(); it.hasNext(); )
+        {
+            GameObject gameObject = (GameObject) it.next();
+            if (gameObject.isToDelete())
+            {
+                gameObjects.remove(gameObject);
+            }
+        }
     }
 
-    public Laser fireLaser(Vector2 pos, float speed, float rotation)
+    public Laser fireLaser(
+            Vector2 pos,
+            float speed,
+            float rotation)
     {
         Laser laser = new Laser(new Vector2(pos), rotation, speed);
-        Fixture fixture = shapeFactory.CreateCube(laser);
+        Fixture fixture = shapeHelper.CreateCube(laser);
         fixture.setFilterData(CollisionMasks.PLAYER_FILTER);
         laser.setFixture(fixture);
         laser.setSpeed(speed);
@@ -86,7 +90,7 @@ public class GameManager
         SpaceShip ship = new SpaceShip(pos, 0f, spaceShipTexturesHelper.getSpaceShipSprite(1));
         ship.setGameManager(this);
 
-        Fixture fixture = shapeFactory.CreateCube(ship);
+        Fixture fixture = shapeHelper.CreateCube(ship);
         fixture.setFilterData(CollisionMasks.PLAYER_FILTER);
         ship.setFixture(fixture);
         fixture.setUserData(ship);
@@ -101,7 +105,7 @@ public class GameManager
     {
         SpaceShipEnemy enemy = new SpaceShipEnemy(pos, 0, spaceShipTexturesHelper.getSpaceShipSprite(16), player);
 
-        Fixture fixture = shapeFactory.CreateCube(enemy);
+        Fixture fixture = shapeHelper.CreateCube(enemy);
         fixture.setFilterData(CollisionMasks.ENEMY_FILTER);
         enemy.setFixture(fixture);
         fixture.setUserData(enemy);

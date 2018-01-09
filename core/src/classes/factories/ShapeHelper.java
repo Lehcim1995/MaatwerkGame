@@ -7,16 +7,14 @@ import com.badlogic.gdx.physics.box2d.*;
 
 import java.util.List;
 
-public class ShapeFactory
+public class ShapeHelper
 {
-
-    // https://en.wikipedia.org/wiki/Abstract_factory_pattern
-
-    //TODO fix duplicate code
+    // TODO fix duplicate code
+    // TODO add object pooling
 
     private World world;
 
-    public ShapeFactory(World world)
+    public ShapeHelper(World world)
     {
         // Start box2d?
         this.world = world;

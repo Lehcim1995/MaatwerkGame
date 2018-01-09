@@ -69,12 +69,6 @@ public interface IGameObject
     void Draw(Batch batch);
 
     /**
-     * @param shapeRenderer
-     * @param batch
-     */
-    void Draw(ShapeRenderer shapeRenderer, Batch batch);
-
-    /**
      * @return
      */
     long getID();

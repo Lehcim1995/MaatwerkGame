@@ -13,18 +13,18 @@ import interfaces.IGameObject;
 
 import java.io.Serializable;
 
-
+/**
+ * An implementation of the Gameobject interface
+ */
 public abstract class GameObject implements IGameObject, Serializable
 {
-    private static float COLLISIONDISTANCE = 1000;
-    private static float COLLISIONSTAYTIME = 5; // in millisecs
-
     protected Fixture fixture;
     protected Vector2 position;
     protected float rotation;
     protected Polygon hitbox; // swap this with fixture
     protected long id;
     protected Sprite sprite;
+    protected boolean toDelete = false;
 
     protected GameObject()
     {
@@ -38,7 +38,7 @@ public abstract class GameObject implements IGameObject, Serializable
      * Returns a hitbox made with the size given
      *
      * @param size Hit range
-     * @return returns defaulthitbox using the pararm's size
+     * @return returns default hitbox using the pararm's size
      */
     public static Vector2[] defaultHitbox(float size)
     {
@@ -61,7 +61,7 @@ public abstract class GameObject implements IGameObject, Serializable
      *
      * @param size     Hit range
      * @param vertices Vertices
-     * @return returns default cercle hitbox using the pararm's size and vertices
+     * @return returns default circle hitbox using the pararm's size and vertices
      */
     public static Vector2[] circleHitbox(float size, int vertices)
     {
@@ -192,57 +192,46 @@ public abstract class GameObject implements IGameObject, Serializable
         setRotation(getRotation() + rot);
     }
 
+    /**
+     * @param other The other Gameobject it collided with
+     */
     @Override
-    public void onCollisionEnter(IGameObject other)
-    {
-        // Has to have a Override.
-    }
-
-    @Override
-    public void onCollisionExit(IGameObject other)
-    {
-        // Has to have a Override.
-    }
-
-    @Override
-    public void onCollisionStay(IGameObject other)
-    {
-        // Has to have a Override.
-    }
-
-    @Override
-    public void update()
-    {
-        // Has to have a Override.
-    }
-
-    @Override
-    public void Draw(ShapeRenderer shapeRenderer)
-    {
-        // Has to have a Override.
-    }
-
-    @Override
-    public void Draw(Batch batch)
-    {
-        // Has to have a Override.
-    }
+    public abstract void onCollisionEnter(IGameObject other);
 
     /**
-     * Draw objects
-     *
-     * @param shapeRenderer Shape
-     * @param batch         Batch
+     * @param other The other Gameobject it ending collided with
      */
-    public void Draw(ShapeRenderer shapeRenderer, Batch batch)
-    {
-        Draw(shapeRenderer);
-    }
+    @Override
+    public abstract void onCollisionExit(IGameObject other);
+
+    /**
+     * @param other
+     */
+    @Override
+    public abstract void onCollisionStay(IGameObject other);
+
+    /**
+     * For updating this gameobject
+     */
+    @Override
+    public abstract void update();
+
+    /**
+     * @param shapeRenderer Shaperendere to draw into
+     */
+    @Override
+    public abstract void Draw(ShapeRenderer shapeRenderer);
+
+    /**
+     * @param batch Batch to draw into
+     */
+    @Override
+    public abstract void Draw(Batch batch);
 
     /**
      * DrawText on screen
      *
-     * @param batch
+     * @param batch    Batch used
      * @param font     Font used
      * @param layout   Layout used
      * @param text     Text to draw
@@ -255,7 +244,7 @@ public abstract class GameObject implements IGameObject, Serializable
     }
 
     /**
-     * @return
+     * @return The sprite
      */
     public Sprite getSprite()
     {
@@ -263,6 +252,8 @@ public abstract class GameObject implements IGameObject, Serializable
     }
 
     /**
+     * Overwrite or set the current sprite
+     *
      * @param sprite
      */
     public void setSprite(Sprite sprite)
@@ -270,16 +261,28 @@ public abstract class GameObject implements IGameObject, Serializable
         this.sprite = sprite;
     }
 
+    /**
+     *
+     * @return the Fixture
+     */
     public Fixture getFixture()
     {
         return fixture;
     }
 
+    /**
+     *
+     * @param fixture The new Fixture
+     */
     public void setFixture(Fixture fixture)
     {
         this.fixture = fixture;
     }
 
+    /**
+     *
+     *  @return a new Vector that points forwards and includes the rotations
+     */
     public Vector2 getForward()
     {
         Vector2 forward = new Vector2(1, 0).rotate(rotation);
@@ -287,6 +290,10 @@ public abstract class GameObject implements IGameObject, Serializable
         return forward;
     }
 
+    /**
+     *
+     * @return a new Vector that points backwards from forwards Vector
+     */
     public Vector2 getBackwards()
     {
         Vector2 backwards = new Vector2(-1, 0).rotate(rotation);
@@ -294,6 +301,10 @@ public abstract class GameObject implements IGameObject, Serializable
         return backwards;
     }
 
+    /**
+     *
+     * @return a new Vector that points left from forwards Vector
+     */
     public Vector2 getLeft()
     {
         Vector2 left = new Vector2(0, 1).rotate(rotation);
@@ -301,10 +312,23 @@ public abstract class GameObject implements IGameObject, Serializable
         return left;
     }
 
+    /**
+     *
+     * @return a new Vector that points right from forwards Vector
+     */
     public Vector2 getRight()
     {
         Vector2 right = new Vector2(0, -1).rotate(rotation);
 
         return right;
+    }
+
+    /**
+     *
+     * @return a boolean to determine if this gameobject is set to be deleted.
+     */
+    public boolean isToDelete()
+    {
+        return toDelete;
     }
 }

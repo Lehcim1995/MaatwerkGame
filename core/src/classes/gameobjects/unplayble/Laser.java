@@ -50,8 +50,7 @@ public class Laser extends Projectile
     @Override
     public void onCollisionEnter(IGameObject other)
     {
-        super.onCollisionEnter(other);
+        toDelete = true;
         System.out.println("Laser got hit");
-
     }
 }

@@ -1,10 +1,9 @@
 package classes.gameobjects.playable;
 
 import classes.gameobjects.GameObject;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 
-public class Ship extends GameObject
+public abstract class Ship extends GameObject
 {
     protected float maxSpaceshipSpeed;
     protected float maxSpeed;
@@ -24,12 +23,6 @@ public class Ship extends GameObject
 
         sprite.setPosition(position.x - (sprite.getWidth() / 2), position.y - (sprite.getHeight() / 2));
         sprite.setRotation(rotation);
-    }
-
-    @Override
-    public void Draw(Batch batch)
-    {
-        super.Draw(batch);
     }
 
     private void destroy()

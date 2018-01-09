@@ -3,7 +3,9 @@ package classes.gameobjects.unplayble;
 import classes.gameobjects.GameObject;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import interfaces.IGameObject;
 
 public class Projectile extends GameObject
 {
@@ -23,7 +25,6 @@ public class Projectile extends GameObject
     @Override
     public void Draw(Batch batch)
     {
-        super.Draw(batch);
         if (sprite != null)
         {
             sprite.draw(batch);
@@ -47,5 +48,29 @@ public class Projectile extends GameObject
     public float getSpeed()
     {
         return speed;
+    }
+
+    @Override
+    public void onCollisionEnter(IGameObject other)
+    {
+
+    }
+
+    @Override
+    public void onCollisionExit(IGameObject other)
+    {
+
+    }
+
+    @Override
+    public void onCollisionStay(IGameObject other)
+    {
+
+    }
+
+    @Override
+    public void Draw(ShapeRenderer shapeRenderer)
+    {
+
     }
 }
