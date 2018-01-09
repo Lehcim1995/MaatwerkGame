@@ -1,7 +1,6 @@
 package classes.gameobjects.playable;
 
 import classes.gameobjects.GameObject;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -50,18 +49,18 @@ public class SpaceShipEnemy extends Ship
     {
         if (follow != null)
         {
-            shapeRenderer.setColor(Color.WHITE);
-            shapeRenderer.line(position, follow.getPosition());
-
-
-            Vector2 disPlayerPos = new Vector2(position);
-            Vector2 disFollowPos = new Vector2(follow.getPosition());
-
-            Vector2 towardsPlayer = disFollowPos.sub(disPlayerPos);
-            disPlayerPos.add(towardsPlayer.nor().scl(10));
-
-            shapeRenderer.setColor(Color.RED);
-            shapeRenderer.line(position, disPlayerPos);
+//            shapeRenderer.setColor(Color.WHITE);
+//            shapeRenderer.line(position, follow.getPosition());
+//
+//
+//            Vector2 disPlayerPos = new Vector2(position);
+//            Vector2 disFollowPos = new Vector2(follow.getPosition());
+//
+//            Vector2 towardsPlayer = disFollowPos.sub(disPlayerPos);
+//            disPlayerPos.add(towardsPlayer.nor().scl(10));
+//
+//            shapeRenderer.setColor(Color.RED);
+//            shapeRenderer.line(position, disPlayerPos);
 
         }
     }

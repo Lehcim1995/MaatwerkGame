@@ -1,6 +1,8 @@
 package classes.managers;
 
+import classes.CollisionListener;
 import com.badlogic.gdx.physics.box2d.Box2D;
+import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.World;
 
 import static classes.Constants.GRAVITY;
@@ -9,10 +11,12 @@ public class WorldManager
 {
     public World world;
 
+    private final ContactListener contactListener = new CollisionListener();
+
     public WorldManager()
     {
         Box2D.init();
-        world = new World(GRAVITY, false);
+        reloadWorld();
     }
 
     public WorldManager(World world)
@@ -29,6 +33,7 @@ public class WorldManager
         }
 
         world = new World(GRAVITY, false);
+        world.setContactListener(contactListener);
     }
 
 

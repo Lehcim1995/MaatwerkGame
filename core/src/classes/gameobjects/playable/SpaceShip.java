@@ -87,6 +87,7 @@ public class SpaceShip extends Ship
         {
             Vector2 dir = new Vector2(fixture.getBody().getLinearVelocity()).rotate(180).nor();
 
+//            fixture.getBody().
             fixture.getBody().applyForceToCenter(dir.scl(moveNewtons), false);
         }
 
@@ -94,7 +95,6 @@ public class SpaceShip extends Ship
         {
             //TODO add shooting
             gameManager.fireLaser(position, 100, rotation);
-            System.out.println(position.x + " : " + position.y);
         }
     }
 

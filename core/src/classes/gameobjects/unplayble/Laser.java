@@ -46,4 +46,12 @@ public class Laser extends Projectile
             follow.getPosition().angleRad(towardsPlayer);
         }
     }
+
+    @Override
+    public void onCollisionEnter(IGameObject other)
+    {
+        super.onCollisionEnter(other);
+        System.out.println("Laser got hit");
+
+    }
 }

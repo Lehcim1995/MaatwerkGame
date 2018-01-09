@@ -41,13 +41,13 @@ public class GameManager
         createPlayer(new Vector2(0, 0));
 
 
-//        for (int x = 0; x < 5; x++)
-//        {
-//            for (int y = 0; y < 5; y++)
-//            {
-//                createEnemy(new Vector2(x * 31 * 100, y * 33 * 100));
-//            }
-//        }
+        for (int x = 0; x < 5; x++)
+        {
+            for (int y = 0; y < 5; y++)
+            {
+                createEnemy(new Vector2(x * 31 * 100, y * 33 * 100));
+            }
+        }
 
         Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
     }
@@ -74,6 +74,8 @@ public class GameManager
         fixture.setFilterData(CollisionMasks.PLAYER_FILTER);
         laser.setFixture(fixture);
         laser.setSpeed(speed);
+        laser.update();
+        fixture.setUserData(laser);
 
         gameObjects.add(laser);
         return laser;
@@ -85,7 +87,10 @@ public class GameManager
         ship.setGameManager(this);
 
         Fixture fixture = shapeFactory.CreateCube(ship);
+        fixture.setFilterData(CollisionMasks.PLAYER_FILTER);
         ship.setFixture(fixture);
+        fixture.setUserData(ship);
+
 
         gameObjects.add(ship);
         player = ship;
@@ -97,7 +102,9 @@ public class GameManager
         SpaceShipEnemy enemy = new SpaceShipEnemy(pos, 0, spaceShipTexturesHelper.getSpaceShipSprite(16), player);
 
         Fixture fixture = shapeFactory.CreateCube(enemy);
+        fixture.setFilterData(CollisionMasks.ENEMY_FILTER);
         enemy.setFixture(fixture);
+        fixture.setUserData(enemy);
 
         gameObjects.add(enemy);
         return enemy;
