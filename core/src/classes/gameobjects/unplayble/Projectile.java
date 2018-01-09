@@ -2,9 +2,7 @@ package classes.gameobjects.unplayble;
 
 import classes.gameobjects.GameObject;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
 public class Projectile extends GameObject
@@ -15,8 +13,11 @@ public class Projectile extends GameObject
     @Override
     public void update()
     {
-        super.update();
+        this.position = fixture.getBody().getPosition();
+        this.rotation = (float) Math.toDegrees(fixture.getBody().getAngle());
 
+        sprite.setPosition(position.x - (sprite.getWidth() / 2), position.y - (sprite.getHeight() / 2));
+        sprite.setRotation(rotation);
     }
 
     @Override
@@ -29,14 +30,6 @@ public class Projectile extends GameObject
         }
     }
 
-    @Override
-    public void Draw(ShapeRenderer shapeRenderer)
-    {
-        shapeRenderer.setColor(Color.WHITE);
-        shapeRenderer.circle(position.x, position.y, 5);
-        super.Draw(shapeRenderer);
-    }
-
     private float getDeltaTime()
     {
         return Gdx.graphics.getDeltaTime();
@@ -47,7 +40,7 @@ public class Projectile extends GameObject
         this.speed = speed;
         if (fixture != null)
         {
-            fixture.getBody().setLinearVelocity(getForward());
+            fixture.getBody().setLinearVelocity(getForward().scl(speed));
         }
     }
 

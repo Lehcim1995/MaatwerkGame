@@ -75,12 +75,6 @@ public interface IGameObject
     void Draw(ShapeRenderer shapeRenderer, Batch batch);
 
     /**
-     * @param go2
-     * @return
-     */
-    boolean isHit(IGameObject go2);
-
-    /**
      * @return
      */
     long getID();

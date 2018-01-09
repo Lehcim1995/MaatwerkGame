@@ -1,5 +1,6 @@
 package classes.managers;
 
+import classes.CollisionMasks;
 import classes.factories.ShapeFactory;
 import classes.gameobjects.playable.SpaceShip;
 import classes.gameobjects.playable.SpaceShipEnemy;
@@ -12,8 +13,9 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import interfaces.IGameObject;
 
-import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import static classes.Constants.*;
 
@@ -33,21 +35,19 @@ public class GameManager
         this.worldManager = new WorldManager();
         this.spaceShipTexturesHelper = new SpaceShipTexturesHelper();
         shapeFactory = new ShapeFactory(worldManager.world);
-        gameObjects = new ArrayList<>();
+        gameObjects = new CopyOnWriteArrayList<>();
 
         // TODO make simple
         createPlayer(new Vector2(0, 0));
 
 
-        for (int x = 0; x < 5; x++)
-        {
-            for (int y = 0; y < 5; y++)
-            {
-                createEnemy(new Vector2(x * 31 * 100, y * 33 * 100));
-            }
-        }
-
-        fireLazer(new Vector2(0, 0), 0);
+//        for (int x = 0; x < 5; x++)
+//        {
+//            for (int y = 0; y < 5; y++)
+//            {
+//                createEnemy(new Vector2(x * 31 * 100, y * 33 * 100));
+//            }
+//        }
 
         Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
     }
@@ -60,36 +60,32 @@ public class GameManager
     public void update(float deltaTime)
     {
         doPhysicsStep(deltaTime);
-        for (IGameObject go : gameObjects)
+        for (Iterator<IGameObject> it = gameObjects.iterator(); it.hasNext(); )
         {
-            go.update();
+            IGameObject gameObject = it.next();
+            gameObject.update();
         }
     }
 
-    public Laser fireLazer(Vector2 pos, float speed)
+    public Laser fireLaser(Vector2 pos, float speed, float rotation)
     {
-        Laser laser = new Laser(pos, 0, null, speed);
+        Laser laser = new Laser(new Vector2(pos), rotation, speed);
         Fixture fixture = shapeFactory.CreateCube(laser);
+        fixture.setFilterData(CollisionMasks.PLAYER_FILTER);
         laser.setFixture(fixture);
-        laser.setSpeed(0f);
+        laser.setSpeed(speed);
 
         gameObjects.add(laser);
-
         return laser;
-    }
-
-    public IGameObject createGameObject()
-    {
-        return null;
     }
 
     public SpaceShip createPlayer(Vector2 pos)
     {
         SpaceShip ship = new SpaceShip(pos, 0f, spaceShipTexturesHelper.getSpaceShipSprite(1));
+        ship.setGameManager(this);
 
-        Fixture fixture = shapeFactory.CreateCube((int) ship.getPosition().x, (int) ship.getPosition().y, (int) ship.getSprite().getWidth(), (int) ship.getSprite().getHeight());
+        Fixture fixture = shapeFactory.CreateCube(ship);
         ship.setFixture(fixture);
-//        fixture.getBody().setTransform(pos, 0);
 
         gameObjects.add(ship);
         player = ship;
@@ -100,9 +96,8 @@ public class GameManager
     {
         SpaceShipEnemy enemy = new SpaceShipEnemy(pos, 0, spaceShipTexturesHelper.getSpaceShipSprite(16), player);
 
-        Fixture fixture = shapeFactory.CreateCube((int) enemy.getPosition().x, (int) enemy.getPosition().y, (int) enemy.getSprite().getWidth(), (int) enemy.getSprite().getHeight());
+        Fixture fixture = shapeFactory.CreateCube(enemy);
         enemy.setFixture(fixture);
-//        fixture.getBody().setTransform(pos, 0);
 
         gameObjects.add(enemy);
         return enemy;

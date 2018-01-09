@@ -93,6 +93,13 @@ public class SpaceShip extends Ship
         if (Gdx.input.isKeyPressed(Input.Keys.V))
         {
             //TODO add shooting
+            gameManager.fireLaser(position, 100, rotation);
+            System.out.println(position.x + " : " + position.y);
         }
+    }
+
+    public void setGameManager(GameManager gameManager)
+    {
+        this.gameManager = gameManager;
     }
 }

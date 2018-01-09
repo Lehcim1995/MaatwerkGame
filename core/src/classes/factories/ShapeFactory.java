@@ -24,14 +24,8 @@ public class ShapeFactory
 
     public Fixture CreateSuperShape(int x, int y, Polygon polygon)
     {
-        BodyDef bodyDef = new BodyDef();
-        // We set our body to dynamic, for something like ground which doesn't move we would set it to StaticBody
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        // Set our body's starting position in the world
-        bodyDef.position.set(x, y);
-
         // Create our body in the world using our body definition
-        Body body = world.createBody(bodyDef);
+        Body body = createDynamicBody(x, y, 0);
 
         ChainShape chainShape = new ChainShape();
         chainShape.createLoop(polygon.getTransformedVertices());
@@ -56,14 +50,8 @@ public class ShapeFactory
 
     public Fixture CreateChainShape(int x, int y, List<Vector2> polygon)
     {
-        BodyDef bodyDef = new BodyDef();
-        // We set our body to dynamic, for something like ground which doesn't move we would set it to StaticBody
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        // Set our body's starting position in the world
-        bodyDef.position.set(x, y);
-
         // Create our body in the world using our body definition
-        Body body = world.createBody(bodyDef);
+        Body body = createDynamicBody(x, y, 0);
 
         ChainShape chainShape = new ChainShape();
 
@@ -88,20 +76,13 @@ public class ShapeFactory
 
     public Fixture CreateCube(GameObject go)
     {
-        return CreateCube((int) go.getPosition().x, (int) go.getPosition().y, (int) go.getSprite().getWidth(), (int) go.getSprite().getHeight());
+        return CreateCube((int) go.getPosition().x, (int) go.getPosition().y, (int) go.getSprite().getWidth(), (int) go.getSprite().getHeight(), go.getRotation());
     }
 
-    public Fixture CreateCube(int x, int y, int width, int height)
+    public Fixture CreateCube(int x, int y, int width, int height, float rotation)
     {
-        // First we create a body definition
-        BodyDef bodyDef = new BodyDef();
-        // We set our body to dynamic, for something like ground which doesn't move we would set it to StaticBody
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        // Set our body's starting position in the world
-        bodyDef.position.set(x, y);
-
         // Create our body in the world using our body definition
-        Body body = world.createBody(bodyDef);
+        Body body = createDynamicBody(x, y, rotation);
 
         // Create a circle shape and set its radius to 6
         PolygonShape square = new PolygonShape();
@@ -127,16 +108,8 @@ public class ShapeFactory
 
     public Fixture CreateCircle(int x, int y, int size)
     {
-        // First we create a body definition
-        BodyDef bodyDef = new BodyDef();
-        // We set our body to dynamic, for something like ground which doesn't move we would set it to StaticBody
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-
-        // Set our body's starting position in the world
-        bodyDef.position.set(x, y);
-
         // Create our body in the world using our body definition
-        Body body = world.createBody(bodyDef);
+        Body body = createDynamicBody(x, y, 0);
 
         // Create a circle shape and set its radius to 6
         CircleShape circle = new CircleShape();
@@ -157,5 +130,26 @@ public class ShapeFactory
         circle.dispose();
 
         return fixture;
+    }
+
+    private Body createDynamicBody(float x, float y, float rotation)
+    {
+        return createBody(x, y, rotation, BodyDef.BodyType.DynamicBody);
+    }
+
+    private Body createBody(float x, float y, float rotation, BodyDef.BodyType bodyType)
+    {
+        // First we create a body definition
+        BodyDef bodyDef = new BodyDef();
+        // We set our body to dynamic, for something like ground which doesn't move we would set it to StaticBody
+        bodyDef.type = bodyType;
+
+        // Set our body's starting position in the world
+        bodyDef.position.set(x, y);
+
+        // set rotation
+        bodyDef.angle = (float) Math.toRadians(rotation);
+
+        return world.createBody(bodyDef);
     }
 }

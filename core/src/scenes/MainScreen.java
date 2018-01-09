@@ -90,7 +90,7 @@ public class MainScreen implements Screen
         textBatch.end();
 
         box2DDebugRenderer.setDrawBodies(false);
-        box2DDebugRenderer.setDrawVelocities(true);
+        box2DDebugRenderer.setDrawVelocities(false);
         box2DDebugRenderer.render(gameManager.getWorldManager().world, camera.combined);
         batch.setProjectionMatrix(camera.combined);
         shapeRenderer.setProjectionMatrix(camera.combined);
