@@ -2,7 +2,7 @@ package com.school.spacegame;
 
 import classes.managers.SceneManager;
 import com.badlogic.gdx.Game;
-import scenes.MainScreen;
+import screens.MainScreen;
 
 // TODO \/
 // https://gist.github.com/Leejjon/7fb8aa3ea2e4024a9eba31fa4f3339fb

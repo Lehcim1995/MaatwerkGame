@@ -13,6 +13,14 @@ public abstract class Ship extends GameObject
     protected float rotSpeed;
     protected float mass;
 
+    protected int maxHealth;
+    protected float health;
+
+    protected int maxArmor;
+    protected float armor;
+
+    //TODO add weapon system.
+
     protected Vector2 currentSpeedVector;
 
     @Override
@@ -25,8 +33,8 @@ public abstract class Ship extends GameObject
         sprite.setRotation(rotation);
     }
 
-    private void destroy()
+    protected void onDestroy() // Make abstract?
     {
-
+        //TODO add stuff
     }
 }

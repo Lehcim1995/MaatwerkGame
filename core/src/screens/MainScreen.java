@@ -1,4 +1,4 @@
-package scenes;
+package screens;
 
 import classes.gameobjects.GameObject;
 import classes.managers.GameManager;

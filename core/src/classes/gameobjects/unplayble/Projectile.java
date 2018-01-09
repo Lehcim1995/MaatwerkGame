@@ -9,8 +9,11 @@ import interfaces.IGameObject;
 
 public class Projectile extends GameObject
 {
+    float lifeTime = 1; // Seconds
     private float speed;
     private Vector2 dirVector;
+    private int damage = 25;
+    private int armorPenetration;
 
     @Override
     public void update()
@@ -20,6 +23,12 @@ public class Projectile extends GameObject
 
         sprite.setPosition(position.x - (sprite.getWidth() / 2), position.y - (sprite.getHeight() / 2));
         sprite.setRotation(rotation);
+
+        lifeTime -= Gdx.graphics.getDeltaTime();
+        if (lifeTime <= 0)
+        {
+            toDelete = true;
+        }
     }
 
     @Override
@@ -31,9 +40,9 @@ public class Projectile extends GameObject
         }
     }
 
-    private float getDeltaTime()
+    public float getSpeed()
     {
-        return Gdx.graphics.getDeltaTime();
+        return speed;
     }
 
     public void setSpeed(float speed)
@@ -45,9 +54,9 @@ public class Projectile extends GameObject
         }
     }
 
-    public float getSpeed()
+    public int getDamage()
     {
-        return speed;
+        return damage;
     }
 
     @Override

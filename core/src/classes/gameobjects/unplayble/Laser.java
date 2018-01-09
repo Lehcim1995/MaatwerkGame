@@ -19,6 +19,9 @@ public class Laser extends Projectile
         this.sprite = new Sprite(Beams, 6, 7, 16, 22);
         this.position = position;
         this.rotation = rotation;
+
+        sprite.setPosition(position.x, position.y);
+        sprite.setRotation(rotation);
     }
 
     @Override

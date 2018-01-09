@@ -56,13 +56,15 @@ public class GameManager
             gameObject.update();
         }
 
-        // TODO delete objects with the delete flag/boolean
+        // TODO can this be merged?
 
         for (Iterator<IGameObject> it = gameObjects.iterator(); it.hasNext(); )
         {
             GameObject gameObject = (GameObject) it.next();
             if (gameObject.isToDelete())
             {
+                // Deleting this body is useful
+                worldManager.world.destroyBody(gameObject.getFixture().getBody());
                 gameObjects.remove(gameObject);
             }
         }
@@ -76,9 +78,10 @@ public class GameManager
         Laser laser = new Laser(new Vector2(pos), rotation, speed);
         Fixture fixture = shapeHelper.CreateCube(laser);
         fixture.setFilterData(CollisionMasks.PLAYER_FILTER);
-        laser.setFixture(fixture);
+
+        laser.setFixture(fixture); // TODO refactor this.
         laser.setSpeed(speed);
-        laser.update();
+
         fixture.setUserData(laser);
 
         gameObjects.add(laser);
