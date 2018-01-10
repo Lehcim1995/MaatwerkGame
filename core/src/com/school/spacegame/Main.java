@@ -14,13 +14,12 @@ public class Main extends Game
 
     private MainScreen mainScreen;
     private MainMenuScreen mainMenuScreen;
-    private SceneManager sceneManager;
+    public SceneManager sceneManager;
 
     @Override
     public void create()
     {
-        mainScreen = new MainScreen();
-        mainMenuScreen = new MainMenuScreen();
-        setScreen(mainMenuScreen);
+        sceneManager = new SceneManager(this);
+        sceneManager.LoadMainMenuScreen();
     }
 }

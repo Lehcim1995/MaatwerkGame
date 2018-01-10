@@ -10,17 +10,20 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.school.spacegame.Main;
 
 public class MainMenuScreen implements Screen
 {
     private Stage stage;
+    private Main main;
 
-    public MainMenuScreen()
+    public MainMenuScreen(Main main)
     {
-
         /// create stage and set it as input processor
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
+
+        this.main = main;
     }
 
     @Override
@@ -29,7 +32,7 @@ public class MainMenuScreen implements Screen
         // Create a table that fills the screen. Everything else will go inside this table.
         Table table = new Table();
         table.setFillParent(true);
-        table.setDebug(true);
+        table.setDebug(false);
         stage.addActor(table);
 
         // temporary until we have asset manager in
@@ -67,6 +70,7 @@ public class MainMenuScreen implements Screen
                     Actor actor)
             {
                 System.out.println("new Game");
+                main.sceneManager.LoadMainScreen();
             }
         });
 

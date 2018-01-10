@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.school.spacegame.Main;
 
 //http://badlogicgames.com/forum/viewtopic.php?t=19454&p=81586
 public class MainScreen implements Screen
@@ -35,6 +36,13 @@ public class MainScreen implements Screen
     //Debug
     private Box2DDebugRenderer box2DDebugRenderer;
 
+    private Main parent;
+
+    public MainScreen(Main parent)
+    {
+        this.parent = parent;
+    }
+
     @Override
     public void show()
     {
@@ -45,7 +53,6 @@ public class MainScreen implements Screen
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setAutoShapeType(true);
         camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-//        camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
         box2DDebugRenderer = new Box2DDebugRenderer();
 
@@ -105,7 +112,6 @@ public class MainScreen implements Screen
 
         batch.setProjectionMatrix(camera.combined);
         textBatch = new SpriteBatch();
-//        textBatch.setProjectionMatrix(camera.combined);
     }
 
     @Override
