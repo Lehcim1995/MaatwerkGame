@@ -5,19 +5,17 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.school.spacegame.Main;
 
-public class MainMenuScreen implements Screen
+public class LobbyScreen implements Screen
 {
     private Stage stage;
     private Main main;
 
-    public MainMenuScreen(Main main)
+    public LobbyScreen(Main main)
     {
         /// create stage and set it as input processor
         stage = new Stage(new ScreenViewport());
@@ -38,68 +36,44 @@ public class MainMenuScreen implements Screen
         // temporary until we have asset manager in
         Skin skin = new Skin(Gdx.files.local("/core/assets/skins/neon/skin/neon-ui.json"));
 
-        //create buttons
-        TextButton startGame = new TextButton("Start single player Game", skin);
-        TextButton lobby = new TextButton("Lobby's", skin);
-        TextButton preferences = new TextButton("Preferences", skin);
-        TextButton exit = new TextButton("Exit", skin);
+        TextButton backButton = new TextButton("Back", skin);
+        TextButton startButton = new TextButton("Join", skin);
+        TextButton createLobbyButton = new TextButton("Create", skin);
 
-        //add buttons to table
-        table.add(startGame).fillX().uniformX();
+        List<String> listBox = new List<>(skin);
+        TextField playerName = new TextField("Playername", skin);
+        // TODO get this data from the server
+//        listBox.setItems("1", "2", "3");
+
+        table.add(listBox).colspan(3).fillX();
         table.row().pad(10, 0, 10, 0);
-        table.add(lobby).fillX().uniformX();
+        table.add(playerName);
+        table.add(startButton);
+        table.add(createLobbyButton);
         table.row();
-        table.add(preferences).fillX().uniformX();
-        table.row();
-        table.add(exit).fillX().uniformX();
+        table.add(backButton).fillX().uniformX().right();
 
-        // create button listeners
-        exit.addListener(new ChangeListener()
+        backButton.addListener(new ChangeListener()
         {
             @Override
             public void changed(
                     ChangeEvent event,
                     Actor actor)
             {
-                Gdx.app.exit();
+                main.sceneManager.LoadMainMenuScreen();
             }
         });
 
-        startGame.addListener(new ChangeListener()
+        createLobbyButton.addListener(new ChangeListener()
         {
             @Override
             public void changed(
                     ChangeEvent event,
                     Actor actor)
             {
-                System.out.println("new Game");
-                main.sceneManager.LoadMainScreen();
+                main.sceneManager.LoadLobbyCreateScreen();
             }
         });
-
-        lobby.addListener(new ChangeListener()
-        {
-            @Override
-            public void changed(
-                    ChangeEvent event,
-                    Actor actor)
-            {
-                System.out.println("new Game");
-                main.sceneManager.LoadLobbyScreen();
-            }
-        });
-
-        preferences.addListener(new ChangeListener()
-        {
-            @Override
-            public void changed(
-                    ChangeEvent event,
-                    Actor actor)
-            {
-                System.out.println("Settings");
-            }
-        });
-
     }
 
     @Override
