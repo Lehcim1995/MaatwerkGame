@@ -38,7 +38,7 @@ public class MainMenuScreen implements Screen
         Skin skin = new Skin(Gdx.files.local("/core/assets/skins/neon/skin/neon-ui.json"));
 
         TextButton startGame = new TextButton("Local Destroyer Game", skin);
-        TextButton startGameOther = new TextButton("Start Spawner Game", skin);
+        TextButton startGameOther = new TextButton("Local Spawner Game", skin);
         TextButton lobby = new TextButton("Lobby's", skin);
         TextButton preferences = new TextButton("Preferences", skin);
         TextButton exit = new TextButton("Exit", skin);
@@ -85,7 +85,7 @@ public class MainMenuScreen implements Screen
             }
         });
 
-        lobby.addListener(new ChangeListener()
+        startGameOther.addListener(new ChangeListener()
         {
             @Override
             public void changed(
@@ -93,6 +93,18 @@ public class MainMenuScreen implements Screen
                     Actor actor)
             {
                 System.out.println("new Game");
+                main.sceneManager.LoadMainScreenSpawner();
+            }
+        });
+
+        lobby.addListener(new ChangeListener()
+        {
+            @Override
+            public void changed(
+                    ChangeEvent event,
+                    Actor actor)
+            {
+                System.out.println("Lobby");
                 main.sceneManager.LoadLobbyScreen();
             }
         });

@@ -4,13 +4,15 @@ import classes.gameobjects.GameObject;
 import classes.managers.GameManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.school.spacegame.Main;
 
@@ -27,6 +29,7 @@ public class MainScreen implements Screen
     private ShapeRenderer shapeRenderer;
     private Camera camera;
     private float zoomLevel = 5;
+    private GameObject textDrawer;
 
     // Text stuff
     private BitmapFont font;
@@ -40,13 +43,16 @@ public class MainScreen implements Screen
 
     private Main parent;
     private boolean online;
+    private GameManager.playerType type;
 
     public MainScreen(
             Main parent,
-            boolean online)
+            boolean online,
+            GameManager.playerType type)
     {
         this.parent = parent;
         this.online = online;
+        this.type = type;
     }
 
     @Override
@@ -55,7 +61,7 @@ public class MainScreen implements Screen
         // init
         try
         {
-            gameManager = new GameManager(online);
+            gameManager = new GameManager(online, type);
         }
         catch (RemoteException e)
         {
@@ -84,7 +90,15 @@ public class MainScreen implements Screen
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        camera.position.set(gameManager.getPlayer().getPosition(), 0);
+        switch (gameManager.getPlayerType())
+        {
+            case Destroyer:
+                camera.position.set(gameManager.getPlayer().getPosition(), 0);
+                break;
+            case Spawner:
+                camera.position.set(gameManager.getWaveSpawnerPlayer().getPosition(), 0);
+                break;
+        }
         camera.update();
 
         batch.begin();
@@ -97,19 +111,12 @@ public class MainScreen implements Screen
         gameManager.draw(shapeRenderer);
         shapeRenderer.end();
 
-        textBatch.begin();
-        int fps = (int) (1 / delta);
-        if (fps < 30)
-        {
-            font.setColor(Color.RED);
-        }
-        else
-        {
-            font.setColor(Color.WHITE);
-        }
-        final Vector2 pos = new Vector2(100, 100);
-        gameManager.getPlayer().DrawText(textBatch, font, layout, "Fps: " + fps, pos);
-        textBatch.end();
+//        textBatch.begin();
+//        int fps = (int) (1 / delta);
+//        font.setColor(fps < 30 ? Color.RED : Color.WHITE);
+//        final Vector2 pos = new Vector2(100, 100);
+//        gameManager.getPlayer().DrawText(textBatch, font, layout, "Fps: " + fps, pos);
+//        textBatch.end();
 
         box2DDebugRenderer.setDrawBodies(false);
         box2DDebugRenderer.setDrawVelocities(false);
@@ -165,7 +172,20 @@ public class MainScreen implements Screen
         final int totalHeight = (int) (textureHeight * 4);
         final int totalWidth = (int) (textureWidth * 4);
 
-        GameObject player = gameManager.getPlayer();
+        GameObject player = null;
+        switch (type)
+        {
+            case Destroyer:
+                player = gameManager.getPlayer();
+                break;
+            case Spawner:
+                player = gameManager.getWaveSpawnerPlayer();
+                break;
+            case Spectator:
+                // Exit
+                return;
+//                break;
+        }
 
         batch.draw(background, -offSetWidth + (textureWidth * (int) (player.getPosition().x / textureWidth)), -offSetHeight + (textureHeight * (int) (player.getPosition().y / textureHeight)), 0, 0, totalWidth, totalHeight);
     }

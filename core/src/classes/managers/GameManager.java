@@ -5,6 +5,7 @@ import classes.factories.ShapeHelper;
 import classes.gameobjects.GameObject;
 import classes.gameobjects.playable.SpaceShip;
 import classes.gameobjects.playable.SpaceShipEnemy;
+import classes.gameobjects.playable.WaveSpawnerPlayer;
 import classes.gameobjects.unplayble.Laser;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -13,7 +14,6 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import interfaces.IGameObject;
 
 import java.rmi.RemoteException;
-import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Iterator;
 import java.util.List;
@@ -32,13 +32,15 @@ public class GameManager extends UnicastRemoteObject
     private List<IGameObject> serverGameObjects;
 
     private SpaceShip player;
+    private WaveSpawnerPlayer waveSpawnerPlayer;
 
     // Online stuff
     private boolean online;
     private playerType type;
-    private Registry registry;
 
-    public GameManager(boolean online) throws RemoteException
+    public GameManager(
+            boolean online,
+            playerType type) throws RemoteException
     {
         super();
         this.worldManager = new WorldManager();
@@ -47,14 +49,14 @@ public class GameManager extends UnicastRemoteObject
         gameObjects = new CopyOnWriteArrayList<>();
 
         this.online = online;
+        this.type = type;
 
-        switch (type)
+        switch (this.type)
         {
             case Destroyer:
                 createPlayer(new Vector2(0, 0));
                 break;
             case Spawner:
-                // TODO createSpawnerPlayer
                 createSpawnerPlayer();
                 break;
         }
@@ -70,8 +72,18 @@ public class GameManager extends UnicastRemoteObject
         connectToServer("");
     }
 
-    private void createSpawnerPlayer()
+    public void createSpawnerPlayer()
     {
+        createSpawnerPlayer(new Vector2(0, 0));
+        // TODO make this method
+    }
+
+    public void createSpawnerPlayer(Vector2 pos)
+    {
+        waveSpawnerPlayer = new WaveSpawnerPlayer(this);
+        waveSpawnerPlayer.setPosition(pos);
+
+        gameObjects.add(waveSpawnerPlayer);
         // TODO make this method
     }
 
@@ -148,7 +160,6 @@ public class GameManager extends UnicastRemoteObject
         fixture.setFilterData(CollisionMasks.PLAYER_FILTER);
         ship.setFixture(fixture);
         fixture.setUserData(ship);
-
 
         gameObjects.add(ship);
         player = ship;
@@ -246,9 +257,20 @@ public class GameManager extends UnicastRemoteObject
         this.online = online;
     }
 
+    public playerType getPlayerType()
+    {
+        return type;
+    }
+
+    public WaveSpawnerPlayer getWaveSpawnerPlayer()
+    {
+        return waveSpawnerPlayer;
+    }
+
     public enum playerType
     {
         Destroyer,
-        Spawner
+        Spawner,
+        Spectator
     }
 }

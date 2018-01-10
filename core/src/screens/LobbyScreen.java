@@ -1,5 +1,6 @@
 package screens;
 
+import classes.managers.GameManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -119,7 +120,8 @@ public class LobbyScreen implements Screen
                     System.out.println("Nothing selected");
                     //TODO show error
                 }
-                main.sceneManager.LoadMainScreen(true);
+                // TODO select the current selected rol
+                main.sceneManager.LoadMainScreen(true, GameManager.playerType.Destroyer);
             }
         });
 
