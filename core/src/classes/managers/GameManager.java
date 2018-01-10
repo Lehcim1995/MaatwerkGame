@@ -90,7 +90,14 @@ public class GameManager
 
     public SpaceShip createPlayer(Vector2 pos)
     {
-        SpaceShip ship = new SpaceShip(pos, 0f, spaceShipTexturesHelper.getSpaceShipSprite(1));
+        return createPlayer(pos, 0);
+    }
+
+    public SpaceShip createPlayer(
+            Vector2 pos,
+            float rotation)
+    {
+        SpaceShip ship = new SpaceShip(pos, rotation, spaceShipTexturesHelper.getSpaceShipSprite(1));
         ship.setGameManager(this);
 
         Fixture fixture = shapeHelper.CreateCube(ship);
@@ -104,9 +111,29 @@ public class GameManager
         return ship;
     }
 
+    public SpaceShip CreateNonPlayer(Vector2 pos)
+    {
+        return CreateNonPlayer(pos, 0f);
+    }
+
+    public SpaceShip CreateNonPlayer(
+            Vector2 pos,
+            float rotation)
+    {
+        //TODO create this method
+        return null;
+    }
+
     public SpaceShipEnemy createEnemy(Vector2 pos)
     {
-        SpaceShipEnemy enemy = new SpaceShipEnemy(pos, 0, spaceShipTexturesHelper.getSpaceShipSprite(16), player);
+        return createEnemy(pos, 0f);
+    }
+
+    public SpaceShipEnemy createEnemy(
+            Vector2 pos,
+            float rotation)
+    {
+        SpaceShipEnemy enemy = new SpaceShipEnemy(pos, rotation, spaceShipTexturesHelper.getSpaceShipSprite(16), player);
 
         Fixture fixture = shapeHelper.CreateCube(enemy);
         fixture.setFilterData(CollisionMasks.ENEMY_FILTER);

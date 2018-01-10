@@ -2,6 +2,7 @@ package com.school.spacegame;
 
 import classes.managers.SceneManager;
 import com.badlogic.gdx.Game;
+import screens.MainMenuScreen;
 import screens.MainScreen;
 
 // TODO \/
@@ -12,12 +13,14 @@ public class Main extends Game
 {
 
     private MainScreen mainScreen;
+    private MainMenuScreen mainMenuScreen;
     private SceneManager sceneManager;
 
     @Override
     public void create()
     {
         mainScreen = new MainScreen();
-        setScreen(mainScreen);
+        mainMenuScreen = new MainMenuScreen();
+        setScreen(mainMenuScreen);
     }
 }

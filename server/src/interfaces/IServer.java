@@ -3,7 +3,7 @@ package interfaces;
 import java.io.Serializable;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Stefan on 12/20/2016.
@@ -14,7 +14,7 @@ public interface IServer extends Remote, Serializable
     String ServerManger = "servermanager";
     String connection = "connection";
 
-    ArrayList<String> getLobbies() throws RemoteException;
+    List<String> getLobbies() throws RemoteException;
 
 //    IGameManager CreateLobby(String name) throws RemoteException;
 

@@ -6,12 +6,15 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ServerMain implements IServer
 {
     private transient Registry registry;
+
+    private List<String> lobbies;
 
     public ServerMain() throws RemoteException
     {
@@ -33,8 +36,8 @@ public class ServerMain implements IServer
     }
 
     @Override
-    public ArrayList<String> getLobbies() throws RemoteException
+    public List<String> getLobbies() throws RemoteException
     {
-        return null;
+        return new ArrayList<>();
     }
 }
