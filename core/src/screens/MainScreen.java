@@ -53,6 +53,8 @@ public class MainScreen implements Screen
         this.parent = parent;
         this.online = online;
         this.type = type;
+
+//        Gdx.input.setInputProcessor();
     }
 
     @Override
@@ -61,7 +63,7 @@ public class MainScreen implements Screen
         // init
         try
         {
-            gameManager = new GameManager(online, type);
+            gameManager = new GameManager(online, type, this);
         }
         catch (RemoteException e)
         {
@@ -188,5 +190,10 @@ public class MainScreen implements Screen
         }
 
         batch.draw(background, -offSetWidth + (textureWidth * (int) (player.getPosition().x / textureWidth)), -offSetHeight + (textureHeight * (int) (player.getPosition().y / textureHeight)), 0, 0, totalWidth, totalHeight);
+    }
+
+    public Camera getCamera()
+    {
+        return camera;
     }
 }

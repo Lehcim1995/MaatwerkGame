@@ -3,8 +3,6 @@ package com.school.spacegame;
 import classes.managers.SceneManager;
 import com.badlogic.gdx.Game;
 import interfaces.IServer;
-import screens.MainMenuScreen;
-import screens.MainScreen;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -20,9 +18,6 @@ import java.util.logging.Logger;
 // http://www.pixnbgames.com/blog/libgdx/how-to-manage-screens-in-libgdx/
 public class Main extends Game
 {
-
-    private MainScreen mainScreen;
-    private MainMenuScreen mainMenuScreen;
     public SceneManager sceneManager;
     private Registry registry;
     private IServer server;

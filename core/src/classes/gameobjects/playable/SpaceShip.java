@@ -128,4 +128,9 @@ public class SpaceShip extends Ship
     {
 
     }
+
+    public GameManager getGameManager()
+    {
+        return gameManager;
+    }
 }

@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import interfaces.IGameObject;
+import screens.MainScreen;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -23,6 +24,7 @@ import static classes.Constants.*;
 
 public class GameManager extends UnicastRemoteObject
 {
+    private MainScreen mainScreen;
     private WorldManager worldManager;
     private SpaceShipTexturesHelper spaceShipTexturesHelper;
     private ShapeHelper shapeHelper;
@@ -40,7 +42,8 @@ public class GameManager extends UnicastRemoteObject
 
     public GameManager(
             boolean online,
-            playerType type) throws RemoteException
+            playerType type,
+            MainScreen mainScreen) throws RemoteException
     {
         super();
         this.worldManager = new WorldManager();
@@ -50,6 +53,7 @@ public class GameManager extends UnicastRemoteObject
 
         this.online = online;
         this.type = type;
+        this.mainScreen = mainScreen;
 
         switch (this.type)
         {
@@ -61,13 +65,6 @@ public class GameManager extends UnicastRemoteObject
                 break;
         }
 
-        for (int x = 0; x < 5; x++)
-        {
-            for (int y = 0; y < 5; y++)
-            {
-                createEnemy(new Vector2(x * 31 * 100, y * 33 * 100));
-            }
-        }
         // TODO add lobby name
         connectToServer("");
     }
@@ -265,6 +262,11 @@ public class GameManager extends UnicastRemoteObject
     public WaveSpawnerPlayer getWaveSpawnerPlayer()
     {
         return waveSpawnerPlayer;
+    }
+
+    public MainScreen getMainScreen()
+    {
+        return mainScreen;
     }
 
     public enum playerType

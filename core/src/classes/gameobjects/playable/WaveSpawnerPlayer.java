@@ -7,12 +7,14 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import interfaces.IGameObject;
 
 public class WaveSpawnerPlayer extends GameObject
 {
 
     private GameManager gameManager;
+    private boolean hasSpawned;
 
     public WaveSpawnerPlayer(GameManager gameManager)
     {
@@ -65,24 +67,40 @@ public class WaveSpawnerPlayer extends GameObject
         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
         {
             // TODO spawn
-            int x = Gdx.input.getX();
-            int y = Gdx.input.getY();
-            Vector2 mousePos = new Vector2(x, y);
 
-            int spawn = 10;
-            float radius = 500;
-            float angle = 360 / spawn;
-            Vector2 middle = new Vector2(mousePos);
-
-            for (int i = 0; i < spawn; i++)
+            if (!hasSpawned)
             {
-                // TODO refactor
-                // Make a vector with a radius
-                Vector2 pos = new Vector2(radius, 0);
-                pos.rotate(angle * i);
-                pos.add(middle);
+                int x = Gdx.input.getX();
 
-                gameManager.createEnemy(pos, angle * i);
+                hasSpawned = true;
+                int y = Gdx.input.getY();
+                Vector2 mousePos = new Vector2(x, y);
+
+                int spawn = 10;
+                float radius = 10;
+                float angle = 360 / spawn;
+                Vector3 vector3 = new Vector3(mousePos.x, mousePos.y, 0);
+                Vector3 screenpos = gameManager.getMainScreen().getCamera().unproject(vector3);
+                Vector2 middle = new Vector2(screenpos.x, screenpos.y);
+
+                for (int i = 0; i < spawn; i++)
+                {
+                    // TODO refactor
+                    // Make a vector with a radius
+                    Vector2 pos = new Vector2(radius, 0);
+                    pos.rotate(angle * i);
+                    pos.add(middle);
+
+                    gameManager.createEnemy(pos, angle * i);
+                }
+            }
+        }
+
+        if (!Gdx.input.isButtonPressed(Input.Buttons.LEFT))
+        {
+            if (hasSpawned = true)
+            {
+                hasSpawned = false;
             }
         }
     }
