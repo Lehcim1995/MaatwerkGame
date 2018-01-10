@@ -21,7 +21,12 @@ public class SceneManager
 
     public void LoadMainScreen()
     {
-        mainScreen = new MainScreen(main);
+        LoadMainScreen(false);
+    }
+
+    public void LoadMainScreen(boolean online)
+    {
+        mainScreen = new MainScreen(main, online);
         main.setScreen(mainScreen);
     }
 

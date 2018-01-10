@@ -5,10 +5,12 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.school.spacegame.Main;
 
@@ -44,9 +46,16 @@ public class MainMenuScreen implements Screen
         TextButton preferences = new TextButton("Preferences", skin);
         TextButton exit = new TextButton("Exit", skin);
 
+
+        Label label = new Label("Space game", skin);
+        label.setFontScale(2);
+        label.setAlignment(Align.center);
+
         //add buttons to table
-        table.add(startGame).fillX().uniformX();
+        table.add(label);
         table.row().pad(10, 0, 10, 0);
+        table.add(startGame).fillX().uniformX();
+        table.row();
         table.add(lobby).fillX().uniformX();
         table.row();
         table.add(preferences).fillX().uniformX();
@@ -150,4 +159,5 @@ public class MainMenuScreen implements Screen
         // dispose of assets when not needed anymore
         stage.dispose();
     }
+
 }

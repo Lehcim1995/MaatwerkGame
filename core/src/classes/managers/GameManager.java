@@ -11,14 +11,23 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import interfaces.IGameObject;
+import interfaces.IServer;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.logging.Logger;
 
 import static classes.Constants.*;
 
-public class GameManager
+public class GameManager extends UnicastRemoteObject
 {
     private WorldManager worldManager;
     private SpaceShipTexturesHelper spaceShipTexturesHelper;
@@ -26,15 +35,23 @@ public class GameManager
     private float accumulator;
 
     private List<IGameObject> gameObjects;
+    private List<IGameObject> serverGameObjects;
 
     private SpaceShip player;
 
-    public GameManager()
+    // Online stuff
+    private boolean online;
+    private Registry registry;
+
+    public GameManager(boolean online) throws RemoteException
     {
+        super();
         this.worldManager = new WorldManager();
         this.spaceShipTexturesHelper = new SpaceShipTexturesHelper();
         shapeHelper = new ShapeHelper(worldManager.world);
         gameObjects = new CopyOnWriteArrayList<>();
+
+        this.online = online;
 
         createPlayer(new Vector2(0, 0));
 
@@ -44,6 +61,58 @@ public class GameManager
             {
                 createEnemy(new Vector2(x * 31 * 100, y * 33 * 100));
             }
+        }
+        // TODO add lobby name
+        connectToServer("");
+    }
+
+    private void connectToServer(String lobby)
+    {
+        if (!online)
+        {
+            return;
+        }
+
+        InetAddress localhost = null;
+        online = true;
+        try
+        {
+            localhost = InetAddress.getLocalHost();
+        }
+        catch (UnknownHostException e)
+        {
+            //Log this
+            java.util.logging.Logger.getAnonymousLogger().log(java.util.logging.Level.SEVERE, "Client: UnknownHostException: " + e.getMessage());
+            online = false;
+        }
+        String ip = "";
+        int portNumber = 1099;
+
+        try
+        {
+            registry = LocateRegistry.getRegistry(ip, portNumber);
+            System.out.println("1");
+            String serverManger = IServer.ServerManger;
+            System.out.println("2");
+            IServer tempServer = (IServer) registry.lookup(serverManger);
+            //not bound exception
+//            String serverName = ScreenManager.getInstance().getLobbyname();
+//            server = tempserver.JoinLobby(serverName, ScreenManager.getInstance().getUser());
+            System.out.println(tempServer.getLobbies());
+            System.out.println("3");
+
+        }
+        catch (RemoteException e)
+        {
+            //Log this
+            Logger.getAnonymousLogger().log(java.util.logging.Level.SEVERE, "Client: RemoteExeption: " + e.getMessage());
+            online = false;
+        }
+        catch (NotBoundException e)
+        {
+            //Log this
+            Logger.getAnonymousLogger().log(java.util.logging.Level.SEVERE, "Client: NotBoundException: " + e.getMessage());
+            online = false;
         }
     }
 
@@ -66,7 +135,15 @@ public class GameManager
                 // Deleting this body is useful
                 worldManager.world.destroyBody(gameObject.getFixture().getBody());
                 gameObjects.remove(gameObject);
+                //TODO let the server know i deleted this gameobject
             }
+        }
+
+        if (online)
+        {
+            // TODO sync my objects to the server
+
+            // TODO retrieve gameobject's from the server
         }
     }
 
@@ -190,5 +267,15 @@ public class GameManager
         {
             //TODO dispose all game objects
         }
+    }
+
+    public boolean isOnline()
+    {
+        return online;
+    }
+
+    public void setOnline(boolean online)
+    {
+        this.online = online;
     }
 }

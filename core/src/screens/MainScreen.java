@@ -14,6 +14,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.school.spacegame.Main;
 
+import java.rmi.RemoteException;
+
 //http://badlogicgames.com/forum/viewtopic.php?t=19454&p=81586
 public class MainScreen implements Screen
 {
@@ -37,17 +39,30 @@ public class MainScreen implements Screen
     private Box2DDebugRenderer box2DDebugRenderer;
 
     private Main parent;
+    private boolean online;
 
-    public MainScreen(Main parent)
+    public MainScreen(
+            Main parent,
+            boolean online)
     {
         this.parent = parent;
+        this.online = online;
     }
 
     @Override
     public void show()
     {
         // init
-        gameManager = new GameManager();
+        try
+        {
+            gameManager = new GameManager(online);
+        }
+        catch (RemoteException e)
+        {
+            e.printStackTrace();
+            // exit
+            parent.sceneManager.LoadMainMenuScreen();
+        }
         batch = new SpriteBatch();
         textBatch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
