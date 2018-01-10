@@ -21,7 +21,6 @@ public class MainMenuScreen implements Screen
 
     public MainMenuScreen(Main main)
     {
-        /// create stage and set it as input processor
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
@@ -31,17 +30,15 @@ public class MainMenuScreen implements Screen
     @Override
     public void show()
     {
-        // Create a table that fills the screen. Everything else will go inside this table.
         Table table = new Table();
         table.setFillParent(true);
         table.setDebug(false);
         stage.addActor(table);
 
-        // temporary until we have asset manager in
         Skin skin = new Skin(Gdx.files.local("/core/assets/skins/neon/skin/neon-ui.json"));
 
-        //create buttons
-        TextButton startGame = new TextButton("Start single player Game", skin);
+        TextButton startGame = new TextButton("Local Destroyer Game", skin);
+        TextButton startGameOther = new TextButton("Start Spawner Game", skin);
         TextButton lobby = new TextButton("Lobby's", skin);
         TextButton preferences = new TextButton("Preferences", skin);
         TextButton exit = new TextButton("Exit", skin);
@@ -53,16 +50,16 @@ public class MainMenuScreen implements Screen
         // TODO disable Lobby when no server is found
         // TODO add new button to connect to server
 
-        //add buttons to table
-        table.add(label);
+        table.add(label).colspan(2);
         table.row().pad(10, 0, 10, 0);
         table.add(startGame).fillX().uniformX();
+        table.add(startGameOther).fillX().uniformX();
         table.row();
-        table.add(lobby).fillX().uniformX();
+        table.add(lobby).fillX().uniformX().colspan(2);
         table.row();
-        table.add(preferences).fillX().uniformX();
+        table.add(preferences).fillX().uniformX().colspan(2);
         table.row();
-        table.add(exit).fillX().uniformX();
+        table.add(exit).fillX().uniformX().colspan(2);
 
         // create button listeners
         exit.addListener(new ChangeListener()
@@ -116,11 +113,9 @@ public class MainMenuScreen implements Screen
     @Override
     public void render(float delta)
     {
-        // clear the screen ready for next set of images to be drawn
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // tell our stage to do actions and draw itself
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
     }
@@ -130,7 +125,6 @@ public class MainMenuScreen implements Screen
             int width,
             int height)
     {
-        // change the stage's viewport when teh screen size is changed
         stage.getViewport().update(width, height, true);
     }
 
@@ -158,7 +152,6 @@ public class MainMenuScreen implements Screen
     @Override
     public void dispose()
     {
-        // dispose of assets when not needed anymore
         stage.dispose();
     }
 

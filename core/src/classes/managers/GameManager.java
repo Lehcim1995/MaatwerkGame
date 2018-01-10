@@ -35,6 +35,7 @@ public class GameManager extends UnicastRemoteObject
 
     // Online stuff
     private boolean online;
+    private playerType type;
     private Registry registry;
 
     public GameManager(boolean online) throws RemoteException
@@ -47,7 +48,16 @@ public class GameManager extends UnicastRemoteObject
 
         this.online = online;
 
-        createPlayer(new Vector2(0, 0));
+        switch (type)
+        {
+            case Destroyer:
+                createPlayer(new Vector2(0, 0));
+                break;
+            case Spawner:
+                // TODO createSpawnerPlayer
+                createSpawnerPlayer();
+                break;
+        }
 
         for (int x = 0; x < 5; x++)
         {
@@ -58,6 +68,11 @@ public class GameManager extends UnicastRemoteObject
         }
         // TODO add lobby name
         connectToServer("");
+    }
+
+    private void createSpawnerPlayer()
+    {
+        // TODO make this method
     }
 
     private void connectToServer(String lobby)
@@ -229,5 +244,11 @@ public class GameManager extends UnicastRemoteObject
     public void setOnline(boolean online)
     {
         this.online = online;
+    }
+
+    public enum playerType
+    {
+        Destroyer,
+        Spawner
     }
 }

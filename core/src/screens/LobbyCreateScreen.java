@@ -57,8 +57,6 @@ public class LobbyCreateScreen extends AbstractScreen
                     ChangeEvent event,
                     Actor actor)
             {
-//                main.sceneManager.LoadLobbyScreen();
-
                 try
                 {
                     main.getServer().createLobby(lobbyName.getText());

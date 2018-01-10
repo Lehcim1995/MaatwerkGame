@@ -80,6 +80,9 @@ public class LobbyScreen implements Screen
         table.add(startButton);
         table.add(createLobbyButton);
         table.row();
+        table.add();
+        table.add();
+        table.add();
         table.add(backButton).right().fillX().uniformX();
 
         backButton.addListener(new ChangeListener()
