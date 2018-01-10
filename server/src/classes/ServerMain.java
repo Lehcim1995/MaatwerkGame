@@ -30,10 +30,6 @@ public class ServerMain extends UnicastRemoteObject implements IServer
         System.out.println(InetAddress.getLocalHost().getHostAddress());
 
         lobbies = new ArrayList<>();
-        lobbies.add("1");
-        lobbies.add("2");
-        lobbies.add("3");
-        lobbies.add("4");
     }
 
     public static void main(String[] args)
@@ -75,5 +71,24 @@ public class ServerMain extends UnicastRemoteObject implements IServer
     public List<String> getLobbies() throws RemoteException
     {
         return lobbies;
+    }
+
+    @Override
+    public boolean createLobby(String name) throws RemoteException
+    {
+        for (String s : lobbies)
+        {
+            if (s.equals(name))
+            {
+                System.out.println("Lobby already exists");
+
+                return false;
+            }
+        }
+
+        // TODO create more then only a lobby name
+        lobbies.add(name);
+        System.out.println("Created lobby" + name);
+        return true;
     }
 }

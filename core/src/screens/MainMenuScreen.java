@@ -46,10 +46,12 @@ public class MainMenuScreen implements Screen
         TextButton preferences = new TextButton("Preferences", skin);
         TextButton exit = new TextButton("Exit", skin);
 
-
         Label label = new Label("Space game", skin);
         label.setFontScale(2);
         label.setAlignment(Align.center);
+
+        // TODO disable Lobby when no server is found
+        // TODO add new button to connect to server
 
         //add buttons to table
         table.add(label);

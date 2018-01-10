@@ -11,19 +11,13 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import interfaces.IGameObject;
-import interfaces.IServer;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.logging.Logger;
 
 import static classes.Constants.*;
 
@@ -71,48 +65,6 @@ public class GameManager extends UnicastRemoteObject
         if (!online)
         {
             return;
-        }
-
-        InetAddress localhost = null;
-        online = true;
-        try
-        {
-            localhost = InetAddress.getLocalHost();
-        }
-        catch (UnknownHostException e)
-        {
-            //Log this
-            java.util.logging.Logger.getAnonymousLogger().log(java.util.logging.Level.SEVERE, "Client: UnknownHostException: " + e.getMessage());
-            online = false;
-        }
-        String ip = "";
-        int portNumber = 1099;
-
-        try
-        {
-            registry = LocateRegistry.getRegistry(ip, portNumber);
-            System.out.println("1");
-            String serverManger = IServer.ServerManger;
-            System.out.println("2");
-            IServer tempServer = (IServer) registry.lookup(serverManger);
-            //not bound exception
-//            String serverName = ScreenManager.getInstance().getLobbyname();
-//            server = tempserver.JoinLobby(serverName, ScreenManager.getInstance().getUser());
-            System.out.println(tempServer.getLobbies());
-            System.out.println("3");
-
-        }
-        catch (RemoteException e)
-        {
-            //Log this
-            Logger.getAnonymousLogger().log(java.util.logging.Level.SEVERE, "Client: RemoteExeption: " + e.getMessage());
-            online = false;
-        }
-        catch (NotBoundException e)
-        {
-            //Log this
-            Logger.getAnonymousLogger().log(java.util.logging.Level.SEVERE, "Client: NotBoundException: " + e.getMessage());
-            online = false;
         }
     }
 

@@ -10,15 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.school.spacegame.Main;
-import interfaces.IServer;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.logging.Logger;
 
 public class LobbyScreen implements Screen
 {
@@ -35,44 +29,6 @@ public class LobbyScreen implements Screen
         Gdx.input.setInputProcessor(stage);
 
         this.main = main;
-    }
-
-    private void getRemoteLobbies()
-    {
-
-        InetAddress localhost = null;
-        try
-        {
-            localhost = InetAddress.getLocalHost();
-        }
-        catch (UnknownHostException e)
-        {
-            //Log this
-            java.util.logging.Logger.getAnonymousLogger().log(java.util.logging.Level.SEVERE, "Client: UnknownHostException: " + e.getMessage());
-        }
-        String ip = "";
-        int portNumber = 1099;
-
-        try
-        {
-            registry = LocateRegistry.getRegistry(ip, portNumber);
-            String serverManger = IServer.ServerManger;
-            IServer tempServer = (IServer) registry.lookup(serverManger);
-
-            String[] lobbies = new String[tempServer.getLobbies().size()];
-            tempServer.getLobbies().toArray(lobbies);
-            lobbySelectBox.setItems(lobbies);
-        }
-        catch (RemoteException e)
-        {
-            //Log this
-            Logger.getAnonymousLogger().log(java.util.logging.Level.SEVERE, "Client: RemoteExeption: " + e.getMessage());
-        }
-        catch (NotBoundException e)
-        {
-            //Log this
-            Logger.getAnonymousLogger().log(java.util.logging.Level.SEVERE, "Client: NotBoundException: " + e.getMessage());
-        }
     }
 
     @Override
@@ -93,12 +49,23 @@ public class LobbyScreen implements Screen
 
         lobbySelectBox = new SelectBox<>(skin);
         SelectBox<String> playerTypeSelectBox = new SelectBox<>(skin);
-        TextField playerName = new TextField("Playername", skin);
+        TextField playerName = new TextField("Player name", skin);
 
         playerTypeSelectBox.setItems("Destroyer", "Spawner", "Spectator");
-//
-//        // TODO get this data from the server
-//        lobbySelectBox.setItems("a", "b", "c");
+
+        String[] lobbies;
+        try
+        {
+            lobbies = new String[main.getServer().getLobbies().size()];
+            main.getServer().getLobbies().toArray(lobbies);
+            lobbySelectBox.setItems(lobbies);
+        }
+        catch (RemoteException e)
+        {
+            e.printStackTrace();
+            // TODO get error
+        }
+
 
         Label labelLobbys = new Label("Lobby's", skin);
         labelLobbys.setFontScale(2);
@@ -163,8 +130,6 @@ public class LobbyScreen implements Screen
                 //TODO fix this
             }
         });
-
-        getRemoteLobbies();
     }
 
     @Override
