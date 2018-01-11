@@ -18,7 +18,13 @@ public interface IServer extends Remote, Serializable
 
     boolean createLobby(String name) throws RemoteException;
 
-//    IGameManager JoinLobby(
-//            String name,
-//            IUser user) throws RemoteException;
+    void DeleteLobby(String name) throws RemoteException;
+
+    IGameLobby joinLobby(
+            String lobbyName,
+            String user) throws RemoteException;
+
+    void leaveLobby(
+            String lobbyName,
+            String user) throws RemoteException;
 }

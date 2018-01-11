@@ -1,6 +1,7 @@
 package classes.managers;
 
 import com.school.spacegame.Main;
+import interfaces.IGameLobby;
 import screens.*;
 
 public class SceneManager
@@ -12,6 +13,7 @@ public class SceneManager
     private OptionsScreen optionsScreen;
     private LobbyScreen lobbyScreen;
     private LobbyCreateScreen lobbyCreateScreen;
+    private JoinedLobbyScreen joinedLobbyScreen;
     // TODO add Server screen
 
     public SceneManager(Main main)
@@ -47,6 +49,14 @@ public class SceneManager
     {
         lobbyScreen = new LobbyScreen(main);
         main.setScreen(lobbyScreen);
+    }
+
+    public void LoadGameLobbyScreen(
+            IGameLobby gameLobby,
+            String playerName)
+    {
+        joinedLobbyScreen = new JoinedLobbyScreen(main, gameLobby, playerName);
+        main.setScreen(joinedLobbyScreen);
     }
 
     public void LoadLobbyCreateScreen()

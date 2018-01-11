@@ -1,6 +1,5 @@
 package screens;
 
-import classes.managers.GameManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -11,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.school.spacegame.Main;
+import interfaces.IGameLobby;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.Registry;
@@ -49,10 +49,8 @@ public class LobbyScreen implements Screen
         TextButton createLobbyButton = new TextButton("Create", skin);
 
         lobbySelectBox = new SelectBox<>(skin);
-        SelectBox<String> playerTypeSelectBox = new SelectBox<>(skin);
         TextField playerName = new TextField("Player name", skin);
 
-        playerTypeSelectBox.setItems("Destroyer", "Spawner", "Spectator");
 
         String[] lobbies;
         try
@@ -83,7 +81,6 @@ public class LobbyScreen implements Screen
         table.row().pad(10, 0, 10, 0);
         table.add(lobbySelectBox).colspan(4).fillX();
         table.row();
-        table.add(playerTypeSelectBox);
         table.add(playerName);
         table.add(startButton);
         table.add(createLobbyButton);
@@ -128,18 +125,18 @@ public class LobbyScreen implements Screen
                     //TODO show error
                 }
                 // TODO select the current selected rol
-                main.sceneManager.LoadMainScreen(true, GameManager.playerType.Destroyer);
-            }
-        });
-
-        lobbySelectBox.addListener(new ChangeListener()
-        {
-            @Override
-            public void changed(
-                    ChangeEvent event,
-                    Actor actor)
-            {
-                //TODO fix this
+//                main.sceneManager.LoadMainScreen(true, GameManager.playerType.Destroyer);
+                IGameLobby gameLobby = null;
+                try
+                {
+                    String lobbyname = lobbySelectBox.getSelected();
+                    gameLobby = main.getServer().joinLobby(lobbyname, playerName.getText());
+                    main.sceneManager.LoadGameLobbyScreen(gameLobby, playerName.getText());
+                }
+                catch (RemoteException e)
+                {
+                    e.printStackTrace();
+                }
             }
         });
     }

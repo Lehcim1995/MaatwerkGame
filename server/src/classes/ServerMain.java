@@ -1,5 +1,6 @@
 package classes;
 
+import interfaces.IGameLobby;
 import interfaces.IServer;
 
 import java.io.BufferedReader;
@@ -12,7 +13,9 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,7 +23,7 @@ public class ServerMain extends UnicastRemoteObject implements IServer
 {
     private transient Registry registry;
 
-    private List<String> lobbies;
+    private Map<String, IGameLobby> lobbies;
 
     public ServerMain() throws RemoteException, UnknownHostException
     {
@@ -29,7 +32,7 @@ public class ServerMain extends UnicastRemoteObject implements IServer
 //        registry.rebind(connection, connectionInstance); // Database shizzle
         System.out.println(InetAddress.getLocalHost().getHostAddress());
 
-        lobbies = new ArrayList<>();
+        lobbies = new HashMap<>();
     }
 
     public static void main(String[] args)
@@ -70,25 +73,55 @@ public class ServerMain extends UnicastRemoteObject implements IServer
     @Override
     public List<String> getLobbies() throws RemoteException
     {
-        return lobbies;
+        return new ArrayList<>(lobbies.keySet());
+    }
+
+    @Override
+    public void leaveLobby(
+            String lobbyName,
+            String user) throws RemoteException
+    {
+        if (!lobbies.containsKey(lobbyName))
+        {
+            // Maybe throw error
+            return;
+        }
+
+        lobbies.get(lobbyName).removeUser(user);
     }
 
     @Override
     public boolean createLobby(String name) throws RemoteException
     {
-        for (String s : lobbies)
+        if (lobbies.containsKey(name))
         {
-            if (s.equals(name))
-            {
-                System.out.println("Lobby already exists");
-
-                return false;
-            }
+            System.out.println("Lobby already exists");
+            return false;
         }
 
-        // TODO create more then only a lobby name
-        lobbies.add(name);
+        lobbies.put(name, new GameLobby());
         System.out.println("Created lobby" + name);
         return true;
+    }
+
+    @Override
+    public IGameLobby joinLobby(
+            String lobbyName,
+            String user) throws RemoteException
+    {
+        if (!lobbies.containsKey(lobbyName))
+        {
+            // Maybe throw error
+            return null;
+        }
+
+        lobbies.get(lobbyName).addUser(user);
+        return lobbies.get(lobbyName);
+    }
+
+    @Override
+    public void DeleteLobby(String name) throws RemoteException
+    {
+        // TODO
     }
 }

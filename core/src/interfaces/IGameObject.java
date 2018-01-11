@@ -5,13 +5,16 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 
-public interface IGameObject
+
+public interface IGameObject extends Remote
 {
     /**
      * @return
      */
-    Vector2 getPosition();
+    Vector2 getPosition() throws RemoteException;
 
     /**
      * @param pos
