@@ -99,8 +99,8 @@ public class ServerMain extends UnicastRemoteObject implements IServer
             return false;
         }
 
-        lobbies.put(name, new GameLobby());
-        System.out.println("Created lobby" + name);
+        lobbies.put(name, new GameLobby(name));
+        System.out.println("Created lobby " + name);
         return true;
     }
 

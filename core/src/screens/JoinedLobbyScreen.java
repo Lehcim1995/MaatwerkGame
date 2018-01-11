@@ -1,6 +1,5 @@
 package screens;
 
-import classes.managers.GameManager;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
@@ -44,20 +43,7 @@ public class JoinedLobbyScreen extends AbstractScreen
 
         playerTypeSelectBox.setItems("Destroyer", "Spawner", "Spectator");
 
-        String names[] = new String[0];
-        try
-        {
-            if (lobby != null)
-            {
-                names = new String[lobby.getPlayers().size()];
-                lobby.getPlayers().toArray(names);
-                playersSelectBox.setItems(names);
-            }
-        }
-        catch (RemoteException e)
-        {
-            e.printStackTrace();
-        }
+        updatePlayers();
 
         Label labelLobbys = new Label("Lobby's", skin);
         labelLobbys.setFontScale(2);
@@ -84,7 +70,15 @@ public class JoinedLobbyScreen extends AbstractScreen
                     ChangeEvent event,
                     Actor actor)
             {
-//                main.sceneManager.LoadMainMenuScreen();
+                try
+                {
+                    main.getServer().leaveLobby(lobby.getLobbyName(), playerName);
+                }
+                catch (RemoteException e)
+                {
+                    e.printStackTrace();
+                }
+                main.sceneManager.LoadLobbyScreen();
             }
         });
 
@@ -112,15 +106,62 @@ public class JoinedLobbyScreen extends AbstractScreen
                     //TODO show error
                 }
                 // TODO select the current selected rol
-                main.sceneManager.LoadMainScreen(true, GameManager.playerType.Destroyer);
+//                main.sceneManager.LoadMainScreen(true, GameManager.playerType.Destroyer);
+                try
+                {
+                    lobby.start();
+                }
+                catch (RemoteException e)
+                {
+                    e.printStackTrace();
+                }
             }
         });
+    }
+
+    private void checkIfStarted()
+    {
+        try
+        {
+            if (lobby != null)
+            {
+                if (lobby.isRunning())
+                {
+                    System.out.println("Started!");
+                }
+            }
+        }
+        catch (RemoteException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    private void updatePlayers()
+    {
+        String names[] = new String[]{"----------------", "No one connected", "----------------"};
+        try
+        {
+            if (lobby != null)
+            {
+                names = new String[lobby.getPlayers().size()];
+                lobby.getPlayers().toArray(names);
+            }
+        }
+        catch (RemoteException e)
+        {
+            e.printStackTrace();
+        }
+        playersSelectBox.setItems(names);
     }
 
     @Override
     public void render(float delta)
     {
         super.render(delta);
+        //TODO limit this
+        updatePlayers();
+        checkIfStarted();
     }
 
     @Override

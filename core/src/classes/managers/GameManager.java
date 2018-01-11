@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Fixture;
+import interfaces.IGameLobby;
 import interfaces.IGameObject;
 import screens.MainScreen;
 
@@ -38,12 +39,15 @@ public class GameManager extends UnicastRemoteObject
     private WaveSpawnerPlayer waveSpawnerPlayer;
 
     // Online stuff
+    private IGameLobby gameLobby;
     private boolean online;
     private playerType type;
+    private String playerName;
 
     public GameManager(
-            boolean online,
+            IGameLobby gameLobby,
             playerType type,
+            String playerName,
             MainScreen mainScreen) throws RemoteException
     {
         super();
@@ -52,7 +56,9 @@ public class GameManager extends UnicastRemoteObject
         shapeHelper = new ShapeHelper(worldManager.world);
         gameObjects = new CopyOnWriteArrayList<>();
 
-        this.online = online;
+        this.gameLobby = gameLobby;
+        this.online = gameLobby != null;
+        this.playerName = playerName;
         this.type = type;
         this.mainScreen = mainScreen;
 
@@ -69,7 +75,6 @@ public class GameManager extends UnicastRemoteObject
         }
 
         // TODO add lobby name
-        connectToServer("");
     }
 
     public void createSpawnerPlayer()
@@ -85,14 +90,6 @@ public class GameManager extends UnicastRemoteObject
 
         gameObjects.add(waveSpawnerPlayer);
         // TODO make this method
-    }
-
-    private void connectToServer(String lobby)
-    {
-        if (!online)
-        {
-            return;
-        }
     }
 
     public void update(float deltaTime)
@@ -120,9 +117,23 @@ public class GameManager extends UnicastRemoteObject
 
         if (online)
         {
-            // TODO sync my objects to the server
+            try
+            {
+                gameLobby.addUpdate(gameObjects, playerName);
+            }
+            catch (RemoteException e)
+            {
+                // TODO stop!
+            }
 
-            // TODO retrieve gameobject's from the server
+            try
+            {
+                gameLobby.getUpdates(playerName);
+            }
+            catch (RemoteException e)
+            {
+                // TODO stop!
+            }
         }
     }
 

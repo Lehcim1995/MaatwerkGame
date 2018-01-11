@@ -7,9 +7,13 @@ import java.util.List;
 
 public interface IGameLobby extends Remote, Serializable
 {
-    void addUpdate() throws RemoteException;
+    void addUpdate(
+            List<IGameObject> update,
+            String user) throws RemoteException;
 
     List<IGameObject> getUpdates() throws RemoteException;
+
+    List<IGameObject> getUpdates(String user) throws RemoteException;
 
     List<IGameObject> getUpdatesFromUser(String user) throws RemoteException;
 
@@ -17,5 +21,13 @@ public interface IGameLobby extends Remote, Serializable
 
     void addUser(String name) throws RemoteException;
 
-    void removeUser(String user);
+    void removeUser(String user) throws RemoteException;
+
+    void stop() throws RemoteException;
+
+    void start() throws RemoteException;
+
+    String getLobbyName() throws RemoteException;
+
+    boolean isRunning() throws RemoteException;
 }

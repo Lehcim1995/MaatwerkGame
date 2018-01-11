@@ -13,18 +13,16 @@ import java.util.Map;
 public class GameLobby extends UnicastRemoteObject implements IGameLobby
 {
     Map<String, List<IGameObject>> playerGameobjectList;
+    boolean isRunning;
+    String lobbyName;
 
-    public GameLobby() throws RemoteException
+    public GameLobby(String lobbyName) throws RemoteException
     {
         super();
+        this.lobbyName = lobbyName;
         playerGameobjectList = new HashMap<>();
     }
 
-    @Override
-    public void addUpdate()
-    {
-
-    }
 
     @Override
     public List<IGameObject> getUpdates()
@@ -54,5 +52,43 @@ public class GameLobby extends UnicastRemoteObject implements IGameLobby
     public void removeUser(String user)
     {
         playerGameobjectList.remove(user);
+    }
+
+    @Override
+    public void addUpdate(
+            List<IGameObject> update,
+            String user) throws RemoteException
+    {
+
+    }
+
+    @Override
+    public List<IGameObject> getUpdates(String user) throws RemoteException
+    {
+        return null;
+    }
+
+    @Override
+    public void stop() throws RemoteException
+    {
+        isRunning = false;
+    }
+
+    @Override
+    public void start() throws RemoteException
+    {
+        isRunning = true;
+    }
+
+    @Override
+    public boolean isRunning() throws RemoteException
+    {
+        return isRunning;
+    }
+
+    @Override
+    public String getLobbyName()
+    {
+        return lobbyName;
     }
 }
