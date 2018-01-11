@@ -1,20 +1,31 @@
 package classes.gameobjects.playable;
 
 import classes.managers.GameManager;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import interfaces.IGameObject;
 
-public class SpaceShip extends Ship
+public class SpaceShip extends Ship implements InputProcessor
 {
 
     private GameManager gameManager;
 
-    public SpaceShip(Vector2 position, float rotation, Sprite sprite)
+    //flags
+    private boolean up;
+    private boolean down;
+    private boolean left;
+    private boolean rigth;
+    private boolean halt;
+    private boolean shoot;
+
+    public SpaceShip(
+            Vector2 position,
+            float rotation,
+            Sprite sprite)
     {
 
         this.sprite = sprite;
@@ -24,7 +35,11 @@ public class SpaceShip extends Ship
         setDefaults();
     }
 
-    public SpaceShip(Vector2 position, float rotation, Sprite sprite, GameManager gameManager)
+    public SpaceShip(
+            Vector2 position,
+            float rotation,
+            Sprite sprite,
+            GameManager gameManager)
     {
         this.sprite = sprite;
         this.rotation = rotation;
@@ -60,32 +75,30 @@ public class SpaceShip extends Ship
         final float rotNewtons = fixture.getBody().getMass() * 100;
         final float moveNewtons = fixture.getBody().getMass() * 1000;
 
-        // TODO add this to inputManager
-
-        if (Gdx.input.isKeyPressed(Input.Keys.W))
+        if (up)
         {
             fixture.getBody().applyForceToCenter(getForward().scl(moveNewtons), false);
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.S))
+        if (down)
         {
             //TODO slow down spaceship
             fixture.getBody().applyForceToCenter(getBackwards().scl(moveNewtons), false);
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.A))
+        if (left)
         {
             fixture.getBody().applyForce(getLeft().scl(rotNewtons), getForward().scl(sprite.getWidth() / 2), true);
             fixture.getBody().applyForce(getRight().scl(rotNewtons), getBackwards().scl(sprite.getWidth() / 2), true);
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.D))
+        if (rigth)
         {
             fixture.getBody().applyForce(getRight().scl(rotNewtons), getForward().scl(sprite.getWidth() / 2), true);
             fixture.getBody().applyForce(getLeft().scl(rotNewtons), getBackwards().scl(sprite.getWidth() / 2), true);
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE))
+        if (halt)
         {
             Vector2 dir = new Vector2(fixture.getBody().getLinearVelocity()).rotate(180).nor();
 
@@ -93,16 +106,11 @@ public class SpaceShip extends Ship
             fixture.getBody().applyForceToCenter(dir.scl(moveNewtons), false);
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.V))
+        if (shoot)
         {
             //TODO add shooting
             gameManager.fireLaser(position, 300, rotation);
         }
-    }
-
-    public void setGameManager(GameManager gameManager)
-    {
-        this.gameManager = gameManager;
     }
 
     @Override
@@ -132,5 +140,136 @@ public class SpaceShip extends Ship
     public GameManager getGameManager()
     {
         return gameManager;
+    }
+
+    public void setGameManager(GameManager gameManager)
+    {
+        this.gameManager = gameManager;
+    }
+
+    @Override
+    public boolean keyDown(int keycode)
+    {
+        if (keycode == Input.Keys.W) // Forward
+        {
+            up = true;
+        }
+
+        if (keycode == Input.Keys.S) // Backward
+        {
+            down = true;
+        }
+
+        if (keycode == Input.Keys.D) // Turning right
+        {
+            rigth = true;
+        }
+
+        if (keycode == Input.Keys.A) // Turning left
+        {
+            left = true;
+        }
+
+        if (keycode == Input.Keys.SPACE) // Stopping?
+        {
+            halt = true;
+        }
+
+        if (keycode == Input.Keys.V) // Shooting
+        {
+            shoot = true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode)
+    {
+        if (keycode == Input.Keys.W) // Forward
+        {
+            up = false;
+        }
+
+        if (keycode == Input.Keys.S) // Backward
+        {
+            down = false;
+        }
+
+        if (keycode == Input.Keys.D) // Turning right
+        {
+            rigth = false;
+        }
+
+        if (keycode == Input.Keys.A) // Turning left
+        {
+            left = false;
+        }
+
+        if (keycode == Input.Keys.SPACE) // Stopping?
+        {
+            halt = false;
+        }
+
+        if (keycode == Input.Keys.V) // Shooting
+        {
+            shoot = false;
+        }
+
+        if (keycode == Input.Keys.ESCAPE) // Shooting
+        {
+            gameManager.getMainScreen().getMain().sceneManager.LoadMainMenuScreen();
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean keyTyped(char character)
+    {
+        return true;
+    }
+
+    @Override
+    public boolean touchDown(
+            int screenX,
+            int screenY,
+            int pointer,
+            int button)
+    {
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(
+            int screenX,
+            int screenY,
+            int pointer,
+            int button)
+    {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(
+            int screenX,
+            int screenY,
+            int pointer)
+    {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(
+            int screenX,
+            int screenY)
+    {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount)
+    {
+        return false;
     }
 }

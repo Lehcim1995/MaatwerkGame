@@ -81,4 +81,9 @@ public class AbstractScreen implements Screen //TODO implement this with the oth
     {
         stage.dispose();
     }
+
+    public Main getMain()
+    {
+        return main;
+    }
 }

@@ -2,19 +2,23 @@ package classes.gameobjects.playable;
 
 import classes.gameobjects.GameObject;
 import classes.managers.GameManager;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import interfaces.IGameObject;
 
-public class WaveSpawnerPlayer extends GameObject
+public class WaveSpawnerPlayer extends GameObject implements InputProcessor
 {
 
     private GameManager gameManager;
     private boolean hasSpawned;
+    private boolean up;
+    private boolean down;
+    private boolean rigth;
+    private boolean left;
 
     public WaveSpawnerPlayer(GameManager gameManager)
     {
@@ -44,64 +48,26 @@ public class WaveSpawnerPlayer extends GameObject
     {
         //TODO change pos when moving
 
-        if (Gdx.input.isKeyPressed(Input.Keys.A))
+        final float speed = 10;
+
+        if (left)
         {
-            position.x -= 1;
+            position.x -= speed;
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.D))
+        if (rigth)
         {
-            position.x += 1;
+            position.x += speed;
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.W))
+        if (up)
         {
-            position.y += 1;
+            position.y += speed;
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.S))
+        if (down)
         {
-            position.y -= 1;
-        }
-
-        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
-        {
-            // TODO spawn
-
-            if (!hasSpawned)
-            {
-                int x = Gdx.input.getX();
-
-                hasSpawned = true;
-                int y = Gdx.input.getY();
-                Vector2 mousePos = new Vector2(x, y);
-
-                int spawn = 10;
-                float radius = 10;
-                float angle = 360 / spawn;
-                Vector3 vector3 = new Vector3(mousePos.x, mousePos.y, 0);
-                Vector3 screenpos = gameManager.getMainScreen().getCamera().unproject(vector3);
-                Vector2 middle = new Vector2(screenpos.x, screenpos.y);
-
-                for (int i = 0; i < spawn; i++)
-                {
-                    // TODO refactor
-                    // Make a vector with a radius
-                    Vector2 pos = new Vector2(radius, 0);
-                    pos.rotate(angle * i);
-                    pos.add(middle);
-
-                    gameManager.createEnemy(pos, angle * i);
-                }
-            }
-        }
-
-        if (!Gdx.input.isButtonPressed(Input.Buttons.LEFT))
-        {
-            if (hasSpawned = true)
-            {
-                hasSpawned = false;
-            }
+            position.y -= speed;
         }
     }
 
@@ -115,5 +81,140 @@ public class WaveSpawnerPlayer extends GameObject
     public void Draw(Batch batch)
     {
 
+    }
+
+    private void spawnEnemys(
+            int screenX,
+            int screenY)
+    {
+        spawnEnemys(new Vector2(screenX, screenY));
+    }
+
+    public void spawnEnemys(Vector2 mousePos)
+    {
+        int spawn = 10;
+        float radius = 10;
+        float angle = 360 / spawn;
+        Vector3 vector3 = new Vector3(mousePos.x, mousePos.y, 0);
+        Vector3 screenpos = gameManager.getMainScreen().getCamera().unproject(vector3);
+        Vector2 middle = new Vector2(screenpos.x, screenpos.y);
+
+        for (int i = 0; i < spawn; i++)
+        {
+            // TODO refactor
+            // Make a vector with a radius
+            Vector2 pos = new Vector2(radius, 0);
+            pos.rotate(angle * i);
+            pos.add(middle);
+
+            gameManager.createEnemy(pos, angle * i);
+        }
+    }
+
+    @Override
+    public boolean keyDown(int keycode)
+    {
+        if (keycode == Input.Keys.W) // Forward
+        {
+            up = true;
+        }
+
+        if (keycode == Input.Keys.S) // Backward
+        {
+            down = true;
+        }
+
+        if (keycode == Input.Keys.D) // Turning right
+        {
+            rigth = true;
+        }
+
+        if (keycode == Input.Keys.A) // Turning left
+        {
+            left = true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode)
+    {
+        if (keycode == Input.Keys.W) // Forward
+        {
+            up = false;
+        }
+
+        if (keycode == Input.Keys.S) // Backward
+        {
+            down = false;
+        }
+
+        if (keycode == Input.Keys.D) // Turning right
+        {
+            rigth = false;
+        }
+
+        if (keycode == Input.Keys.A) // Turning left
+        {
+            left = false;
+        }
+
+        if (keycode == Input.Keys.ESCAPE) // Shooting
+        {
+            gameManager.getMainScreen().getMain().sceneManager.LoadMainMenuScreen();
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character)
+    {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(
+            int screenX,
+            int screenY,
+            int pointer,
+            int button)
+    {
+        spawnEnemys(screenX, screenY);
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(
+            int screenX,
+            int screenY,
+            int pointer,
+            int button)
+    {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(
+            int screenX,
+            int screenY,
+            int pointer)
+    {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(
+            int screenX,
+            int screenY)
+    {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount)
+    {
+        return false;
     }
 }

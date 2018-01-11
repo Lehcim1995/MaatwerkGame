@@ -7,6 +7,7 @@ import classes.gameobjects.playable.SpaceShip;
 import classes.gameobjects.playable.SpaceShipEnemy;
 import classes.gameobjects.playable.WaveSpawnerPlayer;
 import classes.gameobjects.unplayble.Laser;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -59,9 +60,11 @@ public class GameManager extends UnicastRemoteObject
         {
             case Destroyer:
                 createPlayer(new Vector2(0, 0));
+                Gdx.input.setInputProcessor(player);
                 break;
             case Spawner:
                 createSpawnerPlayer();
+                Gdx.input.setInputProcessor(waveSpawnerPlayer);
                 break;
         }
 

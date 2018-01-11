@@ -3,23 +3,21 @@ package screens;
 import classes.gameobjects.GameObject;
 import classes.managers.GameManager;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.Align;
 import com.school.spacegame.Main;
 
 import java.rmi.RemoteException;
 
 //http://badlogicgames.com/forum/viewtopic.php?t=19454&p=81586
-public class MainScreen implements Screen
+public class MainScreen extends AbstractScreen
 {
     private GameManager gameManager;
 
@@ -41,26 +39,26 @@ public class MainScreen implements Screen
     //Debug
     private Box2DDebugRenderer box2DDebugRenderer;
 
-    private Main parent;
     private boolean online;
     private GameManager.playerType type;
+    private Label labelLobbys;
 
     public MainScreen(
             Main parent,
             boolean online,
             GameManager.playerType type)
     {
-        this.parent = parent;
+        super(parent);
         this.online = online;
         this.type = type;
-
-//        Gdx.input.setInputProcessor();
     }
 
     @Override
     public void show()
     {
         // init
+        super.show();
+
         try
         {
             gameManager = new GameManager(online, type, this);
@@ -69,7 +67,7 @@ public class MainScreen implements Screen
         {
             e.printStackTrace();
             // exit
-            parent.sceneManager.LoadMainMenuScreen();
+            main.sceneManager.LoadMainMenuScreen();
         }
         batch = new SpriteBatch();
         textBatch = new SpriteBatch();
@@ -84,6 +82,13 @@ public class MainScreen implements Screen
 
         background = new Texture(Gdx.files.local("/core/assets/textures/seamless space.png"));
         background.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+
+        //
+        labelLobbys = new Label("0", skin);
+        labelLobbys.setAlignment(Align.left);
+
+        table.right().bottom();
+        table.add(labelLobbys).left();
     }
 
     @Override
@@ -113,18 +118,19 @@ public class MainScreen implements Screen
         gameManager.draw(shapeRenderer);
         shapeRenderer.end();
 
-//        textBatch.begin();
-//        int fps = (int) (1 / delta);
-//        font.setColor(fps < 30 ? Color.RED : Color.WHITE);
-//        final Vector2 pos = new Vector2(100, 100);
-//        gameManager.getPlayer().DrawText(textBatch, font, layout, "Fps: " + fps, pos);
-//        textBatch.end();
+        int fps = (int) (1 / delta);
+        labelLobbys.setText("Fps: " + fps);
+        labelLobbys.setColor(fps < 30 ? Color.RED : Color.WHITE);
 
         box2DDebugRenderer.setDrawBodies(false);
         box2DDebugRenderer.setDrawVelocities(false);
         box2DDebugRenderer.render(gameManager.getWorldManager().world, camera.combined);
         batch.setProjectionMatrix(camera.combined);
         shapeRenderer.setProjectionMatrix(camera.combined);
+
+        // Draw UI
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        stage.draw();
     }
 
     @Override
@@ -136,24 +142,26 @@ public class MainScreen implements Screen
 
         batch.setProjectionMatrix(camera.combined);
         textBatch = new SpriteBatch();
+
+        super.resize(width, height);
     }
 
     @Override
     public void pause()
     {
-
+        super.pause();
     }
 
     @Override
     public void resume()
     {
-
+        super.resume();
     }
 
     @Override
     public void hide()
     {
-
+        super.hide();
     }
 
     @Override
@@ -161,6 +169,8 @@ public class MainScreen implements Screen
     {
         gameManager.dispose();
         batch.dispose();
+
+        super.dispose();
     }
 
     private void backGround()

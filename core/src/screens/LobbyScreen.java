@@ -57,14 +57,21 @@ public class LobbyScreen implements Screen
         String[] lobbies;
         try
         {
-            lobbies = new String[main.getServer().getLobbies().size()];
-            main.getServer().getLobbies().toArray(lobbies);
-            lobbySelectBox.setItems(lobbies);
+            if (main.getServer() != null)
+            {
+                lobbies = new String[main.getServer().getLobbies().size()];
+                main.getServer().getLobbies().toArray(lobbies);
+                lobbySelectBox.setItems(lobbies);
+            }
+            else
+            {
+                main.sceneManager.LoadMainMenuScreen();
+            }
         }
         catch (RemoteException e)
         {
-            e.printStackTrace();
-            // TODO get error
+            // Error
+            main.sceneManager.LoadMainMenuScreen();
         }
 
 
