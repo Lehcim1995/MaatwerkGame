@@ -18,12 +18,12 @@ import java.io.Serializable;
  */
 public abstract class GameObject implements IGameObject, Serializable
 {
-    protected Fixture fixture;
+    protected transient Fixture fixture;
     protected Vector2 position;
     protected float rotation;
-    protected Polygon hitbox; // swap this with fixture
+    protected transient Polygon hitbox; // swap this with fixture
     protected long id;
-    protected Sprite sprite;
+    protected transient Sprite sprite;
     protected boolean toDelete = false;
 
     protected GameObject()
@@ -147,6 +147,12 @@ public abstract class GameObject implements IGameObject, Serializable
     }
 
     @Override
+    public void setID(long id)
+    {
+        this.id = id;
+    }
+
+    @Override
     public Vector2 getPosition()
     {
         return position;
@@ -265,6 +271,7 @@ public abstract class GameObject implements IGameObject, Serializable
      *
      * @return the Fixture
      */
+    @Override
     public Fixture getFixture()
     {
         return fixture;

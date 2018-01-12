@@ -23,19 +23,20 @@ public class SceneManager
 
     public void LoadMainScreen()
     {
-        LoadMainScreen(false, GameManager.playerType.Destroyer);
+        LoadMainScreen(null, "", GameManager.playerType.Destroyer);
     }
 
     public void LoadMainScreenSpawner()
     {
-        LoadMainScreen(false, GameManager.playerType.Spawner);
+        LoadMainScreen(null, "", GameManager.playerType.Spawner);
     }
 
     public void LoadMainScreen(
-            boolean online,
+            IGameLobby gameLobby,
+            String playerName,
             GameManager.playerType type)
     {
-        mainScreen = new MainScreen(main, online, type);
+        mainScreen = new MainScreen(main, gameLobby, playerName, type);
         main.setScreen(mainScreen);
     }
 

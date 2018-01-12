@@ -1,5 +1,6 @@
 package screens;
 
+import classes.managers.GameManager;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
@@ -17,6 +18,7 @@ public class JoinedLobbyScreen extends AbstractScreen
     private List<String> playersSelectBox;
     private IGameLobby lobby;
     private String playerName;
+    private SelectBox<Object> playerTypeSelectBox;
 
     public JoinedLobbyScreen(
             Main main,
@@ -38,14 +40,25 @@ public class JoinedLobbyScreen extends AbstractScreen
         TextButton createLobbyButton = new TextButton("Create", skin);
 
         playersSelectBox = new List<>(skin);
-        SelectBox<String> playerTypeSelectBox = new SelectBox<>(skin);
+        playerTypeSelectBox = new SelectBox<>(skin);
         Label playerNameLabel = new Label(playerName, skin);
 
-        playerTypeSelectBox.setItems("Destroyer", "Spawner", "Spectator");
+        //GameManager.playerType.Destroyer
+        playerTypeSelectBox.setItems(GameManager.playerType.values());
 
         updatePlayers();
 
-        Label labelLobbys = new Label("Lobby's", skin);
+        Label labelLobbys = new Label("No lobby name!", skin);
+
+        try
+        {
+            labelLobbys.setText(lobby.getLobbyName());
+        }
+        catch (RemoteException e)
+        {
+            e.printStackTrace();
+        }
+
         labelLobbys.setFontScale(2);
         labelLobbys.setAlignment(Align.center);
 
@@ -105,8 +118,7 @@ public class JoinedLobbyScreen extends AbstractScreen
                     System.out.println("Nothing selected");
                     //TODO show error
                 }
-                // TODO select the current selected rol
-//                main.sceneManager.LoadMainScreen(true, GameManager.playerType.Destroyer);
+
                 try
                 {
                     lobby.start();
@@ -128,6 +140,7 @@ public class JoinedLobbyScreen extends AbstractScreen
                 if (lobby.isRunning())
                 {
                     System.out.println("Started!");
+                    main.sceneManager.LoadMainScreen(lobby, playerName, (GameManager.playerType) playerTypeSelectBox.getSelected());
                 }
             }
         }

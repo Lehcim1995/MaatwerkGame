@@ -1,7 +1,7 @@
 package classes;
 
 import interfaces.IGameLobby;
-import interfaces.IGameObject;
+import interfaces.ISyncObject;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -9,31 +9,75 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
+
 
 public class GameLobby extends UnicastRemoteObject implements IGameLobby
 {
-    Map<String, List<IGameObject>> playerGameobjectList;
-    boolean isRunning;
-    String lobbyName;
+    private static AtomicLong idCounter = new AtomicLong();
+    private Map<String, Map<Long, List<ISyncObject>>> playerGameobjectList;
+    private boolean isRunning;
+    private String lobbyName;
 
     public GameLobby(String lobbyName) throws RemoteException
     {
         super();
         this.lobbyName = lobbyName;
         playerGameobjectList = new HashMap<>();
+        idCounter.set(348552);
     }
 
-
-    @Override
-    public List<IGameObject> getUpdates()
+    public static Long createID()
     {
-        return null;
+        return idCounter.getAndIncrement();
     }
 
     @Override
-    public List<IGameObject> getUpdatesFromUser(String user)
+    public void addUpdates(
+            List<ISyncObject> update,
+            String user) throws RemoteException
     {
-        return null;
+
+    }
+
+    @Override
+    public void addUpdate(
+            String user,
+            ISyncObject syncObject) throws RemoteException
+    {
+//        System.out.println("uploading gameobject id " + syncObject.getId() + " from user " + user);
+//        System.out.println("uploading gameobject rot " + syncObject.getRotation());
+        // TODO replace the object with the id
+    }
+
+    @Override
+    public Long createObject(
+            String user,
+            ISyncObject syncObject) throws RemoteException
+    {
+        long id = createID();
+        syncObject.setId(id);
+        return id;
+    }
+
+    @Override
+    public void deleteObject(
+            String user,
+            ISyncObject syncObject) throws RemoteException
+    {
+
+    }
+
+    @Override
+    public List<ISyncObject> getUpdates() throws RemoteException
+    {
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<ISyncObject> getUpdates(String user) throws RemoteException
+    {
+        return new ArrayList<>();
     }
 
     @Override
@@ -45,27 +89,13 @@ public class GameLobby extends UnicastRemoteObject implements IGameLobby
     @Override
     public void addUser(String name)
     {
-        playerGameobjectList.put(name, new ArrayList<>());
+        playerGameobjectList.put(name, new HashMap<>());
     }
 
     @Override
     public void removeUser(String user)
     {
         playerGameobjectList.remove(user);
-    }
-
-    @Override
-    public void addUpdate(
-            List<IGameObject> update,
-            String user) throws RemoteException
-    {
-
-    }
-
-    @Override
-    public List<IGameObject> getUpdates(String user) throws RemoteException
-    {
-        return null;
     }
 
     @Override

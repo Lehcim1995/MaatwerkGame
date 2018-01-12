@@ -13,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 import com.school.spacegame.Main;
+import interfaces.IGameLobby;
 
 import java.rmi.RemoteException;
 
@@ -43,13 +44,19 @@ public class MainScreen extends AbstractScreen
     private GameManager.playerType type;
     private Label labelLobbys;
 
+    private IGameLobby gameLobby;
+    private String playerName;
+
     public MainScreen(
             Main parent,
-            boolean online,
+            IGameLobby gameLobby,
+            String playerName,
             GameManager.playerType type)
     {
         super(parent);
-        this.online = online;
+        this.gameLobby = gameLobby;
+        this.playerName = playerName;
+        this.online = gameLobby != null;
         this.type = type;
     }
 
@@ -61,7 +68,7 @@ public class MainScreen extends AbstractScreen
 
         try
         {
-            gameManager = new GameManager(online, type, this);
+            gameManager = new GameManager(gameLobby, type, playerName, this);
         }
         catch (RemoteException e)
         {

@@ -1,8 +1,10 @@
 package classes.managers;
 
 import classes.CollisionMasks;
+import classes.SyncObject;
 import classes.factories.ShapeHelper;
 import classes.gameobjects.GameObject;
+import classes.gameobjects.playable.Ship;
 import classes.gameobjects.playable.SpaceShip;
 import classes.gameobjects.playable.SpaceShipEnemy;
 import classes.gameobjects.playable.WaveSpawnerPlayer;
@@ -14,6 +16,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import interfaces.IGameLobby;
 import interfaces.IGameObject;
+import interfaces.ISyncObject;
 import screens.MainScreen;
 
 import java.rmi.RemoteException;
@@ -110,30 +113,53 @@ public class GameManager extends UnicastRemoteObject
             {
                 // Deleting this body is useful
                 worldManager.world.destroyBody(gameObject.getFixture().getBody());
-                gameObjects.remove(gameObject);
                 //TODO let the server know i deleted this gameobject
+                if (online)
+                {
+                    try
+                    {
+                        gameLobby.deleteObject(playerName, fromGameObjectTOSynceObject(gameObject));
+                    }
+                    catch (RemoteException e)
+                    {
+                        // TODO errors
+                    }
+                }
+                gameObjects.remove(gameObject);
             }
         }
 
         if (online)
         {
+            // TODO recive other shizzle
             try
             {
-                gameLobby.addUpdate(gameObjects, playerName);
+                for (ISyncObject syncObject : gameLobby.getUpdates(playerName))
+                {
+                    updateFromSyncObject(syncObject);
+                }
             }
             catch (RemoteException e)
             {
-                // TODO stop!
+                // TODO add error
+                // or return to start screen
             }
 
-            try
+
+            // TODO Send own shizzle
+            for (IGameObject gameObject : gameObjects)
             {
-                gameLobby.getUpdates(playerName);
+                try
+                {
+                    gameLobby.addUpdate(playerName, fromGameObjectTOSynceObject(gameObject));
+                }
+                catch (RemoteException e)
+                {
+                    // TODO add error
+                    // or return to start screen
+                }
             }
-            catch (RemoteException e)
-            {
-                // TODO stop!
-            }
+
         }
     }
 
@@ -150,6 +176,8 @@ public class GameManager extends UnicastRemoteObject
         laser.setSpeed(speed);
 
         fixture.setUserData(laser);
+
+        createOnlineObject(laser);
 
         gameObjects.add(laser);
         return laser;
@@ -172,9 +200,42 @@ public class GameManager extends UnicastRemoteObject
         ship.setFixture(fixture);
         fixture.setUserData(ship);
 
+        createOnlineObject(ship);
+
         gameObjects.add(ship);
         player = ship;
         return ship;
+    }
+
+    private void deleteOnlineObject(IGameObject gameObject)
+    {
+        if (online)
+        {
+            try
+            {
+                gameLobby.deleteObject(playerName, fromGameObjectTOSynceObject(gameObject));
+            }
+            catch (RemoteException e)
+            {
+                //TODO
+            }
+        }
+    }
+
+    private void createOnlineObject(IGameObject gameObject)
+    {
+        if (online)
+        {
+            try
+            {
+                long id = gameLobby.createObject(playerName, fromGameObjectTOSynceObject(gameObject));
+                gameObject.setID(id);
+            }
+            catch (RemoteException e)
+            {
+                //TODO
+            }
+        }
     }
 
     public SpaceShip CreateNonPlayer(Vector2 pos)
@@ -206,8 +267,44 @@ public class GameManager extends UnicastRemoteObject
         enemy.setFixture(fixture);
         fixture.setUserData(enemy);
 
+        createOnlineObject(enemy);
+
         gameObjects.add(enemy);
         return enemy;
+    }
+
+    public void updateFromSyncObject(ISyncObject syncObject)
+    {
+        // TODO
+        for (IGameObject gameObject : gameObjects)
+        {
+            if (gameObject.getID() == syncObject.getId())
+            {
+                // TODO Sync
+                break;
+            }
+        }
+
+    }
+
+    public ISyncObject fromGameObjectTOSynceObject(IGameObject gameObject)
+    {
+        ISyncObject syncObject = new SyncObject();
+
+        Fixture f = gameObject.getFixture();
+
+        syncObject.setId(gameObject.getID());
+        syncObject.setAngularVelocity(f.getBody().getAngularVelocity());
+        syncObject.setAwake(f.getBody().isAwake());
+        syncObject.setLinearVelocity(f.getBody().getLinearVelocity());
+        syncObject.setPosition(gameObject.getPosition());
+        syncObject.setRotation(gameObject.getRotation());
+        if (gameObject instanceof Ship)
+        {
+            // TODO change
+            syncObject.setShipSpriteId(1);
+        }
+        return syncObject;
     }
 
     public void draw(Batch batch)

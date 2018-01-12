@@ -4,17 +4,15 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
-
-import java.rmi.Remote;
-import java.rmi.RemoteException;
+import com.badlogic.gdx.physics.box2d.Fixture;
 
 
-public interface IGameObject extends Remote
+public interface IGameObject
 {
     /**
      * @return
      */
-    Vector2 getPosition() throws RemoteException;
+    Vector2 getPosition();
 
     /**
      * @param pos
@@ -76,8 +74,12 @@ public interface IGameObject extends Remote
      */
     long getID();
 
+    void setID(long id);
+
     /**
      * @return
      */
     Polygon getHitbox();
+
+    Fixture getFixture();
 }
