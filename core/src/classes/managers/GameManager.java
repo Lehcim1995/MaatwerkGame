@@ -116,6 +116,16 @@ public class GameManager extends UnicastRemoteObject
 
         // TODO can this be merged?
 
+        for (IGameObject gameObject : serverGameObjects)
+        {
+            if (gameObject.isToDelete())
+            {
+                worldManager.world.destroyBody(gameObject.getFixture().getBody());
+                serverGameObjects.remove(gameObject);
+            }
+        }
+
+
         for (Iterator<IGameObject> it = gameObjects.iterator(); it.hasNext(); )
         {
             GameObject gameObject = (GameObject) it.next();
@@ -342,6 +352,7 @@ public class GameManager extends UnicastRemoteObject
             {
                 serverGameObject.setPosition(syncObject.getPosition());
                 serverGameObject.setRotation(syncObject.getRotation());
+                serverGameObject.setToDelete(serverGameObject.isToDelete());
 
                 if (serverGameObject.getFixture() != null)
                 {

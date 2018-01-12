@@ -12,6 +12,7 @@ public class SyncObject implements ISyncObject
     private boolean isAwake;
     private int shipSpriteId;
     private String objectType;
+    private boolean canDelete;
 
     private Long id;
 
@@ -109,5 +110,17 @@ public class SyncObject implements ISyncObject
     public void setObjectType(String objectType)
     {
         this.objectType = objectType;
+    }
+
+    @Override
+    public boolean isCanDelete()
+    {
+        return canDelete;
+    }
+
+    @Override
+    public void setCanDelete(boolean canDelete)
+    {
+        this.canDelete = canDelete;
     }
 }

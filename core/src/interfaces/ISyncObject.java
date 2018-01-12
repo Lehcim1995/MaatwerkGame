@@ -38,4 +38,8 @@ public interface ISyncObject extends Remote, Serializable
     String getObjectType();
 
     void setObjectType(String objectType);
+
+    boolean isCanDelete();
+
+    void setCanDelete(boolean canDelete);
 }

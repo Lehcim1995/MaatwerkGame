@@ -73,7 +73,7 @@ public class GameLobby extends UnicastRemoteObject implements IGameLobby
         long id = createID();
         syncObject.setId(id);
 
-        System.out.println("Creating object for " + user + " Object id " + id);
+        System.out.println("Creating object for " + user + " Object id " + id + " Type " + syncObject.getObjectType());
         playerGameobjectList.get(user).put(id, syncObject);
 
         for (Map.Entry<String, Map<Long, ISyncObject>> entry : newGameobjectList.entrySet())
@@ -85,7 +85,7 @@ public class GameLobby extends UnicastRemoteObject implements IGameLobby
             }
 
             entry.getValue().put(id, syncObject);
-            System.out.println("Creating object for " + entry.getKey() + " Object id " + id);
+            System.out.println("Creating object for " + entry.getKey() + " Object id " + id + " Type " + syncObject.getObjectType());
         }
 
 

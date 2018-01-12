@@ -82,4 +82,8 @@ public interface IGameObject
     Polygon getHitbox();
 
     Fixture getFixture();
+
+    boolean isToDelete();
+
+    void setToDelete(boolean delete);
 }
