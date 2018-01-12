@@ -27,6 +27,8 @@ public interface IGameLobby extends Remote, Serializable
 
     List<ISyncObject> getUpdates(String user) throws RemoteException;
 
+    List<ISyncObject> getNewObjects(String user) throws RemoteException;
+
     List<String> getPlayers() throws RemoteException;
 
     void addUser(String name) throws RemoteException;

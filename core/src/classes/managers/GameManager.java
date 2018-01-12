@@ -58,6 +58,7 @@ public class GameManager extends UnicastRemoteObject
         this.spaceShipTexturesHelper = new SpaceShipTexturesHelper();
         shapeHelper = new ShapeHelper(worldManager.world);
         gameObjects = new CopyOnWriteArrayList<>();
+        serverGameObjects = new CopyOnWriteArrayList<>();
 
         this.gameLobby = gameLobby;
         this.online = gameLobby != null;
@@ -118,7 +119,7 @@ public class GameManager extends UnicastRemoteObject
                 {
                     try
                     {
-                        gameLobby.deleteObject(playerName, fromGameObjectTOSynceObject(gameObject));
+                        gameLobby.deleteObject(playerName, fromGameObjectTOSyncObject(gameObject));
                     }
                     catch (RemoteException e)
                     {
@@ -134,6 +135,12 @@ public class GameManager extends UnicastRemoteObject
             // TODO recive other shizzle
             try
             {
+                for (ISyncObject syncObject : gameLobby.getNewObjects(playerName))
+                {
+                    //
+                    System.out.println("New objects");
+                }
+
                 for (ISyncObject syncObject : gameLobby.getUpdates(playerName))
                 {
                     updateFromSyncObject(syncObject);
@@ -151,7 +158,7 @@ public class GameManager extends UnicastRemoteObject
             {
                 try
                 {
-                    gameLobby.addUpdate(playerName, fromGameObjectTOSynceObject(gameObject));
+                    gameLobby.addUpdate(playerName, fromGameObjectTOSyncObject(gameObject));
                 }
                 catch (RemoteException e)
                 {
@@ -159,7 +166,6 @@ public class GameManager extends UnicastRemoteObject
                     // or return to start screen
                 }
             }
-
         }
     }
 
@@ -213,7 +219,7 @@ public class GameManager extends UnicastRemoteObject
         {
             try
             {
-                gameLobby.deleteObject(playerName, fromGameObjectTOSynceObject(gameObject));
+                gameLobby.deleteObject(playerName, fromGameObjectTOSyncObject(gameObject));
             }
             catch (RemoteException e)
             {
@@ -228,7 +234,7 @@ public class GameManager extends UnicastRemoteObject
         {
             try
             {
-                long id = gameLobby.createObject(playerName, fromGameObjectTOSynceObject(gameObject));
+                long id = gameLobby.createObject(playerName, fromGameObjectTOSyncObject(gameObject));
                 gameObject.setID(id);
             }
             catch (RemoteException e)
@@ -238,12 +244,12 @@ public class GameManager extends UnicastRemoteObject
         }
     }
 
-    public SpaceShip CreateNonPlayer(Vector2 pos)
+    public SpaceShip createNonPlayer(Vector2 pos)
     {
-        return CreateNonPlayer(pos, 0f);
+        return createNonPlayer(pos, 0f);
     }
 
-    public SpaceShip CreateNonPlayer(
+    public SpaceShip createNonPlayer(
             Vector2 pos,
             float rotation)
     {
@@ -276,27 +282,30 @@ public class GameManager extends UnicastRemoteObject
     public void updateFromSyncObject(ISyncObject syncObject)
     {
         // TODO
-        for (IGameObject gameObject : gameObjects)
+        for (IGameObject serverGameObject : serverGameObjects)
         {
-            if (gameObject.getID() == syncObject.getId())
+            if (serverGameObject.getID() == syncObject.getId())
             {
-                // TODO Sync
+                serverGameObject.setPosition(syncObject.getPosition());
+                serverGameObject.setRotation(syncObject.getRotation());
                 break;
             }
         }
-
     }
 
-    public ISyncObject fromGameObjectTOSynceObject(IGameObject gameObject)
+    private ISyncObject fromGameObjectTOSyncObject(IGameObject gameObject)
     {
         ISyncObject syncObject = new SyncObject();
 
         Fixture f = gameObject.getFixture();
 
         syncObject.setId(gameObject.getID());
-        syncObject.setAngularVelocity(f.getBody().getAngularVelocity());
-        syncObject.setAwake(f.getBody().isAwake());
-        syncObject.setLinearVelocity(f.getBody().getLinearVelocity());
+        if (f != null)
+        {
+            syncObject.setAngularVelocity(f.getBody().getAngularVelocity());
+            syncObject.setAwake(f.getBody().isAwake());
+            syncObject.setLinearVelocity(f.getBody().getLinearVelocity());
+        }
         syncObject.setPosition(gameObject.getPosition());
         syncObject.setRotation(gameObject.getRotation());
         if (gameObject instanceof Ship)

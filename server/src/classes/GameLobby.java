@@ -15,7 +15,8 @@ import java.util.concurrent.atomic.AtomicLong;
 public class GameLobby extends UnicastRemoteObject implements IGameLobby
 {
     private static AtomicLong idCounter = new AtomicLong();
-    private Map<String, Map<Long, List<ISyncObject>>> playerGameobjectList;
+    private Map<String, Map<Long, ISyncObject>> playerGameobjectList;
+    private Map<String, Map<Long, ISyncObject>> newGameobjectList;
     private boolean isRunning;
     private String lobbyName;
 
@@ -24,7 +25,8 @@ public class GameLobby extends UnicastRemoteObject implements IGameLobby
         super();
         this.lobbyName = lobbyName;
         playerGameobjectList = new HashMap<>();
-        idCounter.set(348552);
+        newGameobjectList = new HashMap<>();
+        idCounter.set(348552); // TODO generate random number
     }
 
     public static Long createID()
@@ -48,6 +50,19 @@ public class GameLobby extends UnicastRemoteObject implements IGameLobby
 //        System.out.println("uploading gameobject id " + syncObject.getId() + " from user " + user);
 //        System.out.println("uploading gameobject rot " + syncObject.getRotation());
         // TODO replace the object with the id
+        playerGameobjectList.get(user).put(syncObject.getId(), syncObject);
+    }
+
+    @Override
+    public List<ISyncObject> getNewObjects(String user) throws RemoteException
+    {
+        List<ISyncObject> s = new ArrayList<>();
+        if (newGameobjectList.get(user) != null)
+        {
+            s = new ArrayList<>(newGameobjectList.get(user).values());
+        }
+        newGameobjectList.put(user, new HashMap<>());
+        return s;
     }
 
     @Override
@@ -57,6 +72,28 @@ public class GameLobby extends UnicastRemoteObject implements IGameLobby
     {
         long id = createID();
         syncObject.setId(id);
+
+        for (Map.Entry<String, Map<Long, ISyncObject>> entry : playerGameobjectList.entrySet())
+        {
+            if (entry.getKey().equals(user))
+            {
+                continue;
+            }
+
+            entry.getValue().put(id, syncObject);
+        }
+
+        for (Map.Entry<String, Map<Long, ISyncObject>> entry : newGameobjectList.entrySet())
+        {
+            if (entry.getKey().equals(user))
+            {
+                continue;
+            }
+
+            entry.getValue().put(id, syncObject);
+        }
+
+
         return id;
     }
 
@@ -65,19 +102,38 @@ public class GameLobby extends UnicastRemoteObject implements IGameLobby
             String user,
             ISyncObject syncObject) throws RemoteException
     {
-
+        playerGameobjectList.get(user).remove(syncObject.getId());
     }
 
     @Override
     public List<ISyncObject> getUpdates() throws RemoteException
     {
-        return new ArrayList<>();
+        List<ISyncObject> syncObjects = new ArrayList<>();
+
+        for (Map.Entry<String, Map<Long, ISyncObject>> stringMapEntry : playerGameobjectList.entrySet())
+        {
+            syncObjects.addAll(stringMapEntry.getValue().values());
+        }
+
+        return syncObjects;
     }
 
     @Override
     public List<ISyncObject> getUpdates(String user) throws RemoteException
     {
-        return new ArrayList<>();
+        List<ISyncObject> syncObjects = new ArrayList<>();
+
+        for (Map.Entry<String, Map<Long, ISyncObject>> stringMapEntry : playerGameobjectList.entrySet())
+        {
+            if (stringMapEntry.getKey().equals(user))
+            {
+                continue;
+            }
+
+            syncObjects.addAll(stringMapEntry.getValue().values());
+        }
+
+        return syncObjects;
     }
 
     @Override
