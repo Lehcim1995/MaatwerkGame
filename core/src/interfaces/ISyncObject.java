@@ -34,4 +34,8 @@ public interface ISyncObject extends Remote, Serializable
     Long getId();
 
     void setId(Long id);
+
+    String getObjectType();
+
+    void setObjectType(String objectType);
 }

@@ -51,27 +51,7 @@ public class LobbyScreen implements Screen
         lobbySelectBox = new SelectBox<>(skin);
         TextField playerName = new TextField("Player name", skin);
 
-
-        String[] lobbies;
-        try
-        {
-            if (main.getServer() != null)
-            {
-                lobbies = new String[main.getServer().getLobbies().size()];
-                main.getServer().getLobbies().toArray(lobbies);
-                lobbySelectBox.setItems(lobbies);
-            }
-            else
-            {
-                main.sceneManager.LoadMainMenuScreen();
-            }
-        }
-        catch (RemoteException e)
-        {
-            // Error
-            main.sceneManager.LoadMainMenuScreen();
-        }
-
+        loadLobbys();
 
         Label labelLobbys = new Label("Lobby's", skin);
         labelLobbys.setFontScale(2);
@@ -141,12 +121,37 @@ public class LobbyScreen implements Screen
         });
     }
 
+    private void loadLobbys()
+    {
+        String[] lobbies;
+        try
+        {
+            if (main.getServer() != null)
+            {
+                lobbies = new String[main.getServer().getLobbies().size()];
+                main.getServer().getLobbies().toArray(lobbies);
+                lobbySelectBox.setItems(lobbies);
+            }
+            else
+            {
+                main.sceneManager.LoadMainMenuScreen();
+            }
+        }
+        catch (RemoteException e)
+        {
+            // Error
+            main.sceneManager.LoadMainMenuScreen();
+        }
+    }
+
     @Override
     public void render(float delta)
     {
         // clear the screen ready for next set of images to be drawn
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        loadLobbys();
 
         // tell our stage to do actions and draw itself
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));

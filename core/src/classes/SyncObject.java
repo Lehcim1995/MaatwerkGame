@@ -11,6 +11,7 @@ public class SyncObject implements ISyncObject
     private float angularVelocity;
     private boolean isAwake;
     private int shipSpriteId;
+    private String objectType;
 
     private Long id;
 
@@ -96,5 +97,17 @@ public class SyncObject implements ISyncObject
     public void setId(Long id)
     {
         this.id = id;
+    }
+
+    @Override
+    public String getObjectType()
+    {
+        return objectType;
+    }
+
+    @Override
+    public void setObjectType(String objectType)
+    {
+        this.objectType = objectType;
     }
 }

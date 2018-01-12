@@ -105,6 +105,15 @@ public class GameManager extends UnicastRemoteObject
             gameObject.update();
         }
 
+        for (IGameObject gameObject : serverGameObjects)
+        {
+            if (gameObject == null)
+            {
+                continue;
+            }
+            gameObject.update();
+        }
+
         // TODO can this be merged?
 
         for (Iterator<IGameObject> it = gameObjects.iterator(); it.hasNext(); )
@@ -139,6 +148,12 @@ public class GameManager extends UnicastRemoteObject
                 {
                     //
                     System.out.println("New objects");
+                    IGameObject obj = createFromSyncObject(syncObject);
+                    if (obj == null)
+                    {
+                        continue;
+                    }
+                    serverGameObjects.add(obj);
                 }
 
                 for (ISyncObject syncObject : gameLobby.getUpdates(playerName))
@@ -279,11 +294,53 @@ public class GameManager extends UnicastRemoteObject
         return enemy;
     }
 
+    private IGameObject createFromSyncObject(ISyncObject syncObject)
+    {
+        online = false;
+
+        IGameObject obj = null;
+
+        System.out.println("object type " + syncObject.getObjectType());
+
+        switch (syncObject.getObjectType())
+        {
+            case "Laser":
+                obj = fireLaser(syncObject.getPosition(), 300, syncObject.getRotation());
+                obj.setID(syncObject.getId());
+                break;
+            case "SpaceShip":
+                obj = createPlayer(syncObject.getPosition());
+                obj.setID(syncObject.getId());
+                break;
+            case "SpaceShipEnemy":
+                obj = createEnemy(syncObject.getPosition(), syncObject.getRotation());
+                obj.setID(syncObject.getId());
+                break;
+            default:
+                break;
+        }
+        online = true;
+
+        return obj;
+    }
+
     public void updateFromSyncObject(ISyncObject syncObject)
     {
         // TODO
         for (IGameObject serverGameObject : serverGameObjects)
         {
+            if (syncObject.getId() == null)
+            {
+                System.out.println("id is null");
+                continue;
+            }
+
+            if (serverGameObject == null)
+            {
+                System.out.println("gameobject is null");
+                continue;
+            }
+
             if (serverGameObject.getID() == syncObject.getId())
             {
                 serverGameObject.setPosition(syncObject.getPosition());
@@ -308,6 +365,20 @@ public class GameManager extends UnicastRemoteObject
         }
         syncObject.setPosition(gameObject.getPosition());
         syncObject.setRotation(gameObject.getRotation());
+
+        if (gameObject instanceof Laser)
+        {
+            syncObject.setObjectType("Laser");
+        }
+        else if (gameObject instanceof SpaceShip)
+        {
+            syncObject.setObjectType("SpaceShip");
+        }
+        else if (gameObject instanceof SpaceShipEnemy)
+        {
+            syncObject.setObjectType("SpaceShipEnemy");
+        }
+
         if (gameObject instanceof Ship)
         {
             // TODO change

@@ -119,7 +119,7 @@ public class GameLobby extends UnicastRemoteObject implements IGameLobby
     }
 
     @Override
-    public List<ISyncObject> getUpdates(String user) throws RemoteException
+    public synchronized List<ISyncObject> getUpdates(String user) throws RemoteException
     {
         List<ISyncObject> syncObjects = new ArrayList<>();
 
@@ -130,14 +130,14 @@ public class GameLobby extends UnicastRemoteObject implements IGameLobby
                 continue;
             }
 
-            syncObjects.addAll(stringMapEntry.getValue().values());
+            syncObjects.addAll(stringMapEntry.getValue().values()); // TODO fix java.util.ConcurrentModificationException
         }
 
         return syncObjects;
     }
 
     @Override
-    public List<String> getPlayers()
+    public synchronized List<String> getPlayers()
     {
         return new ArrayList<>(playerGameobjectList.keySet());
     }
