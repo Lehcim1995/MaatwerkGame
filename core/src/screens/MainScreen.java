@@ -129,8 +129,8 @@ public class MainScreen extends AbstractScreen
         labelLobbys.setText("Fps: " + fps);
         labelLobbys.setColor(fps < 30 ? Color.RED : Color.WHITE);
 
-        box2DDebugRenderer.setDrawBodies(false);
-        box2DDebugRenderer.setDrawVelocities(false);
+        box2DDebugRenderer.setDrawBodies(true);
+        box2DDebugRenderer.setDrawVelocities(true);
         box2DDebugRenderer.render(gameManager.getWorldManager().world, camera.combined);
         batch.setProjectionMatrix(camera.combined);
         shapeRenderer.setProjectionMatrix(camera.combined);

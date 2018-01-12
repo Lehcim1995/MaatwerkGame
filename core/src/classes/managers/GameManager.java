@@ -281,7 +281,7 @@ public class GameManager extends UnicastRemoteObject
             Vector2 pos,
             float rotation)
     {
-        SpaceShipEnemy enemy = new SpaceShipEnemy(pos, rotation, spaceShipTexturesHelper.getSpaceShipSprite(16), player);
+        SpaceShipEnemy enemy = new SpaceShipEnemy(pos, rotation, spaceShipTexturesHelper.getSpaceShipSprite(16), null);
 
         Fixture fixture = shapeHelper.CreateCube(enemy);
         fixture.setFilterData(CollisionMasks.ENEMY_FILTER);
@@ -305,14 +305,17 @@ public class GameManager extends UnicastRemoteObject
         switch (syncObject.getObjectType())
         {
             case "Laser":
+                System.out.println("Laser");
                 obj = fireLaser(syncObject.getPosition(), 300, syncObject.getRotation());
                 obj.setID(syncObject.getId());
                 break;
             case "SpaceShip":
+                System.out.println("Player");
                 obj = createPlayer(syncObject.getPosition());
                 obj.setID(syncObject.getId());
                 break;
             case "SpaceShipEnemy":
+                System.out.println("Enemy");
                 obj = createEnemy(syncObject.getPosition(), syncObject.getRotation());
                 obj.setID(syncObject.getId());
                 break;
@@ -335,16 +338,20 @@ public class GameManager extends UnicastRemoteObject
                 continue;
             }
 
-            if (serverGameObject == null)
-            {
-                System.out.println("gameobject is null");
-                continue;
-            }
-
             if (serverGameObject.getID() == syncObject.getId())
             {
                 serverGameObject.setPosition(syncObject.getPosition());
                 serverGameObject.setRotation(syncObject.getRotation());
+
+                if (serverGameObject.getFixture() != null)
+                {
+                    Fixture f = serverGameObject.getFixture();
+                    f.getBody().setActive(false);
+                    f.getBody().setTransform(syncObject.getPosition(), (float) Math.toRadians(syncObject.getRotation()));
+                    f.getBody().setLinearVelocity(syncObject.getLinearVelocity());
+                    f.getBody().setAngularVelocity(syncObject.getAngularVelocity());
+                    f.getBody().setActive(true);
+                }
                 break;
             }
         }

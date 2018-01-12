@@ -73,24 +73,19 @@ public class GameLobby extends UnicastRemoteObject implements IGameLobby
         long id = createID();
         syncObject.setId(id);
 
-        for (Map.Entry<String, Map<Long, ISyncObject>> entry : playerGameobjectList.entrySet())
-        {
-            if (entry.getKey().equals(user))
-            {
-                continue;
-            }
-
-            entry.getValue().put(id, syncObject);
-        }
+        System.out.println("Creating object for " + user + " Object id " + id);
+        playerGameobjectList.get(user).put(id, syncObject);
 
         for (Map.Entry<String, Map<Long, ISyncObject>> entry : newGameobjectList.entrySet())
         {
+            // Add new object for everybody but me
             if (entry.getKey().equals(user))
             {
                 continue;
             }
 
             entry.getValue().put(id, syncObject);
+            System.out.println("Creating object for " + entry.getKey() + " Object id " + id);
         }
 
 
@@ -146,12 +141,14 @@ public class GameLobby extends UnicastRemoteObject implements IGameLobby
     public void addUser(String name)
     {
         playerGameobjectList.put(name, new HashMap<>());
+        newGameobjectList.put(name, new HashMap<>());
     }
 
     @Override
     public void removeUser(String user)
     {
         playerGameobjectList.remove(user);
+        newGameobjectList.remove(user);
     }
 
     @Override

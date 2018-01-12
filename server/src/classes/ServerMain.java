@@ -88,6 +88,12 @@ public class ServerMain extends UnicastRemoteObject implements IServer
         }
 
         lobbies.get(lobbyName).removeUser(user);
+
+        if (lobbies.get(lobbyName).getPlayers().size() == 0)
+        {
+            // TODO maybe stop?
+            lobbies.remove(lobbyName);
+        }
     }
 
     @Override
