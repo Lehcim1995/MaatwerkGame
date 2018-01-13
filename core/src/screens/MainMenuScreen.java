@@ -120,6 +120,9 @@ public class MainMenuScreen implements Screen
             }
         });
 
+
+        lobby.setDisabled(main.getServer() == null);
+
     }
 
     @Override

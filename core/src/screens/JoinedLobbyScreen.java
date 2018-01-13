@@ -56,7 +56,7 @@ public class JoinedLobbyScreen extends AbstractScreen
         }
         catch (RemoteException e)
         {
-            e.printStackTrace();
+            // TODO
         }
 
         labelLobbys.setFontScale(2);
@@ -64,12 +64,11 @@ public class JoinedLobbyScreen extends AbstractScreen
 
         table.add(labelLobbys);
         table.row().pad(10, 0, 10, 0);
-        table.add(playersSelectBox).colspan(4).expandY().fillX();
+        table.add(playersSelectBox).colspan(4).fillX();
         table.row();
         table.add(playerTypeSelectBox);
         table.add(playerNameLabel);
         table.add(startButton);
-        table.add(createLobbyButton);
         table.row();
         table.add();
         table.add();

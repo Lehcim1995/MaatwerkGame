@@ -20,6 +20,8 @@ public class GameLobby extends UnicastRemoteObject implements IGameLobby
     private boolean isRunning;
     private String lobbyName;
 
+    //TODO add Times for match time and such
+
     public GameLobby(String lobbyName) throws RemoteException
     {
         super();
@@ -39,7 +41,7 @@ public class GameLobby extends UnicastRemoteObject implements IGameLobby
             List<ISyncObject> update,
             String user) throws RemoteException
     {
-
+        // TODO
     }
 
     @Override
@@ -47,9 +49,6 @@ public class GameLobby extends UnicastRemoteObject implements IGameLobby
             String user,
             ISyncObject syncObject) throws RemoteException
     {
-//        System.out.println("uploading gameobject id " + syncObject.getId() + " from user " + user);
-//        System.out.println("uploading gameobject rot " + syncObject.getRotation());
-        // TODO replace the object with the id
         playerGameobjectList.get(user).put(syncObject.getId(), syncObject);
     }
 
@@ -73,7 +72,6 @@ public class GameLobby extends UnicastRemoteObject implements IGameLobby
         long id = createID();
         syncObject.setId(id);
 
-        System.out.println("Creating object for " + user + " Object id " + id + " Type " + syncObject.getObjectType());
         playerGameobjectList.get(user).put(id, syncObject);
 
         for (Map.Entry<String, Map<Long, ISyncObject>> entry : newGameobjectList.entrySet())
@@ -85,9 +83,7 @@ public class GameLobby extends UnicastRemoteObject implements IGameLobby
             }
 
             entry.getValue().put(id, syncObject);
-            System.out.println("Creating object for " + entry.getKey() + " Object id " + id + " Type " + syncObject.getObjectType());
         }
-
 
         return id;
     }

@@ -9,8 +9,10 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.utils.Align;
 import com.school.spacegame.Main;
 import interfaces.IGameLobby;
@@ -46,6 +48,7 @@ public class MainScreen extends AbstractScreen
 
     private IGameLobby gameLobby;
     private String playerName;
+    private ProgressBar playerHealth;
 
     public MainScreen(
             Main parent,
@@ -94,8 +97,13 @@ public class MainScreen extends AbstractScreen
         labelLobbys = new Label("0", skin);
         labelLobbys.setAlignment(Align.left);
 
+        playerHealth = new ProgressBar(0, 100, 1, false, skin);
+        playerHealth.setValue(50);
+
         table.right().bottom();
         table.add(labelLobbys).left();
+
+        stage.addActor(playerHealth);
     }
 
     @Override
@@ -135,13 +143,22 @@ public class MainScreen extends AbstractScreen
         batch.setProjectionMatrix(camera.combined);
         shapeRenderer.setProjectionMatrix(camera.combined);
 
+        if (gameManager.getPlayer() != null)
+        {
+            Vector3 world = new Vector3(gameManager.getPlayer().getPosition().x, gameManager.getPlayer().getPosition().y, 0);
+            Vector3 view = camera.project(world);
+            playerHealth.setPosition(view.x - playerHealth.getWidth() / 2, view.y);
+        }
+
         // Draw UI
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
     }
 
     @Override
-    public void resize(int width, int height)
+    public void resize(
+            int width,
+            int height)
     {
         camera.viewportWidth = width;
         camera.viewportHeight = height;

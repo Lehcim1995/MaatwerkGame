@@ -132,7 +132,6 @@ public class GameManager extends UnicastRemoteObject
             if (gameObject.isToDelete())
             {
                 // Deleting this body is useful
-                worldManager.world.destroyBody(gameObject.getFixture().getBody());
                 //TODO let the server know i deleted this gameobject
                 if (online)
                 {
@@ -145,6 +144,7 @@ public class GameManager extends UnicastRemoteObject
                         // TODO errors
                     }
                 }
+                worldManager.world.destroyBody(gameObject.getFixture().getBody());
                 gameObjects.remove(gameObject);
             }
         }
