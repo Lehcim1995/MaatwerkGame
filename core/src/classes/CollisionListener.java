@@ -1,7 +1,6 @@
 package classes;
 
 import classes.gameobjects.GameObject;
-import classes.gameobjects.unplayble.Laser;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
@@ -10,9 +9,9 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 public class CollisionListener implements ContactListener
 {
     @Override
-    public void beginContact(Contact contact)
+    public void beginContact(Contact contact) //TODO fix this bug
     {
-        if (contact.getFixtureA().getUserData() instanceof Laser || contact.getFixtureB().getUserData() instanceof Laser)
+        if (contact.getFixtureA().getUserData() instanceof GameObject || contact.getFixtureB().getUserData() instanceof GameObject)
         {
             GameObject a = (GameObject) contact.getFixtureA().getUserData();
             GameObject b = (GameObject) contact.getFixtureB().getUserData();
@@ -25,7 +24,7 @@ public class CollisionListener implements ContactListener
     @Override
     public void endContact(Contact contact)
     {
-        if (contact.getFixtureA().getUserData() instanceof Laser || contact.getFixtureB().getUserData() instanceof Laser)
+        if (contact.getFixtureA().getUserData() instanceof GameObject || contact.getFixtureB().getUserData() instanceof GameObject)
         {
             GameObject a = (GameObject) contact.getFixtureA().getUserData();
             GameObject b = (GameObject) contact.getFixtureB().getUserData();
