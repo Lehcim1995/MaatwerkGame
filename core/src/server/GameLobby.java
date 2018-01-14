@@ -1,4 +1,4 @@
-package classes;
+package server;
 
 import interfaces.IGameLobby;
 import interfaces.ISyncObject;

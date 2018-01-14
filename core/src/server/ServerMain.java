@@ -1,4 +1,4 @@
-package classes;
+package server;
 
 import interfaces.IGameLobby;
 import interfaces.IServer;
@@ -89,7 +89,7 @@ public class ServerMain extends UnicastRemoteObject implements IServer
 
         lobbies.get(lobbyName).removeUser(user);
 
-        if (lobbies.get(lobbyName).getPlayers().size() == 0)
+        if (lobbies.get(lobbyName).getPlayers().isEmpty())
         {
             // TODO maybe stop?
             lobbies.remove(lobbyName);
