@@ -86,6 +86,8 @@ public class MainScreen extends AbstractScreen
         camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();
         box2DDebugRenderer = new Box2DDebugRenderer();
+        box2DDebugRenderer.setDrawBodies(false);
+        box2DDebugRenderer.setDrawVelocities(false);
 
         font = new BitmapFont();
         layout = new GlyphLayout();
@@ -137,8 +139,6 @@ public class MainScreen extends AbstractScreen
         labelLobbys.setText("Fps: " + fps);
         labelLobbys.setColor(fps < 30 ? Color.RED : Color.WHITE);
 
-        box2DDebugRenderer.setDrawBodies(true);
-        box2DDebugRenderer.setDrawVelocities(true);
         box2DDebugRenderer.render(gameManager.getWorldManager().world, camera.combined);
         batch.setProjectionMatrix(camera.combined);
         shapeRenderer.setProjectionMatrix(camera.combined);
