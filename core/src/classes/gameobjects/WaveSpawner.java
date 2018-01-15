@@ -106,7 +106,7 @@ public class WaveSpawner
                     pos.rotate(angle * i);
                     pos.add(middle);
 
-                    gameManager.createEnemy(pos, angle * i);
+                    gameManager.createEnemy(pos, angle * i, true);
                 }
                 break;
             case Square:

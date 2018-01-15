@@ -1,6 +1,7 @@
 package classes.gameobjects.playable;
 
 import classes.managers.GameManager;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -18,9 +19,13 @@ public class SpaceShip extends Ship implements InputProcessor
     private boolean up;
     private boolean down;
     private boolean left;
-    private boolean rigth;
+    private boolean right;
     private boolean halt;
     private boolean shoot;
+
+    private boolean isShooting;
+    private float shootingTimer = 0;
+    private float shootingDuration = 1 / 5f;
 
     public SpaceShip(
             Vector2 position,
@@ -92,7 +97,7 @@ public class SpaceShip extends Ship implements InputProcessor
             fixture.getBody().applyForce(getRight().scl(rotNewtons), getBackwards().scl(sprite.getWidth() / 2), true);
         }
 
-        if (rigth)
+        if (right)
         {
             fixture.getBody().applyForce(getRight().scl(rotNewtons), getForward().scl(sprite.getWidth() / 2), true);
             fixture.getBody().applyForce(getLeft().scl(rotNewtons), getBackwards().scl(sprite.getWidth() / 2), true);
@@ -106,11 +111,24 @@ public class SpaceShip extends Ship implements InputProcessor
             fixture.getBody().applyForceToCenter(dir.scl(moveNewtons), false);
         }
 
-        if (shoot)
+        if (shoot && !isShooting)
         {
+            isShooting = true;
             //TODO add shooting
-            gameManager.fireLaser(position, 300, rotation);
+            gameManager.fireLaser(position, 300, rotation, true);
         }
+
+        if (isShooting)
+        {
+            shootingTimer += Gdx.graphics.getDeltaTime();
+            if (shootingTimer > shootingDuration)
+            {
+                shootingTimer = 0;
+                isShooting = false;
+            }
+        }
+
+
     }
 
     @Override
@@ -162,7 +180,7 @@ public class SpaceShip extends Ship implements InputProcessor
 
         if (keycode == Input.Keys.D) // Turning right
         {
-            rigth = true;
+            right = true;
         }
 
         if (keycode == Input.Keys.A) // Turning left
@@ -198,7 +216,7 @@ public class SpaceShip extends Ship implements InputProcessor
 
         if (keycode == Input.Keys.D) // Turning right
         {
-            rigth = false;
+            right = false;
         }
 
         if (keycode == Input.Keys.A) // Turning left
@@ -213,6 +231,7 @@ public class SpaceShip extends Ship implements InputProcessor
 
         if (keycode == Input.Keys.V) // Shooting
         {
+
             shoot = false;
         }
 

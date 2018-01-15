@@ -107,7 +107,7 @@ public class WaveSpawnerPlayer extends GameObject implements InputProcessor
             pos.rotate(angle * i);
             pos.add(middle);
 
-            gameManager.createEnemy(pos, angle * i);
+            gameManager.createEnemy(pos, angle * i, true);
         }
     }
 
