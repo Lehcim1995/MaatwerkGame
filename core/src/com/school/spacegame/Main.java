@@ -22,20 +22,25 @@ public class Main extends Game
     private Registry registry;
     private IServer server;
 
-    private void connectToServer()
+    public static String ip;
+
+    private void connectToServer(String ipaddress)
     {
 
-        InetAddress localhost = null;
         try
         {
-            localhost = InetAddress.getLocalHost();
+            InetAddress localhost = InetAddress.getLocalHost();
+            ip = localhost.getHostAddress();
         }
         catch (UnknownHostException e)
         {
             //Log this
             java.util.logging.Logger.getAnonymousLogger().log(java.util.logging.Level.SEVERE, "Client: UnknownHostException: " + e.getMessage());
         }
-        String ip = "";
+        if (!ipaddress.isEmpty())
+        {
+            ip = ipaddress;
+        }
         int portNumber = 1099;
 
         try
@@ -48,18 +53,20 @@ public class Main extends Game
         {
             //Log this
             Logger.getAnonymousLogger().log(java.util.logging.Level.SEVERE, "Client: RemoteExeption: " + e.getMessage());
+            ip = "not connected";
         }
         catch (NotBoundException e)
         {
             //Log this
             Logger.getAnonymousLogger().log(java.util.logging.Level.SEVERE, "Client: NotBoundException: " + e.getMessage());
+            ip = "not connected";
         }
     }
 
     @Override
     public void create()
     {
-        connectToServer();
+        connectToServer("");
 
         sceneManager = new SceneManager(this);
         sceneManager.LoadMainMenuScreen();

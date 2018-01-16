@@ -231,7 +231,6 @@ public class SpaceShip extends Ship implements InputProcessor
 
         if (keycode == Input.Keys.V) // Shooting
         {
-
             shoot = false;
         }
 

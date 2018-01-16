@@ -14,6 +14,8 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.school.spacegame.Main;
 
+import static com.school.spacegame.Main.ip;
+
 public class MainMenuScreen implements Screen
 {
     private Stage stage;
@@ -47,6 +49,9 @@ public class MainMenuScreen implements Screen
         label.setFontScale(2);
         label.setAlignment(Align.center);
 
+        Label serverIp = new Label("Server ip : " + ip, skin);
+        label.setAlignment(Align.center);
+
         // TODO disable Lobby when no server is found
         // TODO add new button to connect to server
 
@@ -60,6 +65,8 @@ public class MainMenuScreen implements Screen
         table.add(preferences).fillX().uniformX().colspan(2);
         table.row();
         table.add(exit).fillX().uniformX().colspan(2);
+        table.row();
+        table.add(serverIp);
 
         // create button listeners
         exit.addListener(new ChangeListener()

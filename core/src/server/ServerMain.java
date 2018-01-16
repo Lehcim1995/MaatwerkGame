@@ -50,22 +50,17 @@ public class ServerMain extends UnicastRemoteObject implements IServer
             Logger.getAnonymousLogger().log(Level.SEVERE, "Could not locate an ip address");
         }
 
-        while (true)
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String input = "";
+        while (!input.equals("Exit"))
         {
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-            String input = null;
             try
             {
                 input = br.readLine();
             }
             catch (IOException e)
             {
-                e.printStackTrace();
-            }
-
-            if (input.equals("Exit"))
-            {
-                break;
+                //TODO
             }
         }
     }
