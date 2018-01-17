@@ -19,20 +19,22 @@ import interfaces.ISyncObject;
 import screens.MainScreen;
 
 import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static classes.Constants.*;
 
-public class GameManager extends UnicastRemoteObject
+@SuppressWarnings("ALL")
+public class GameManager
 {
+    // Managers
     private MainScreen mainScreen;
     private WorldManager worldManager;
     private SpaceShipTexturesHelper spaceShipTexturesHelper;
     private ShapeHelper shapeHelper;
     private float accumulator;
 
+    // Gameobjects
     private List<IGameObject> gameObjects;
     private List<IGameObject> serverGameObjects;
 
@@ -44,17 +46,15 @@ public class GameManager extends UnicastRemoteObject
     private boolean online;
     private playerType type;
     private String playerName;
-
-    private float updateRate = 1 / 30f;
-    private float updateTimer = 0;
+    private float onlineUpdateRate = 1 / 30f;
+    private float onlineUpdateTimer = 0;
 
     public GameManager(
             IGameLobby gameLobby,
             playerType type,
             String playerName,
-            MainScreen mainScreen) throws RemoteException
+            MainScreen mainScreen)
     {
-        super();
         this.worldManager = new WorldManager();
         this.spaceShipTexturesHelper = new SpaceShipTexturesHelper();
         shapeHelper = new ShapeHelper(worldManager.world);
@@ -77,15 +77,15 @@ public class GameManager extends UnicastRemoteObject
                 createSpawnerPlayer();
                 Gdx.input.setInputProcessor(waveSpawnerPlayer);
                 break;
+            case Spectator:
+                // TODO add spectator
+                break;
         }
-
-        // TODO add lobby name
     }
 
     public void createSpawnerPlayer()
     {
         createSpawnerPlayer(new Vector2(0, 0));
-        // TODO make this method
     }
 
     public void createSpawnerPlayer(Vector2 pos)
@@ -94,7 +94,6 @@ public class GameManager extends UnicastRemoteObject
         waveSpawnerPlayer.setPosition(pos);
 
         gameObjects.add(waveSpawnerPlayer);
-        // TODO make this method
     }
 
     public void update(float deltaTime)
@@ -110,13 +109,39 @@ public class GameManager extends UnicastRemoteObject
             gameObject.update();
         }
 
+        updateOnline(deltaTime);
+
+        for (IGameObject gameObject : serverGameObjects)
+        {
+            if (gameObject.isToDelete())
+            {
+                worldManager.world.destroyBody(gameObject.getFixture().getBody());
+                serverGameObjects.remove(gameObject);
+                System.out.println("Deleting server object local " + gameObject.getID());
+            }
+        }
+
+        for (IGameObject gameObject : gameObjects)
+        {
+            if (gameObject.isToDelete())
+            {
+                // Deleting this body is useful
+                deleteOnlineObject(gameObject);
+                System.out.println("Deleting object local " + gameObject.getID());
+                worldManager.world.destroyBody(gameObject.getFixture().getBody());
+                gameObjects.remove(gameObject);
+            }
+        }
+    }
+
+    private void updateOnline(float deltaTime)
+    {
         if (online)
         {
-            // TODO recive other shizzle
-            updateTimer += deltaTime;
-            if (updateTimer > updateRate)
+            onlineUpdateTimer += deltaTime;
+            if (onlineUpdateTimer > onlineUpdateRate)
             {
-                updateTimer = 0;
+                onlineUpdateTimer = 0;
 
                 try
                 {
@@ -143,7 +168,6 @@ public class GameManager extends UnicastRemoteObject
                     // or return to start screen
                 }
 
-
                 // TODO Send own shizzle
                 for (IGameObject gameObject : gameObjects)
                 {
@@ -157,28 +181,6 @@ public class GameManager extends UnicastRemoteObject
                         // or return to start screen
                     }
                 }
-            }
-        }
-
-        for (IGameObject gameObject : serverGameObjects)
-        {
-            if (gameObject.isToDelete())
-            {
-                worldManager.world.destroyBody(gameObject.getFixture().getBody());
-                serverGameObjects.remove(gameObject);
-                System.out.println("Deleting server object local " + gameObject.getID());
-            }
-        }
-
-        for (IGameObject gameObject : gameObjects)
-        {
-            if (gameObject.isToDelete())
-            {
-                // Deleting this body is useful
-                deleteOnlineObject(gameObject);
-                System.out.println("Deleting object local " + gameObject.getID());
-                worldManager.world.destroyBody(gameObject.getFixture().getBody());
-                gameObjects.remove(gameObject);
             }
         }
     }
@@ -267,19 +269,6 @@ public class GameManager extends UnicastRemoteObject
         }
     }
 
-    public SpaceShip createNonPlayer(Vector2 pos)
-    {
-        return createNonPlayer(pos, 0f);
-    }
-
-    public SpaceShip createNonPlayer(
-            Vector2 pos,
-            float rotation)
-    {
-        //TODO create this method
-        return null;
-    }
-
     public SpaceShipEnemy createEnemy(Vector2 pos)
     {
         return createEnemy(pos, 0f, true);
@@ -308,13 +297,14 @@ public class GameManager extends UnicastRemoteObject
 
     private IGameObject createFromSyncObject(ISyncObject syncObject)
     {
-        online = false;
+        // TODO let his throw a custom (cant create) exception.
+        online = false; // TODO remove this,
 
         IGameObject obj = null;
 
         System.out.println("object type " + syncObject.getObjectType());
 
-        switch (syncObject.getObjectType())
+        switch (syncObject.getObjectType()) // TODO refactor, this should create server objects. not local objects
         {
             case "Laser":
                 System.out.println("Laser");
@@ -386,7 +376,7 @@ public class GameManager extends UnicastRemoteObject
         syncObject.setPosition(gameObject.getPosition());
         syncObject.setRotation(gameObject.getRotation());
 
-        if (gameObject instanceof Laser)
+        if (gameObject instanceof Laser) // TODO add method for this
         {
             syncObject.setObjectType("Laser");
         }
@@ -401,7 +391,7 @@ public class GameManager extends UnicastRemoteObject
 
         if (gameObject instanceof Ship)
         {
-            // TODO change
+            // TODO add param for ship sprite.
             syncObject.setShipSpriteId(1);
         }
         return syncObject;

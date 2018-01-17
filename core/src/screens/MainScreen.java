@@ -17,8 +17,6 @@ import com.badlogic.gdx.utils.Align;
 import com.school.spacegame.Main;
 import interfaces.IGameLobby;
 
-import java.rmi.RemoteException;
-
 //http://badlogicgames.com/forum/viewtopic.php?t=19454&p=81586
 public class MainScreen extends AbstractScreen
 {
@@ -73,7 +71,7 @@ public class MainScreen extends AbstractScreen
         {
             gameManager = new GameManager(gameLobby, type, playerName, this);
         }
-        catch (RemoteException e)
+        catch (Exception e)
         {
             e.printStackTrace();
             // exit
