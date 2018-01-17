@@ -11,54 +11,65 @@ import interfaces.IGameObject;
 import interfaces.ISyncObject;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class OnlineManager
 {
 
-
+    private GameManager gameManager;
     private IGameLobby gameLobby;
     private String playerName;
-    private float onlineUpdateRate;
-    private float onlineUpdateTimer;
-    private boolean online; // TODO remove online
+    private float onlineUpdateRate = 1 / 30f;
+    private float onlineUpdateTimer = 0;
     private List<IGameObject> serverGameObjects;
 
-    private void updateOnline(float deltaTime)
+    public OnlineManager(
+            IGameLobby gameLobby,
+            String playerName)
     {
-        if (online)
+        this.gameLobby = gameLobby;
+        this.playerName = playerName;
+        serverGameObjects = new ArrayList<>();
+    }
+
+    public void updateOnline(float deltaTime) throws RemoteException
+    {
+        onlineUpdateTimer += deltaTime;
+        if (onlineUpdateTimer > onlineUpdateRate)
         {
-            onlineUpdateTimer += deltaTime;
-            if (onlineUpdateTimer > onlineUpdateRate)
+            onlineUpdateTimer = 0;
+
+            for (ISyncObject syncObject : gameLobby.getNewObjects(playerName))
             {
-                onlineUpdateTimer = 0;
-
-                try
+                //
+                System.out.println("New objects");
+                IGameObject obj = createFromSyncObject(syncObject);
+                if (obj == null)
                 {
-                    for (ISyncObject syncObject : gameLobby.getNewObjects(playerName))
-                    {
-                        //
-                        System.out.println("New objects");
-                        IGameObject obj = createFromSyncObject(syncObject);
-                        if (obj == null)
-                        {
-                            continue;
-                        }
-                        serverGameObjects.add(obj);
-                    }
-
-                    for (ISyncObject syncObject : gameLobby.getUpdates(playerName))
-                    {
-                        updateFromSyncObject(syncObject);
-                    }
+                    continue;
                 }
-                catch (RemoteException e)
-                {
-                    // TODO add error
-                    // or return to start screen
-                }
+                serverGameObjects.add(obj);
+            }
 
-                // TODO Send own shizzle
+            for (ISyncObject syncObject : gameLobby.getUpdates(playerName))
+            {
+                updateFromSyncObject(syncObject);
+            }
+        }
+
+        for (IGameObject gameObject : serverGameObjects)
+        {
+            if (gameObject.isToDelete())
+            {
+                gameManager.getWorldManager().world.destroyBody(gameObject.getFixture().getBody());
+                serverGameObjects.remove(gameObject);
+                System.out.println("Deleting server object local " + gameObject.getID());
+            }
+        }
+
+
+        // TODO Send own shizzle
 //                for (IGameObject gameObject : gameObjects)
 //                {
 //                    try
@@ -71,47 +82,24 @@ public class OnlineManager
 //                        // or return to start screen
 //                    }
 //                }
-            }
-        }
     }
 
-    private void deleteOnlineObject(IGameObject gameObject)
+
+    public void deleteOnlineObject(ISyncObject syncObject) throws RemoteException // TODO change to ISyncObject
     {
-        if (online)
-        {
-            try
-            {
-                System.out.println("Deleting object online " + gameObject.getID());
-                gameLobby.deleteObject(playerName, fromGameObjectTOSyncObject(gameObject));
-            }
-            catch (RemoteException e)
-            {
-                //TODO
-            }
-        }
+        System.out.println("Deleting object online " + syncObject.getId());
+        gameLobby.deleteObject(playerName, syncObject);
     }
 
-    private void createOnlineObject(IGameObject gameObject)
+    public void createOnlineObject(IGameObject gameObject) throws RemoteException // TODO change to ISyncObject
     {
-        if (online)
-        {
-            try
-            {
-                long id = gameLobby.createObject(playerName, fromGameObjectTOSyncObject(gameObject));
-                gameObject.setID(id);
-            }
-            catch (RemoteException e)
-            {
-                //TODO
-            }
-        }
+        long id = gameLobby.createObject(playerName, fromGameObjectTOSyncObject(gameObject));
+        gameObject.setID(id);
     }
 
-    private IGameObject createFromSyncObject(ISyncObject syncObject)
+    private IGameObject createFromSyncObject(ISyncObject syncObject) // TODO maybe keep in Gamemanger
     {
         // TODO let his throw a custom (cant create) exception.
-        online = false; // TODO remove this,
-
         IGameObject obj = null;
 
         System.out.println("object type " + syncObject.getObjectType());
@@ -136,8 +124,6 @@ public class OnlineManager
 //            default:
 //                break;
         }
-
-        online = true;
 
         return obj;
     }
@@ -209,5 +195,6 @@ public class OnlineManager
         }
         return syncObject;
     }
+
 
 }

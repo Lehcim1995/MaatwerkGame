@@ -42,6 +42,7 @@ public class GameManager
     private WaveSpawnerPlayer waveSpawnerPlayer;
 
     // Online stuff
+    private OnlineManager onlineManager;
     private IGameLobby gameLobby;
     private boolean online;
     private playerType type;
@@ -66,6 +67,7 @@ public class GameManager
         this.playerName = playerName;
         this.type = type;
         this.mainScreen = mainScreen;
+        this.onlineManager = new OnlineManager(gameLobby, playerName);
 
         switch (this.type)
         {
@@ -136,52 +138,13 @@ public class GameManager
 
     private void updateOnline(float deltaTime)
     {
-        if (online)
+        try
         {
-            onlineUpdateTimer += deltaTime;
-            if (onlineUpdateTimer > onlineUpdateRate)
-            {
-                onlineUpdateTimer = 0;
-
-                try
-                {
-                    for (ISyncObject syncObject : gameLobby.getNewObjects(playerName))
-                    {
-                        //
-                        System.out.println("New objects");
-                        IGameObject obj = createFromSyncObject(syncObject);
-                        if (obj == null)
-                        {
-                            continue;
-                        }
-                        serverGameObjects.add(obj);
-                    }
-
-                    for (ISyncObject syncObject : gameLobby.getUpdates(playerName))
-                    {
-                        updateFromSyncObject(syncObject);
-                    }
-                }
-                catch (RemoteException e)
-                {
-                    // TODO add error
-                    // or return to start screen
-                }
-
-                // TODO Send own shizzle
-                for (IGameObject gameObject : gameObjects)
-                {
-                    try
-                    {
-                        gameLobby.addUpdate(playerName, fromGameObjectTOSyncObject(gameObject));
-                    }
-                    catch (RemoteException e)
-                    {
-                        // TODO add error
-                        // or return to start screen
-                    }
-                }
-            }
+            onlineManager.updateOnline(deltaTime);
+        }
+        catch (RemoteException e)
+        {
+            e.printStackTrace();
         }
     }
 
