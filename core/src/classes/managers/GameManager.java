@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import interfaces.IGameLobby;
+import interfaces.IGameManager;
 import interfaces.IGameObject;
 import interfaces.ISyncObject;
 import screens.MainScreen;
@@ -25,7 +26,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import static classes.Constants.*;
 
 @SuppressWarnings("ALL")
-public class GameManager
+public class GameManager implements IGameManager
 {
     // Managers
     private MainScreen mainScreen;
@@ -67,7 +68,7 @@ public class GameManager
         this.playerName = playerName;
         this.type = type;
         this.mainScreen = mainScreen;
-        this.onlineManager = new OnlineManager(gameLobby, playerName);
+        this.onlineManager = new OnlineManager(this, gameLobby, playerName);
 
         switch (this.type)
         {
@@ -98,6 +99,7 @@ public class GameManager
         gameObjects.add(waveSpawnerPlayer);
     }
 
+    @Override
     public void update(float deltaTime)
     {
         doPhysicsStep(deltaTime);
@@ -106,29 +108,13 @@ public class GameManager
             gameObject.update();
         }
 
-        for (IGameObject gameObject : serverGameObjects)
-        {
-            gameObject.update();
-        }
-
         updateOnline(deltaTime);
-
-        for (IGameObject gameObject : serverGameObjects)
-        {
-            if (gameObject.isToDelete())
-            {
-                worldManager.world.destroyBody(gameObject.getFixture().getBody());
-                serverGameObjects.remove(gameObject);
-                System.out.println("Deleting server object local " + gameObject.getID());
-            }
-        }
 
         for (IGameObject gameObject : gameObjects)
         {
             if (gameObject.isToDelete())
             {
                 // Deleting this body is useful
-                deleteOnlineObject(gameObject);
                 System.out.println("Deleting object local " + gameObject.getID());
                 worldManager.world.destroyBody(gameObject.getFixture().getBody());
                 gameObjects.remove(gameObject);
@@ -140,7 +126,8 @@ public class GameManager
     {
         try
         {
-            onlineManager.updateOnline(deltaTime);
+            onlineManager.update(deltaTime);
+            onlineManager.updateOnline(gameObjects);
         }
         catch (RemoteException e)
         {
@@ -360,6 +347,7 @@ public class GameManager
         return syncObject;
     }
 
+    @Override
     public void draw(Batch batch)
     {
         for (IGameObject go : gameObjects)
@@ -373,6 +361,7 @@ public class GameManager
         }
     }
 
+    @Override
     public void draw(ShapeRenderer shapeRenderer)
     {
         for (IGameObject go : gameObjects)

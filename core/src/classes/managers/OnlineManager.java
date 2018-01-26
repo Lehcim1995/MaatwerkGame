@@ -25,15 +25,28 @@ public class OnlineManager
     private List<IGameObject> serverGameObjects;
 
     public OnlineManager(
+            GameManager gameManager,
             IGameLobby gameLobby,
             String playerName)
     {
         this.gameLobby = gameLobby;
         this.playerName = playerName;
+        this.gameManager = gameManager;
         serverGameObjects = new ArrayList<>();
     }
 
-    public void updateOnline(float deltaTime) throws RemoteException
+    public void updateOnline(List<IGameObject> objects)
+    {
+        for (IGameObject object : objects)
+        {
+            if (object.isToDelete())
+            {
+
+            }
+        }
+    }
+
+    public void update(float deltaTime) throws RemoteException
     {
         onlineUpdateTimer += deltaTime;
         if (onlineUpdateTimer > onlineUpdateRate)
@@ -67,23 +80,7 @@ public class OnlineManager
                 System.out.println("Deleting server object local " + gameObject.getID());
             }
         }
-
-
-        // TODO Send own shizzle
-//                for (IGameObject gameObject : gameObjects)
-//                {
-//                    try
-//                    {
-//                        gameLobby.addUpdate(playerName, fromGameObjectTOSyncObject(gameObject));
-//                    }
-//                    catch (RemoteException e)
-//                    {
-//                        // TODO add error
-//                        // or return to start screen
-//                    }
-//                }
     }
-
 
     public void deleteOnlineObject(ISyncObject syncObject) throws RemoteException // TODO change to ISyncObject
     {

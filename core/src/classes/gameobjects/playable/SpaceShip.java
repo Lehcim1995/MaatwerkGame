@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import interfaces.IGameManager;
 import interfaces.IGameObject;
 
 public class SpaceShip extends Ship implements InputProcessor
@@ -155,7 +156,7 @@ public class SpaceShip extends Ship implements InputProcessor
 
     }
 
-    public GameManager getGameManager()
+    public IGameManager getGameManager()
     {
         return gameManager;
     }
