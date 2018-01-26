@@ -6,6 +6,7 @@ import classes.gameobjects.playable.WaveSpawnerPlayer;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import interfaces.IGameLobby;
+import interfaces.IGameManager;
 import interfaces.IGameObject;
 import screens.MainScreen;
 
@@ -15,7 +16,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import static classes.Constants.*;
 
 @SuppressWarnings("ALL")
-public class GameManager2
+public class GameManager2 implements IGameManager
 {
     // Managers
     private MainScreen mainScreen;
@@ -65,6 +66,18 @@ public class GameManager2
         }
     }
 
+    @Override
+    public IGameObject createObject(IGameObject object)
+    {
+        return null;
+    }
+
+    @Override
+    public void deleteObject(IGameObject object)
+    {
+
+    }
+
     public void update(float deltaTime)
     {
         doPhysicsStep(deltaTime);
@@ -95,6 +108,12 @@ public class GameManager2
         {
             go.Draw(shapeRenderer);
         }
+    }
+
+    @Override
+    public List<IGameObject> getObjects()
+    {
+        return gameObjects;
     }
 
     private void doPhysicsStep(float deltaTime)
