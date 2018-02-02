@@ -13,13 +13,11 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Fixture;
-import interfaces.IGameLobby;
 import interfaces.IGameManager;
 import interfaces.IGameObject;
 import interfaces.ISyncObject;
 import screens.MainScreen;
 
-import java.rmi.RemoteException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -29,46 +27,32 @@ import static classes.Constants.*;
 public class GameManager implements IGameManager
 {
     // Managers
-    private MainScreen mainScreen;
-    private WorldManager worldManager;
-    private SpaceShipTexturesHelper spaceShipTexturesHelper;
-    private ShapeHelper shapeHelper;
+    protected MainScreen mainScreen;
+    protected WorldManager worldManager;
+    protected SpaceShipTexturesHelper spaceShipTexturesHelper;
+    protected ShapeHelper shapeHelper;
     private float accumulator;
 
     // Gameobjects
     private List<IGameObject> gameObjects;
-    private List<IGameObject> serverGameObjects;
 
     private SpaceShip player;
     private WaveSpawnerPlayer waveSpawnerPlayer;
 
     // Online stuff
-    private OnlineManager onlineManager;
-    private IGameLobby gameLobby;
-    private boolean online;
     private playerType type;
-    private String playerName;
-    private float onlineUpdateRate = 1 / 30f;
-    private float onlineUpdateTimer = 0;
 
     public GameManager(
-            IGameLobby gameLobby,
             playerType type,
-            String playerName,
             MainScreen mainScreen)
     {
         this.worldManager = new WorldManager();
         this.spaceShipTexturesHelper = new SpaceShipTexturesHelper();
         shapeHelper = new ShapeHelper(worldManager.world);
         gameObjects = new CopyOnWriteArrayList<>();
-        serverGameObjects = new CopyOnWriteArrayList<>();
 
-        this.gameLobby = gameLobby;
-        this.online = gameLobby != null;
-        this.playerName = playerName;
         this.type = type;
         this.mainScreen = mainScreen;
-        this.onlineManager = new OnlineManager(this, gameLobby, playerName);
 
         switch (this.type)
         {
@@ -100,18 +84,25 @@ public class GameManager implements IGameManager
     }
 
     @Override
+    public IGameObject createObject(IGameObject object)
+    {
+        return null;
+    }
+
+    @Override
+    public void deleteObject(IGameObject object)
+    {
+
+    }
+
+    @Override
     public void update(float deltaTime)
     {
         doPhysicsStep(deltaTime);
         for (IGameObject gameObject : gameObjects)
         {
             gameObject.update();
-        }
 
-        updateOnline(deltaTime);
-
-        for (IGameObject gameObject : gameObjects)
-        {
             if (gameObject.isToDelete())
             {
                 // Deleting this body is useful
@@ -122,24 +113,10 @@ public class GameManager implements IGameManager
         }
     }
 
-    private void updateOnline(float deltaTime)
-    {
-        try
-        {
-            onlineManager.update(deltaTime);
-            onlineManager.updateOnline(gameObjects);
-        }
-        catch (RemoteException e)
-        {
-            e.printStackTrace();
-        }
-    }
-
     public Laser fireLaser(
             Vector2 pos,
             float speed,
-            float rotation,
-            boolean addLocal)
+            float rotation)
     {
         Laser laser = new Laser(new Vector2(pos), rotation, speed);
         Fixture fixture = shapeHelper.CreateCube(laser);
@@ -150,24 +127,18 @@ public class GameManager implements IGameManager
 
         fixture.setUserData(laser);
 
-        createOnlineObject(laser);
-
-        if (addLocal)
-        {
-            gameObjects.add(laser);
-        }
+        gameObjects.add(laser);
         return laser;
     }
 
     public SpaceShip createPlayer(Vector2 pos)
     {
-        return createPlayer(pos, 0, true);
+        return createPlayer(pos, 0);
     }
 
     public SpaceShip createPlayer(
             Vector2 pos,
-            float rotation,
-            boolean addLocal)
+            float rotation)
     {
         SpaceShip ship = new SpaceShip(pos, rotation, spaceShipTexturesHelper.getSpaceShipSprite(1));
         ship.setGameManager(this);
@@ -177,57 +148,20 @@ public class GameManager implements IGameManager
         ship.setFixture(fixture);
         fixture.setUserData(ship);
 
-        createOnlineObject(ship);
 
-        if (addLocal)
-        {
-            gameObjects.add(ship);
-        }
+        gameObjects.add(ship);
         player = ship;
         return ship;
     }
 
-    private void deleteOnlineObject(IGameObject gameObject)
-    {
-        if (online)
-        {
-            try
-            {
-                System.out.println("Deleting object online " + gameObject.getID());
-                gameLobby.deleteObject(playerName, fromGameObjectTOSyncObject(gameObject));
-            }
-            catch (RemoteException e)
-            {
-                //TODO
-            }
-        }
-    }
-
-    private void createOnlineObject(IGameObject gameObject)
-    {
-        if (online)
-        {
-            try
-            {
-                long id = gameLobby.createObject(playerName, fromGameObjectTOSyncObject(gameObject));
-                gameObject.setID(id);
-            }
-            catch (RemoteException e)
-            {
-                //TODO
-            }
-        }
-    }
-
     public SpaceShipEnemy createEnemy(Vector2 pos)
     {
-        return createEnemy(pos, 0f, true);
+        return createEnemy(pos, 0f);
     }
 
     public SpaceShipEnemy createEnemy(
             Vector2 pos,
-            float rotation,
-            boolean addLocal)
+            float rotation)
     {
         SpaceShipEnemy enemy = new SpaceShipEnemy(pos, rotation, spaceShipTexturesHelper.getSpaceShipSprite(16), null);
 
@@ -236,78 +170,8 @@ public class GameManager implements IGameManager
         enemy.setFixture(fixture);
         fixture.setUserData(enemy);
 
-        createOnlineObject(enemy);
-
-        if (addLocal)
-        {
-            gameObjects.add(enemy);
-        }
+        gameObjects.add(enemy);
         return enemy;
-    }
-
-    private IGameObject createFromSyncObject(ISyncObject syncObject)
-    {
-        // TODO let his throw a custom (cant create) exception.
-        online = false; // TODO remove this,
-
-        IGameObject obj = null;
-
-        System.out.println("object type " + syncObject.getObjectType());
-
-        switch (syncObject.getObjectType()) // TODO refactor, this should create server objects. not local objects
-        {
-            case "Laser":
-                System.out.println("Laser");
-                obj = fireLaser(syncObject.getPosition(), 300, syncObject.getRotation(), false);
-                obj.setID(syncObject.getId());
-                break;
-            case "SpaceShip":
-                System.out.println("Player");
-                obj = createPlayer(syncObject.getPosition(), 0, false);
-                obj.setID(syncObject.getId());
-                break;
-            case "SpaceShipEnemy":
-                System.out.println("Enemy");
-                obj = createEnemy(syncObject.getPosition(), syncObject.getRotation(), false);
-                obj.setID(syncObject.getId());
-                break;
-            default:
-                break;
-        }
-        online = true;
-
-        return obj;
-    }
-
-    public void updateFromSyncObject(ISyncObject syncObject)
-    {
-        // TODO
-        for (IGameObject serverGameObject : serverGameObjects)
-        {
-            if (syncObject.getId() == null)
-            {
-                System.out.println("id is null");
-                continue;
-            }
-
-            if (serverGameObject.getID() == syncObject.getId())
-            {
-                serverGameObject.setPosition(syncObject.getPosition());
-                serverGameObject.setRotation(syncObject.getRotation());
-                serverGameObject.setToDelete(serverGameObject.isToDelete());
-
-                if (serverGameObject.getFixture() != null)
-                {
-                    Fixture f = serverGameObject.getFixture();
-                    f.getBody().setActive(false);
-                    f.getBody().setTransform(syncObject.getPosition(), (float) Math.toRadians(syncObject.getRotation()));
-                    f.getBody().setLinearVelocity(syncObject.getLinearVelocity());
-                    f.getBody().setAngularVelocity(syncObject.getAngularVelocity());
-                    f.getBody().setActive(true);
-                }
-                break;
-            }
-        }
     }
 
     private ISyncObject fromGameObjectTOSyncObject(IGameObject gameObject)
@@ -354,11 +218,6 @@ public class GameManager implements IGameManager
         {
             go.Draw(batch);
         }
-
-        for (IGameObject go : serverGameObjects)
-        {
-            go.Draw(batch);
-        }
     }
 
     @Override
@@ -368,11 +227,12 @@ public class GameManager implements IGameManager
         {
             go.Draw(shapeRenderer);
         }
+    }
 
-        for (IGameObject go : serverGameObjects)
-        {
-            go.Draw(shapeRenderer);
-        }
+    @Override
+    public List<IGameObject> getObjects()
+    {
+        return null;
     }
 
     private void doPhysicsStep(float deltaTime)
@@ -405,16 +265,6 @@ public class GameManager implements IGameManager
         {
             //TODO dispose all game objects
         }
-    }
-
-    public boolean isOnline()
-    {
-        return online;
-    }
-
-    public void setOnline(boolean online)
-    {
-        this.online = online;
     }
 
     public playerType getPlayerType()

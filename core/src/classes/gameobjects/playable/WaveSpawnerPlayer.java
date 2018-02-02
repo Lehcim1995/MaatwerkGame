@@ -1,26 +1,26 @@
 package classes.gameobjects.playable;
 
 import classes.gameobjects.GameObject;
-import classes.managers.GameManager;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import interfaces.IGameManager;
 import interfaces.IGameObject;
 
 public class WaveSpawnerPlayer extends GameObject implements InputProcessor
 {
 
-    private GameManager gameManager;
+    private IGameManager gameManager;
     private boolean hasSpawned;
     private boolean up;
     private boolean down;
     private boolean rigth;
     private boolean left;
 
-    public WaveSpawnerPlayer(GameManager gameManager)
+    public WaveSpawnerPlayer(IGameManager gameManager)
     {
         this.gameManager = gameManager;
     }
@@ -107,7 +107,7 @@ public class WaveSpawnerPlayer extends GameObject implements InputProcessor
             pos.rotate(angle * i);
             pos.add(middle);
 
-            gameManager.createEnemy(pos, angle * i, true);
+            gameManager.createEnemy(pos, angle * i);
         }
     }
 

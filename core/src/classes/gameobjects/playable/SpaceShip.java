@@ -14,7 +14,7 @@ import interfaces.IGameObject;
 public class SpaceShip extends Ship implements InputProcessor
 {
 
-    private GameManager gameManager;
+    private IGameManager gameManager;
 
     //flags
     private boolean up;
@@ -45,7 +45,7 @@ public class SpaceShip extends Ship implements InputProcessor
             Vector2 position,
             float rotation,
             Sprite sprite,
-            GameManager gameManager)
+            IGameManager gameManager)
     {
         this.sprite = sprite;
         this.rotation = rotation;
@@ -116,7 +116,7 @@ public class SpaceShip extends Ship implements InputProcessor
         {
             isShooting = true;
             //TODO add shooting
-            gameManager.fireLaser(position, 300, rotation, true);
+            gameManager.fireLaser(position, 300, rotation);
         }
 
         if (isShooting)

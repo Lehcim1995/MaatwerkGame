@@ -1,7 +1,11 @@
 package interfaces;
 
+import classes.gameobjects.playable.SpaceShipEnemy;
+import classes.gameobjects.unplayble.Laser;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
+import screens.MainScreen;
 
 import java.util.List;
 
@@ -44,4 +48,17 @@ public interface IGameManager
     void draw(ShapeRenderer shapeRenderer);
 
     List<IGameObject> getObjects();
+
+    MainScreen getMainScreen();
+
+    SpaceShipEnemy createEnemy(
+            Vector2 pos,
+            float v);
+
+    Laser fireLaser(
+            Vector2 position,
+            int i,
+            float rotation);
+
+    //TODO rename parameters and add method add createPlayer
 }

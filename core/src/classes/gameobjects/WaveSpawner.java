@@ -1,8 +1,8 @@
 package classes.gameobjects;
 
 import classes.Wave;
-import classes.managers.GameManager;
 import com.badlogic.gdx.math.Vector2;
+import interfaces.IGameManager;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.security.InvalidParameterException;
@@ -14,7 +14,7 @@ public class WaveSpawner
     private List<Wave> waves;
     private Wave currentWave;
     private boolean repeat;
-    private GameManager gameManager;
+    private IGameManager gameManager;
     private float timeBetweenWaves;
     private float time;
 
@@ -23,7 +23,7 @@ public class WaveSpawner
     public WaveSpawner(
             List<Wave> waves,
             boolean repeat,
-            GameManager gameManager)
+            IGameManager gameManager)
     {
         this.waves = waves;
         this.repeat = repeat;
@@ -106,7 +106,7 @@ public class WaveSpawner
                     pos.rotate(angle * i);
                     pos.add(middle);
 
-                    gameManager.createEnemy(pos, angle * i, true);
+                    gameManager.createEnemy(pos, angle * i);
                 }
                 break;
             case Square:
@@ -120,7 +120,7 @@ public class WaveSpawner
     {
         if (currentWave == null)
         {
-            if (waves == null || waves.size() == 0)
+            if (waves == null || waves.isEmpty())
             {
                 throw new Exception("No waves found");
                 // maybe throw exception
