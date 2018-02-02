@@ -56,8 +56,8 @@ public interface IGameManager
             float v);
 
     Laser fireLaser(
-            Vector2 position,
-            int i,
+            Vector2 pos,
+            float speed,
             float rotation);
 
     //TODO rename parameters and add method add createPlayer

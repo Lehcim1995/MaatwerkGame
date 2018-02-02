@@ -11,6 +11,7 @@ public class ShapeHelper
 {
     // TODO fix duplicate code
     // TODO add object pooling
+    // TODO add Materials
 
     private World world;
 
@@ -20,7 +21,10 @@ public class ShapeHelper
         this.world = world;
     }
 
-    public Fixture CreateSuperShape(int x, int y, Polygon polygon)
+    public Fixture CreateSuperShape(
+            int x,
+            int y,
+            Polygon polygon)
     {
         // Create our body in the world using our body definition
         Body body = createDynamicBody(x, y, 0);
@@ -28,14 +32,8 @@ public class ShapeHelper
         ChainShape chainShape = new ChainShape();
         chainShape.createLoop(polygon.getTransformedVertices());
 
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = chainShape;
-        fixtureDef.density = 0.5f;
-        fixtureDef.friction = 0.4f;
-        fixtureDef.restitution = 0.6f; // Make it bounce a little bit
-
         // Create our fixture and attach it to the body
-        Fixture fixture = body.createFixture(fixtureDef);
+        Fixture fixture = body.createFixture(defaultFixtureDef(chainShape));
 
         fixture.getUserData();
 
@@ -46,7 +44,10 @@ public class ShapeHelper
         return fixture;
     }
 
-    public Fixture CreateChainShape(int x, int y, List<Vector2> polygon)
+    public Fixture CreateChainShape(
+            int x,
+            int y,
+            List<Vector2> polygon)
     {
         // Create our body in the world using our body definition
         Body body = createDynamicBody(x, y, 0);
@@ -56,14 +57,8 @@ public class ShapeHelper
         Vector2[] polygonArray = new Vector2[polygon.size()];
         chainShape.createLoop(polygon.toArray(polygonArray));
 
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = chainShape;
-        fixtureDef.density = 0.5f;
-        fixtureDef.friction = 0.4f;
-        fixtureDef.restitution = 0.6f; // Make it bounce a little bit
-
         // Create our fixture and attach it to the body
-        Fixture fixture = body.createFixture(fixtureDef);
+        Fixture fixture = body.createFixture(defaultFixtureDef(chainShape));
 
         // Remember to dispose of any shapes after you're done with them!
         // BodyDef and FixtureDef don't need disposing, but shapes do.
@@ -77,7 +72,12 @@ public class ShapeHelper
         return CreateCube((int) go.getPosition().x, (int) go.getPosition().y, (int) go.getSprite().getWidth(), (int) go.getSprite().getHeight(), go.getRotation());
     }
 
-    public Fixture CreateCube(int x, int y, int width, int height, float rotation)
+    public Fixture CreateCube(
+            int x,
+            int y,
+            int width,
+            int height,
+            float rotation)
     {
         // Create our body in the world using our body definition
         Body body = createDynamicBody(x, y, rotation);
@@ -86,16 +86,8 @@ public class ShapeHelper
         PolygonShape square = new PolygonShape();
         square.setAsBox(width / 2, height / 2);
 
-        // Create a fixture definition to apply our shape to
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = square;
-        fixtureDef.density = 0.5f;
-        fixtureDef.friction = 0.4f;
-        fixtureDef.restitution = 0.6f; // Make it bounce a little bit
-        // filters
-
         // Create our fixture and attach it to the body
-        Fixture fixture = body.createFixture(fixtureDef);
+        Fixture fixture = body.createFixture(defaultFixtureDef(square));
 
         // Remember to dispose of any shapes after you're done with them!
         // BodyDef and FixtureDef don't need disposing, but shapes do.
@@ -104,7 +96,10 @@ public class ShapeHelper
         return fixture;
     }
 
-    public Fixture CreateCircle(int x, int y, int size)
+    public Fixture CreateCircle(
+            int x,
+            int y,
+            int size)
     {
         // Create our body in the world using our body definition
         Body body = createDynamicBody(x, y, 0);
@@ -113,15 +108,8 @@ public class ShapeHelper
         CircleShape circle = new CircleShape();
         circle.setRadius(size);
 
-        // Create a fixture definition to apply our shape to
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = circle;
-        fixtureDef.density = 0.5f;
-        fixtureDef.friction = 0.4f;
-        fixtureDef.restitution = 0.6f; // Make it bounce a little bit
-
         // Create our fixture and attach it to the body
-        Fixture fixture = body.createFixture(fixtureDef);
+        Fixture fixture = body.createFixture(defaultFixtureDef(circle));
 
         // Remember to dispose of any shapes after you're done with them!
         // BodyDef and FixtureDef don't need disposing, but shapes do.
@@ -130,12 +118,19 @@ public class ShapeHelper
         return fixture;
     }
 
-    private Body createDynamicBody(float x, float y, float rotation)
+    private Body createDynamicBody(
+            float x,
+            float y,
+            float rotation)
     {
         return createBody(x, y, rotation, BodyDef.BodyType.DynamicBody);
     }
 
-    private Body createBody(float x, float y, float rotation, BodyDef.BodyType bodyType)
+    private Body createBody(
+            float x,
+            float y,
+            float rotation,
+            BodyDef.BodyType bodyType)
     {
         // First we create a body definition
         BodyDef bodyDef = new BodyDef();
@@ -149,5 +144,16 @@ public class ShapeHelper
         bodyDef.angle = (float) Math.toRadians(rotation);
 
         return world.createBody(bodyDef);
+    }
+
+    private FixtureDef defaultFixtureDef(Shape shape)
+    {
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.density = 0.5f;
+        fixtureDef.friction = 0.4f;
+        fixtureDef.restitution = 0.6f; // Make it bounce a little bit
+
+        return fixtureDef;
     }
 }

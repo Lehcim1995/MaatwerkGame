@@ -1,9 +1,7 @@
 package classes.managers;
 
 import classes.CollisionMasks;
-import classes.SyncObject;
 import classes.factories.ShapeHelper;
-import classes.gameobjects.playable.Ship;
 import classes.gameobjects.playable.SpaceShip;
 import classes.gameobjects.playable.SpaceShipEnemy;
 import classes.gameobjects.playable.WaveSpawnerPlayer;
@@ -15,7 +13,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import interfaces.IGameManager;
 import interfaces.IGameObject;
-import interfaces.ISyncObject;
 import screens.MainScreen;
 
 import java.util.List;
@@ -113,6 +110,7 @@ public class GameManager implements IGameManager
         }
     }
 
+    @Override
     public Laser fireLaser(
             Vector2 pos,
             float speed,
@@ -172,43 +170,6 @@ public class GameManager implements IGameManager
 
         gameObjects.add(enemy);
         return enemy;
-    }
-
-    private ISyncObject fromGameObjectTOSyncObject(IGameObject gameObject)
-    {
-        ISyncObject syncObject = new SyncObject();
-
-        Fixture f = gameObject.getFixture();
-
-        syncObject.setId(gameObject.getID());
-        if (f != null)
-        {
-            syncObject.setAngularVelocity(f.getBody().getAngularVelocity());
-            syncObject.setAwake(f.getBody().isAwake());
-            syncObject.setLinearVelocity(f.getBody().getLinearVelocity());
-        }
-        syncObject.setPosition(gameObject.getPosition());
-        syncObject.setRotation(gameObject.getRotation());
-
-        if (gameObject instanceof Laser) // TODO add method for this
-        {
-            syncObject.setObjectType("Laser");
-        }
-        else if (gameObject instanceof SpaceShip)
-        {
-            syncObject.setObjectType("SpaceShip");
-        }
-        else if (gameObject instanceof SpaceShipEnemy)
-        {
-            syncObject.setObjectType("SpaceShipEnemy");
-        }
-
-        if (gameObject instanceof Ship)
-        {
-            // TODO add param for ship sprite.
-            syncObject.setShipSpriteId(1);
-        }
-        return syncObject;
     }
 
     @Override
