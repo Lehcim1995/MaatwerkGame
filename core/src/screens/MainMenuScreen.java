@@ -27,6 +27,7 @@ public class MainMenuScreen extends AbstractScreen
     @Override
     public void show()
     {
+        super.show();
         TextButton startGame = new TextButton("Local Destroyer Game", skin);
         TextButton startGameOther = new TextButton("Local Spawner Game", skin);
         TextButton lobby = new TextButton("Lobby's", skin);

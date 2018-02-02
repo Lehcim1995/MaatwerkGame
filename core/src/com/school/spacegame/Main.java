@@ -22,7 +22,7 @@ public class Main extends Game
     private Registry registry;
     private IServer server;
 
-    public static String ip;
+    public static String ip = "";
 
     private void connectToServer(String ipaddress)
     {

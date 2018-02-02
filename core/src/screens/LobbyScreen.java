@@ -36,6 +36,7 @@ public class LobbyScreen extends AbstractScreen
     @Override
     public void show()
     {
+        super.show();
         TextButton backButton = new TextButton("Back", skin);
         TextButton startButton = new TextButton("Join", skin);
         TextButton createLobbyButton = new TextButton("Create", skin);
