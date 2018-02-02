@@ -69,7 +69,7 @@ public class MainScreen extends AbstractScreen
 
         try
         {
-            gameManager = new GameManager(gameLobby, type, playerName, this);
+            gameManager = new GameManager(type, this);
         }
         catch (Exception e)
         {
