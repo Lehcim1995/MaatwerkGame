@@ -66,7 +66,7 @@ public class Main extends Game
     @Override
     public void create()
     {
-        connectToServer("");
+        connectToServer(""); // TODO shizzle
 
         sceneManager = new SceneManager(this);
         sceneManager.LoadMainMenuScreen();

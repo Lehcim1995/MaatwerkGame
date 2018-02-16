@@ -2,6 +2,7 @@ package screens;
 
 import classes.gameobjects.GameObject;
 import classes.managers.GameManager;
+import classes.managers.OnlineManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -69,7 +70,14 @@ public class MainScreen extends AbstractScreen
 
         try
         {
-            gameManager = new GameManager(type, this);
+            if (gameLobby != null)
+            {
+                gameManager = new OnlineManager(gameLobby, type, playerName, this);
+            }
+            else
+            {
+                gameManager = new GameManager(type, this);
+            }
         }
         catch (Exception e)
         {
@@ -77,12 +85,27 @@ public class MainScreen extends AbstractScreen
             // exit
             main.sceneManager.LoadMainMenuScreen();
         }
+
         batch = new SpriteBatch();
         textBatch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setAutoShapeType(true);
-        camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+        switch (gameManager.getPlayerType())
+        {
+
+            case Destroyer:
+                camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+                break;
+            case Spawner:
+                camera = new OrthographicCamera(Gdx.graphics.getWidth() * 4, Gdx.graphics.getHeight() * 4);
+                break;
+            case Spectator:
+                break;
+        }
+
         camera.update();
+
         box2DDebugRenderer = new Box2DDebugRenderer();
         box2DDebugRenderer.setDrawBodies(false);
         box2DDebugRenderer.setDrawVelocities(false);
@@ -158,8 +181,22 @@ public class MainScreen extends AbstractScreen
             int width,
             int height)
     {
-        camera.viewportWidth = width;
-        camera.viewportHeight = height;
+        switch (gameManager.getPlayerType())
+        {
+
+            case Destroyer:
+                camera.viewportWidth = width;
+                camera.viewportHeight = height;
+                break;
+            case Spawner:
+                camera.viewportWidth = width * 4;// TODO dont use hardcoded numbers
+                camera.viewportHeight = height * 4;
+                break;
+            case Spectator:
+                break;
+        }
+
+
         camera.update();
 
         batch.setProjectionMatrix(camera.combined);
@@ -197,8 +234,8 @@ public class MainScreen extends AbstractScreen
 
     private void backGround()
     {
-        final float textureHeight = 1024;
-        final float textureWidth = 1024;
+        final float textureHeight = this.background.getHeight();
+        final float textureWidth = this.background.getWidth();
 
         final float offSetHeight = textureHeight * 2;
         final float offSetWidth = textureWidth * 2;
@@ -206,14 +243,14 @@ public class MainScreen extends AbstractScreen
         final int totalHeight = (int) (textureHeight * 4);
         final int totalWidth = (int) (textureWidth * 4);
 
-        GameObject player = null;
+        GameObject background = null;
         switch (type)
         {
             case Destroyer:
-                player = gameManager.getPlayer();
+                background = gameManager.getPlayer();
                 break;
             case Spawner:
-                player = gameManager.getWaveSpawnerPlayer();
+                background = gameManager.getWaveSpawnerPlayer();
                 break;
             case Spectator:
                 // Exit
@@ -221,7 +258,7 @@ public class MainScreen extends AbstractScreen
 //                break;
         }
 
-        batch.draw(background, -offSetWidth + (textureWidth * (int) (player.getPosition().x / textureWidth)), -offSetHeight + (textureHeight * (int) (player.getPosition().y / textureHeight)), 0, 0, totalWidth, totalHeight);
+        batch.draw(this.background, -offSetWidth + (textureWidth * (int) (background.getPosition().x / textureWidth)), -offSetHeight + (textureHeight * (int) (background.getPosition().y / textureHeight)), 0, 0, totalWidth, totalHeight);
     }
 
     public Camera getCamera()

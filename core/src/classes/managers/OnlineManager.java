@@ -47,7 +47,7 @@ public class OnlineManager extends GameManager
         onlineUpdateTimer += deltaTime;
         if (onlineUpdateTimer > onlineUpdateRate)
         {
-            onlineUpdateTimer = 0;
+            onlineUpdateTimer -= onlineUpdateRate;
 
             try
             {
@@ -85,7 +85,8 @@ public class OnlineManager extends GameManager
         }
     }
 
-    private IGameObject createFromSyncObject(ISyncObject syncObject) // TODO maybe keep in Gamemanger
+    private IGameObject createFromSyncObject(ISyncObject syncObject)
+//    throws CantCreateObjectException // TODO maybe keep in Gamemanger
     {
         // TODO let his throw a custom (cant create) exception.
         IGameObject obj = null;
@@ -110,11 +111,12 @@ public class OnlineManager extends GameManager
                 obj.setID(syncObject.getId());
                 break;
             default:
-                break;
+//                throw new CantCreateObjectException("");
         }
 
         return obj;
     }
+
 
     public void updateFromSyncObject(ISyncObject syncObject)
     {

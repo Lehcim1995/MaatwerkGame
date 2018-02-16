@@ -7,6 +7,7 @@ import classes.gameobjects.playable.SpaceShipEnemy;
 import classes.gameobjects.playable.WaveSpawnerPlayer;
 import classes.gameobjects.unplayble.Laser;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -28,16 +29,18 @@ public class GameManager implements IGameManager
     protected WorldManager worldManager;
     protected SpaceShipTexturesHelper spaceShipTexturesHelper;
     protected ShapeHelper shapeHelper;
-    private float accumulator;
+    protected float accumulator;
+
+    protected InputMultiplexer inputMultiplexer = new InputMultiplexer();
 
     // Gameobjects
-    private List<IGameObject> gameObjects;
+    protected List<IGameObject> gameObjects;
 
-    private SpaceShip player;
-    private WaveSpawnerPlayer waveSpawnerPlayer;
+    protected SpaceShip player;
+    protected WaveSpawnerPlayer waveSpawnerPlayer;
 
     // Online stuff
-    private playerType type;
+    protected playerType type;
 
     public GameManager(
             playerType type,

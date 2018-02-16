@@ -11,6 +11,7 @@ public class WorldManager
 {
     public World world;
 
+    // Shape helper?
     private final ContactListener contactListener = new CollisionListener();
 
     public WorldManager()
