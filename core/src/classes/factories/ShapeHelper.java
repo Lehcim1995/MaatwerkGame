@@ -146,14 +146,43 @@ public class ShapeHelper
         return world.createBody(bodyDef);
     }
 
-    private FixtureDef defaultFixtureDef(Shape shape)
+    private FixtureDef createFixtureDef(
+            Shape shape,
+            Materials materials)
     {
-        FixtureDef fixtureDef = new FixtureDef();
+        FixtureDef fixtureDef = materials.getFixtureDef();
         fixtureDef.shape = shape;
-        fixtureDef.density = 0.5f;
-        fixtureDef.friction = 0.4f;
-        fixtureDef.restitution = 0.6f; // Make it bounce a little bit
 
         return fixtureDef;
+    }
+
+    private FixtureDef defaultFixtureDef(Shape shape)
+    {
+        return createFixtureDef(shape, Materials.DEFAULT);
+    }
+
+    public enum Materials
+    {
+        METAL(0, 0, 0),
+        WOOD(0, 0, 0),
+        DEFAULT(0.5f, 0.4f, 0.6f);
+
+        private final FixtureDef fixtureDef;
+
+        Materials(
+                float density,
+                float friction,
+                float restitution)
+        {
+            fixtureDef = new FixtureDef();
+            fixtureDef.density = density;
+            fixtureDef.friction = friction;
+            fixtureDef.restitution = restitution;
+        }
+
+        public FixtureDef getFixtureDef()
+        {
+            return fixtureDef;
+        }
     }
 }

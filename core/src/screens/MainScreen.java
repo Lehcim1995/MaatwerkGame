@@ -4,6 +4,7 @@ import classes.gameobjects.GameObject;
 import classes.managers.GameManager;
 import classes.managers.OnlineManager;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -49,6 +50,8 @@ public class MainScreen extends AbstractScreen
     private String playerName;
     private ProgressBar playerHealth;
 
+    private InputMultiplexer inputMultiplexer;
+
     public MainScreen(
             Main parent,
             IGameLobby gameLobby,
@@ -60,6 +63,11 @@ public class MainScreen extends AbstractScreen
         this.playerName = playerName;
         this.online = gameLobby != null;
         this.type = type;
+
+        // Multiple input processors
+        inputMultiplexer = new InputMultiplexer();
+        Gdx.input.setInputProcessor(inputMultiplexer);
+        inputMultiplexer.addProcessor(stage);
     }
 
     @Override
@@ -67,6 +75,9 @@ public class MainScreen extends AbstractScreen
     {
         // init
         super.show();
+
+
+        inputMultiplexer.addProcessor(gameManager.getPlayer());
 
         try
         {
@@ -156,6 +167,7 @@ public class MainScreen extends AbstractScreen
         gameManager.draw(shapeRenderer);
         shapeRenderer.end();
 
+        //TODO add timer to only update fps every so seconds
         int fps = (int) (1 / delta);
         labelLobbys.setText("Fps: " + fps);
         labelLobbys.setColor(fps < 30 ? Color.RED : Color.WHITE);

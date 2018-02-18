@@ -10,13 +10,13 @@ import interfaces.IGameObject;
 public class Laser extends Projectile
 {
     private final IGameObject follow;
-    private final Texture Beams;
+    private static final Texture Beams = new Texture(Gdx.files.internal("core/assets/textures/beams.png"));
+    private static final Sprite BeamsSprite = new Sprite(Beams, 6, 7, 16, 22);
 
     public Laser(Vector2 position, float rotation, float speed)
     {
         follow = null;
-        Beams = new Texture(Gdx.files.internal("core/assets/textures/beams.png"));
-        this.sprite = new Sprite(Beams, 6, 7, 16, 22);
+        this.sprite = BeamsSprite;
         this.position = position;
         this.rotation = rotation;
 
@@ -53,7 +53,7 @@ public class Laser extends Projectile
     @Override
     public void onCollisionEnter(IGameObject other)
     {
+        // Always set delete flag when colliding
         toDelete = true;
-        System.out.println("Laser got hit");
     }
 }

@@ -1,6 +1,7 @@
 package classes.gameobjects.playable;
 
 import classes.gameobjects.GameObject;
+import classes.gameobjects.WaveSpawner;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -14,10 +15,11 @@ public class WaveSpawnerPlayer extends GameObject implements InputProcessor
 {
 
     private IGameManager gameManager;
+    private WaveSpawner waveSpawner;
     private boolean hasSpawned;
     private boolean up;
     private boolean down;
-    private boolean rigth;
+    private boolean right;
     private boolean left;
 
     public WaveSpawnerPlayer(IGameManager gameManager)
@@ -55,7 +57,7 @@ public class WaveSpawnerPlayer extends GameObject implements InputProcessor
             position.x -= speed;
         }
 
-        if (rigth)
+        if (right)
         {
             position.x += speed;
         }
@@ -126,7 +128,7 @@ public class WaveSpawnerPlayer extends GameObject implements InputProcessor
 
         if (keycode == Input.Keys.D) // Turning right
         {
-            rigth = true;
+            right = true;
         }
 
         if (keycode == Input.Keys.A) // Turning left
@@ -152,7 +154,7 @@ public class WaveSpawnerPlayer extends GameObject implements InputProcessor
 
         if (keycode == Input.Keys.D) // Turning right
         {
-            rigth = false;
+            right = false;
         }
 
         if (keycode == Input.Keys.A) // Turning left
