@@ -4,9 +4,9 @@ import classes.CollisionMasks;
 import classes.factories.ShapeHelper;
 import classes.gameobjects.playable.SpaceShip;
 import classes.gameobjects.playable.SpaceShipEnemy;
+import classes.gameobjects.playable.Spectator;
 import classes.gameobjects.playable.WaveSpawnerPlayer;
 import classes.gameobjects.unplayble.Laser;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -38,6 +38,7 @@ public class GameManager implements IGameManager
 
     protected SpaceShip player;
     protected WaveSpawnerPlayer waveSpawnerPlayer;
+    protected Spectator spectator;
 
     // Online stuff
     protected playerType type;
@@ -54,21 +55,25 @@ public class GameManager implements IGameManager
         this.type = type;
         this.mainScreen = mainScreen;
 
+        spawnDefault();
+    }
+
+    public void spawnDefault()
+    {
         switch (this.type)
         {
             case Destroyer:
-                createPlayer(new Vector2(0, 0));
-                Gdx.input.setInputProcessor(player);
+                createPlayer(new Vector2(0, 0), 0f);
                 break;
             case Spawner:
                 createSpawnerPlayer();
-                Gdx.input.setInputProcessor(waveSpawnerPlayer);
                 break;
             case Spectator:
                 // TODO add spectator
                 break;
         }
     }
+
 
     public void createSpawnerPlayer()
     {
@@ -149,7 +154,6 @@ public class GameManager implements IGameManager
         ship.setFixture(fixture);
         fixture.setUserData(ship);
 
-
         gameObjects.add(ship);
         player = ship;
         return ship;
@@ -197,6 +201,11 @@ public class GameManager implements IGameManager
     public List<IGameObject> getObjects()
     {
         return null;
+    }
+
+    public Spectator getSpectator()
+    {
+        return spectator;
     }
 
     private void doPhysicsStep(float deltaTime)

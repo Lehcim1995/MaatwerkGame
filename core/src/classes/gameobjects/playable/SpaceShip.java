@@ -1,6 +1,5 @@
 package classes.gameobjects.playable;
 
-import classes.managers.GameManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
@@ -161,7 +160,7 @@ public class SpaceShip extends Ship implements InputProcessor
         return gameManager;
     }
 
-    public void setGameManager(GameManager gameManager)
+    public void setGameManager(IGameManager gameManager)
     {
         this.gameManager = gameManager;
     }

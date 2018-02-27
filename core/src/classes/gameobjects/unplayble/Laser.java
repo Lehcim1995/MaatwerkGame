@@ -16,12 +16,13 @@ public class Laser extends Projectile
     public Laser(Vector2 position, float rotation, float speed)
     {
         follow = null;
-        this.sprite = BeamsSprite;
+        spriteOffsetRotation = 90;
+        this.sprite = new Sprite(BeamsSprite);
         this.position = position;
         this.rotation = rotation;
 
-        sprite.setPosition(position.x, position.y);
-        sprite.setRotation(rotation);
+        this.sprite.setPosition(position.x, position.y);
+        this.sprite.setRotation(rotation);
     }
 
     @Override

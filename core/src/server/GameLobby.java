@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class GameLobby extends UnicastRemoteObject implements IGameLobby
@@ -49,6 +51,8 @@ public class GameLobby extends UnicastRemoteObject implements IGameLobby
             String user,
             ISyncObject syncObject) throws RemoteException
     {
+
+        Logger.getAnonymousLogger().log(Level.INFO, "update object " + syncObject.getId());
         playerGameobjectList.get(user).put(syncObject.getId(), syncObject);
     }
 
@@ -71,6 +75,8 @@ public class GameLobby extends UnicastRemoteObject implements IGameLobby
     {
         long id = createID();
         syncObject.setId(id);
+
+        Logger.getAnonymousLogger().log(Level.INFO, "Create object " + id);
 
         playerGameobjectList.get(user).put(id, syncObject);
 

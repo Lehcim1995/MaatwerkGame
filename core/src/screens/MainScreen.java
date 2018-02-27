@@ -13,11 +13,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.school.spacegame.Main;
 import interfaces.IGameLobby;
+
+import java.rmi.RemoteException;
 
 //http://badlogicgames.com/forum/viewtopic.php?t=19454&p=81586
 public class MainScreen extends AbstractScreen
@@ -44,7 +49,7 @@ public class MainScreen extends AbstractScreen
 
     private boolean online;
     private GameManager.playerType type;
-    private Label labelLobbys;
+    private Label fpsLabel;
 
     private IGameLobby gameLobby;
     private String playerName;
@@ -76,9 +81,6 @@ public class MainScreen extends AbstractScreen
         // init
         super.show();
 
-
-        inputMultiplexer.addProcessor(gameManager.getPlayer());
-
         try
         {
             if (gameLobby != null)
@@ -107,19 +109,23 @@ public class MainScreen extends AbstractScreen
 
             case Destroyer:
                 camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+                inputMultiplexer.addProcessor(gameManager.getPlayer());
                 break;
             case Spawner:
                 camera = new OrthographicCamera(Gdx.graphics.getWidth() * 4, Gdx.graphics.getHeight() * 4);
+                inputMultiplexer.addProcessor(gameManager.getWaveSpawnerPlayer());
                 break;
             case Spectator:
+                camera = new OrthographicCamera(Gdx.graphics.getWidth() * 4, Gdx.graphics.getHeight() * 4);
+                inputMultiplexer.addProcessor(gameManager.getSpectator());
                 break;
         }
 
         camera.update();
 
         box2DDebugRenderer = new Box2DDebugRenderer();
-        box2DDebugRenderer.setDrawBodies(false);
-        box2DDebugRenderer.setDrawVelocities(false);
+//        box2DDebugRenderer.setDrawBodies(false);
+//        box2DDebugRenderer.setDrawVelocities(false);
 
         font = new BitmapFont();
         layout = new GlyphLayout();
@@ -128,14 +134,29 @@ public class MainScreen extends AbstractScreen
         background.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
 
         //
-        labelLobbys = new Label("0", skin);
-        labelLobbys.setAlignment(Align.left);
+        fpsLabel = new Label("0", skin);
+        fpsLabel.setAlignment(Align.left);
+
+        // TODO change
+        Button b = new Button(skin);
+        b.addListener(new ChangeListener()
+        {
+            @Override
+            public void changed(
+                    ChangeEvent event,
+                    Actor actor)
+            {
+                playerHealth.setValue(100);
+            }
+        });
+        table.add(b);
+        table.row();
 
         playerHealth = new ProgressBar(0, 100, 1, false, skin);
         playerHealth.setValue(50);
 
         table.right().bottom();
-        table.add(labelLobbys).left();
+        table.add(fpsLabel).left();
 
         stage.addActor(playerHealth);
     }
@@ -169,8 +190,8 @@ public class MainScreen extends AbstractScreen
 
         //TODO add timer to only update fps every so seconds
         int fps = (int) (1 / delta);
-        labelLobbys.setText("Fps: " + fps);
-        labelLobbys.setColor(fps < 30 ? Color.RED : Color.WHITE);
+        fpsLabel.setText("Fps: " + fps);
+        fpsLabel.setColor(fps < 30 ? Color.RED : Color.WHITE);
 
         box2DDebugRenderer.render(gameManager.getWorldManager().world, camera.combined);
         batch.setProjectionMatrix(camera.combined);
@@ -239,6 +260,17 @@ public class MainScreen extends AbstractScreen
     public void dispose()
     {
         gameManager.dispose();
+        try
+        {
+            if (gameLobby != null)
+            {
+                gameLobby.removeUser(playerName);
+            }
+        }
+        catch (RemoteException e)
+        {
+            e.printStackTrace();
+        }
         batch.dispose();
 
         super.dispose();

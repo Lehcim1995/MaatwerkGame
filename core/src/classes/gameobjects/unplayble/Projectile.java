@@ -10,6 +10,7 @@ import interfaces.IGameObject;
 public class Projectile extends GameObject
 {
     float lifeTime = 1; // Seconds
+    float spriteOffsetRotation = 0;
     private float speed;
     private Vector2 dirVector;
     private int damage = 25;
@@ -22,7 +23,7 @@ public class Projectile extends GameObject
         this.rotation = (float) Math.toDegrees(fixture.getBody().getAngle());
 
         sprite.setPosition(position.x - (sprite.getWidth() / 2), position.y - (sprite.getHeight() / 2));
-        sprite.setRotation(rotation);
+        sprite.setRotation(rotation + spriteOffsetRotation);
 
         lifeTime -= Gdx.graphics.getDeltaTime();
         if (lifeTime <= 0)
