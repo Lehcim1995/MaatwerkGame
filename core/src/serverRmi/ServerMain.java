@@ -1,4 +1,4 @@
-package server;
+package serverRmi;
 
 import interfaces.IGameLobby;
 import interfaces.IServer;
@@ -40,7 +40,7 @@ public class ServerMain extends UnicastRemoteObject implements IServer
         }
         catch (RemoteException e)
         {
-            Logger.getAnonymousLogger().log(Level.SEVERE, "Could not instantiate a server");
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Could not instantiate a serverRmi");
         }
         catch (UnknownHostException e)
         {

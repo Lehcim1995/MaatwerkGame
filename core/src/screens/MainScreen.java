@@ -2,7 +2,7 @@ package screens;
 
 import classes.gameobjects.GameObject;
 import classes.managers.GameManager;
-import classes.managers.OnlineManager;
+import classes.managers.OnlineRmiManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.*;
@@ -85,7 +85,7 @@ public class MainScreen extends AbstractScreen
         {
             if (gameLobby != null)
             {
-                gameManager = new OnlineManager(gameLobby, type, playerName, this);
+                gameManager = new OnlineRmiManager(gameLobby, type, playerName, this);
             }
             else
             {

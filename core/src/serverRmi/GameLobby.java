@@ -1,4 +1,4 @@
-package server;
+package serverRmi;
 
 import interfaces.IGameLobby;
 import interfaces.ISyncObject;

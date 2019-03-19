@@ -43,8 +43,8 @@ public class MainMenuScreen extends AbstractScreen
         Label serverIp = new Label("Server ip : " + ip, skin);
         label.setAlignment(Align.center);
 
-        // TODO disable Lobby when no server is found
-        // TODO add new button to connect to server
+        // TODO disable Lobby when no serverRmi is found
+        // TODO add new button to connect to serverRmi
 
         table.add(label).colspan(2);
         table.row().pad(10, 0, 10, 0);

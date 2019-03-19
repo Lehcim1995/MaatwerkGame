@@ -20,7 +20,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class OnlineManager extends GameManager
+public class OnlineRmiManager extends GameManager
 {
 
     private IGameLobby gameLobby;
@@ -30,7 +30,7 @@ public class OnlineManager extends GameManager
     private float onlineUpdateTimer = 0;
     private List<IGameObject> serverGameObjects;
 
-    public OnlineManager(
+    public OnlineRmiManager(
             IGameLobby gameLobby,
             GameManager.playerType type,
             String playerName,
@@ -102,7 +102,7 @@ public class OnlineManager extends GameManager
         {
             if (gameObject.isToDelete())
             {
-                System.out.println("Deleting server object local " + gameObject.getID());
+                System.out.println("Deleting serverRmi object local " + gameObject.getID());
                 getWorldManager().world.destroyBody(gameObject.getFixture().getBody());
                 serverGameObjects.remove(gameObject);
             }
@@ -219,7 +219,7 @@ public class OnlineManager extends GameManager
 
         System.out.println("object type " + syncObject.getObjectType());
 
-        switch (syncObject.getObjectType()) // TODO refactor, this should create server objects. not local objects
+        switch (syncObject.getObjectType()) // TODO refactor, this should create serverRmi objects. not local objects
         {
             case "Laser":
                 System.out.println("Laser");
