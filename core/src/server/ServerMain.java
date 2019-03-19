@@ -12,10 +12,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -123,6 +120,11 @@ public class ServerMain extends UnicastRemoteObject implements IServer
     @Override
     public void DeleteLobby(String name) throws RemoteException
     {
-        // TODO
+        lobbies.remove(name);
+    }
+
+    @Override
+    public long getUtfTime() {
+        return new Date().getTime();
     }
 }

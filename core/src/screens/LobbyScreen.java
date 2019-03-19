@@ -33,12 +33,14 @@ public class LobbyScreen extends AbstractScreen
         this.main = main;
     }
 
+    @SuppressWarnings("Duplicates")
     @Override
     public void show()
     {
         super.show();
         TextButton backButton = new TextButton("Back", skin);
         TextButton startButton = new TextButton("Join", skin);
+        TextButton deleteButton = new TextButton("Delete", skin);
         TextButton createLobbyButton = new TextButton("Create", skin);
 
         lobbySelectBox = new SelectBox<>(skin);
@@ -57,6 +59,7 @@ public class LobbyScreen extends AbstractScreen
         table.add(playerName);
         table.add(startButton);
         table.add(createLobbyButton);
+        table.add(deleteButton);
         table.row();
         table.add();
         table.add();

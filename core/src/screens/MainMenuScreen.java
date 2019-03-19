@@ -24,6 +24,7 @@ public class MainMenuScreen extends AbstractScreen
         this.main = main;
     }
 
+    @SuppressWarnings("Duplicates")
     @Override
     public void show()
     {
@@ -32,6 +33,7 @@ public class MainMenuScreen extends AbstractScreen
         TextButton startGameOther = new TextButton("Local Spawner Game", skin);
         TextButton lobby = new TextButton("Lobby's", skin);
         TextButton preferences = new TextButton("Preferences", skin);
+        TextButton server = new TextButton("Server selector", skin);
         TextButton exit = new TextButton("Exit", skin);
 
         Label label = new Label("Space game", skin);
@@ -52,6 +54,8 @@ public class MainMenuScreen extends AbstractScreen
         table.add(lobby).fillX().uniformX().colspan(2);
         table.row();
         table.add(preferences).fillX().uniformX().colspan(2);
+        table.row();
+        table.add(server).fillX().uniformX().colspan(2);
         table.row();
         table.add(exit).fillX().uniformX().colspan(2);
         table.row();
@@ -102,6 +106,18 @@ public class MainMenuScreen extends AbstractScreen
             {
                 System.out.println("Lobby");
                 main.sceneManager.LoadLobbyScreen();
+            }
+        });
+
+        server.addListener(new ChangeListener()
+        {
+            @Override
+            public void changed(
+                    ChangeEvent event,
+                    Actor actor)
+            {
+                System.out.println("Server");
+                main.sceneManager.LoadServerScreen();
             }
         });
 

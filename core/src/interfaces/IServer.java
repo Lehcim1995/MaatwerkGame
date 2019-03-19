@@ -27,4 +27,6 @@ public interface IServer extends Remote, Serializable
     void leaveLobby(
             String lobbyName,
             String user) throws RemoteException;
+
+    long getUtfTime();
 }

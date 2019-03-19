@@ -14,6 +14,7 @@ public class SceneManager
     private LobbyScreen lobbyScreen;
     private LobbyCreateScreen lobbyCreateScreen;
     private JoinedLobbyScreen joinedLobbyScreen;
+    private ConnectToServerScreen serverScreen;
     // TODO add Server screen
 
     public SceneManager(Main main)
@@ -50,6 +51,12 @@ public class SceneManager
     {
         lobbyScreen = new LobbyScreen(main);
         main.setScreen(lobbyScreen);
+    }
+
+    public void LoadServerScreen()
+    {
+        serverScreen = new ConnectToServerScreen(main);
+        main.setScreen(serverScreen);
     }
 
     public void LoadGameLobbyScreen(

@@ -24,7 +24,7 @@ public class Main extends Game
 
     public static String ip = "";
 
-    private void connectToServer(String ipaddress)
+    public void connectToServer(String ipaddress)
     {
 
         try
@@ -52,7 +52,7 @@ public class Main extends Game
         catch (RemoteException e)
         {
             //Log this
-            Logger.getAnonymousLogger().log(java.util.logging.Level.SEVERE, "Client: RemoteExeption: " + e.getMessage());
+            Logger.getAnonymousLogger().log(java.util.logging.Level.SEVERE, "Client: RemoteException: " + e.getMessage());
             ip = "not connected";
         }
         catch (NotBoundException e)
