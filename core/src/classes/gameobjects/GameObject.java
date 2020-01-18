@@ -18,9 +18,16 @@ import java.io.Serializable;
  */
 public abstract class GameObject implements IGameObject, Serializable
 {
+    // Box2d Class for physics
     protected transient Fixture fixture;
     protected Vector2 position;
+
+    /**
+     * Rotaion in
+     */
     protected float rotation;
+
+    // Old hitbox
     protected transient Polygon hitbox; // swap this with fixture
     protected long id;
     protected transient Sprite sprite;

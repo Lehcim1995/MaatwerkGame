@@ -37,4 +37,10 @@ public abstract class Ship extends GameObject
     {
         //TODO add stuff
     }
+
+    public void SetRotSpeed(float degPerSec)
+    {
+        // Calculate how fast it needs to be to rotate that fast/slow
+
+    }
 }

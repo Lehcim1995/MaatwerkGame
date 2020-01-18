@@ -2,10 +2,12 @@ package screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.GdxBuild;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.school.spacegame.Main;
 
@@ -35,7 +37,16 @@ public class AbstractScreen implements Screen //TODO implement this with the oth
         stage.addActor(table);
 
         // temporary until we have asset manager in
-        skin = new Skin(Gdx.files.local("/core/assets/skins/neon/skin/neon-ui.json"));
+
+        FileHandle fh = Gdx.files.internal("/core/assets/skins/neon/skin/neon-ui.json");
+        FileHandle fh2 = Gdx.files.local("/core/assets/skins/neon/skin/neon-ui.json");
+        FileHandle fh3 = Gdx.files.absolute("D://Java dev//SpaceGame/core/assets/skins/neon/skin/neon-ui.json");
+        FileHandle fh4 = Gdx.files.external("/core/assets/skins/neon/skin/neon-ui.json");
+        String p = fh.path();
+        String p2 = fh2.path();
+        String p3 = fh3.path();
+        String p4 = fh4.path();
+        skin = new Skin(fh3);
     }
 
     @Override

@@ -1,14 +1,19 @@
 package classes.managers;
 
 import classes.CollisionMasks;
+import classes.factories.ShapeCreator;
 import classes.factories.ShapeHelper;
 import classes.gameobjects.playable.SpaceShip;
 import classes.gameobjects.playable.SpaceShipEnemy;
 import classes.gameobjects.playable.Spectator;
 import classes.gameobjects.playable.WaveSpawnerPlayer;
 import classes.gameobjects.unplayble.Laser;
+import classes.gameobjects.unplayble.Planet;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Fixture;
@@ -72,6 +77,20 @@ public class GameManager implements IGameManager
                 // TODO add spectator
                 break;
         }
+
+        Sprite p = new Sprite(new Texture(Gdx.files.internal("core/assets/textures/planets/planet1.png")), 54, 54, 192, 192);
+
+        Planet planet = new Planet(new Vector2(-500,0), 0f, p);
+
+        ShapeCreator sc = new ShapeCreator(worldManager.world);
+        Fixture fixture = shapeHelper.CreateCircleStatic(planet);
+        fixture.setFilterData(CollisionMasks.ENEMY_FILTER);
+        planet.setFixture(fixture);
+        fixture.setUserData(planet);
+
+
+
+        gameObjects.add(planet);
     }
 
 

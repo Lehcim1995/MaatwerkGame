@@ -1,9 +1,13 @@
 package classes.managers;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Date;
+import java.util.Scanner;
 
 public class OnlineSocketsManger
 {
@@ -11,11 +15,31 @@ public class OnlineSocketsManger
     private PrintWriter out;
     private BufferedReader in;
 
-    public static void main(String[] args) {
-        OnlineSocketsManger client = new OnlineSocketsManger();
-        client.startConnection("127.0.0.1", 6666);
-        String response = client.sendMessage("hello server");
-        System.out.println(response);
+    public static void main(String[] args) throws IOException {
+//        OnlineSocketsManger client = new OnlineSocketsManger();
+//        client.startConnection("127.0.0.1", 6666);
+//        String response = client.sendMessage("hello server");
+//        System.out.println(response);
+//
+//        Scanner scanner = new Scanner(System.in);
+//
+//        while(true)
+//        {
+//            String input = scanner. nextLine();
+//            System.out.println("Sending input " + input);
+//            String next = client.sendMessage(input);
+//            System.out.println(next);
+//        }
+
+        try (ServerSocket listener = new ServerSocket(59090)) {
+            System.out.println("The date server is running...");
+            while (true) {
+                try (Socket socket = listener.accept()) {
+                    PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+                    out.println(new Date().toString());
+                }
+            }
+        }
     }
 
     public void startConnection(String ip, int port) {
@@ -35,6 +59,7 @@ public class OnlineSocketsManger
         try
         {
             out.println(msg);
+            out.flush();
             String resp = in.readLine();
             return resp;
         }

@@ -11,7 +11,7 @@ public class ShapeHelper
 {
     // TODO fix duplicate code
     // TODO add object pooling
-    // TODO add Materials
+    // TODO add Material
 
     private World world;
 
@@ -118,6 +118,36 @@ public class ShapeHelper
         return fixture;
     }
 
+    public Fixture CreateCircle(GameObject go) {
+        return CreateCircle((int) go.getPosition().x, (int) go.getPosition().y, (int) go.getSprite().getWidth()/2);
+    }
+
+    public Fixture CreateCircleStatic(
+            int x,
+            int y,
+            int size)
+    {
+        // Create our body in the world using our body definition
+        Body body = createBody(x, y, 0, BodyDef.BodyType.StaticBody);
+
+        // Create a circle shape and set its radius to 6
+        CircleShape circle = new CircleShape();
+        circle.setRadius(size);
+
+        // Create our fixture and attach it to the body
+        Fixture fixture = body.createFixture(defaultFixtureDef(circle));
+
+        // Remember to dispose of any shapes after you're done with them!
+        // BodyDef and FixtureDef don't need disposing, but shapes do.
+        circle.dispose();
+
+        return fixture;
+    }
+
+    public Fixture CreateCircleStatic(GameObject go) {
+        return CreateCircleStatic((int) go.getPosition().x, (int) go.getPosition().y, (int) go.getSprite().getWidth()/2);
+    }
+
     private Body createDynamicBody(
             float x,
             float y,
@@ -148,7 +178,7 @@ public class ShapeHelper
 
     private FixtureDef createFixtureDef(
             Shape shape,
-            Materials materials)
+            Material materials)
     {
         FixtureDef fixtureDef = materials.getFixtureDef();
         fixtureDef.shape = shape;
@@ -158,10 +188,10 @@ public class ShapeHelper
 
     private FixtureDef defaultFixtureDef(Shape shape)
     {
-        return createFixtureDef(shape, Materials.DEFAULT);
+        return createFixtureDef(shape, Material.DEFAULT);
     }
 
-    public enum Materials
+    public enum Material
     {
         METAL(0, 0, 0),
         WOOD(0, 0, 0),
@@ -169,7 +199,7 @@ public class ShapeHelper
 
         private final FixtureDef fixtureDef;
 
-        Materials(
+        Material(
                 float density,
                 float friction,
                 float restitution)

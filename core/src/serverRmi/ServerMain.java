@@ -40,7 +40,7 @@ public class ServerMain extends UnicastRemoteObject implements IServer
         }
         catch (RemoteException e)
         {
-            Logger.getAnonymousLogger().log(Level.SEVERE, "Could not instantiate a serverRmi");
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Could not instantiate a serverRmi because " + e.getMessage());
         }
         catch (UnknownHostException e)
         {

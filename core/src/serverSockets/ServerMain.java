@@ -20,25 +20,45 @@ public class ServerMain implements IServer
 
     public void start(int port) {
 
+        System.out.println("Starting sever");
+
         try
         {
             serverSocket = new ServerSocket(port);
             clientSocket = serverSocket.accept();
             out = new PrintWriter(clientSocket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            String greeting = in.readLine();
-            if ("hello server".equals(greeting))
+
+
+            while (true)
             {
-                out.println("hello client");
-            }
-            else
-            {
-                out.println("unrecognised greeting");
+
+                //in.mark(0);
+                //in.reset();
+                System.out.println("Waiting for input");
+                String greeting = in.readLine();
+                System.out.println(greeting);
+
+                if ("hello server".equals(greeting))
+                {
+                    out.println("hello client");
+                }
+                else if ("exit".equals(greeting))
+                {
+                    break;
+                }
+                else
+                {
+                    out.println("unrecognised greeting");
+                }
+
             }
         }
         catch (Exception ignored)
         {
-
+            stop();
+            System.out.println(ignored.getMessage());
+            ignored.printStackTrace();
         }
     }
 

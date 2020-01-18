@@ -15,7 +15,7 @@ public class SpaceShip extends Ship implements InputProcessor
 
     private IGameManager gameManager;
 
-    //flags
+    //flags for movement
     private boolean up;
     private boolean down;
     private boolean left;
@@ -25,7 +25,7 @@ public class SpaceShip extends Ship implements InputProcessor
 
     private boolean isShooting;
     private float shootingTimer = 0;
-    private float shootingDuration = 1 / 5f;
+    private float shootingDuration = 1 / 5f; // times per second
 
     public SpaceShip(
             Vector2 position,
@@ -54,7 +54,7 @@ public class SpaceShip extends Ship implements InputProcessor
         setDefaults();
     }
 
-    // TODO translate these values to something useful.
+    // TODO translate these values to something useful and less abstract.
     private void setDefaults()
     {
         maxSpeed = 10;
@@ -234,7 +234,7 @@ public class SpaceShip extends Ship implements InputProcessor
             shoot = false;
         }
 
-        if (keycode == Input.Keys.ESCAPE) // Shooting
+        if (keycode == Input.Keys.ESCAPE) // Move this to the game manager itself
         {
             gameManager.getMainScreen().getMain().sceneManager.LoadMainMenuScreen();
         }
