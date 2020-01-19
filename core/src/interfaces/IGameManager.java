@@ -5,7 +5,7 @@ import classes.gameobjects.unplayble.Laser;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import screens.MainScreen;
+import screens.GameScreen;
 
 import java.util.List;
 
@@ -49,7 +49,7 @@ public interface IGameManager
 
     List<IGameObject> getObjects();
 
-    MainScreen getMainScreen();
+    GameScreen getGameScreen();
 
     SpaceShipEnemy createEnemy(
             Vector2 pos,

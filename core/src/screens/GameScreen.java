@@ -1,15 +1,13 @@
 package screens;
 
+import classes.Util.TextureToSprite;
 import classes.gameobjects.GameObject;
 import classes.managers.GameManager;
 import classes.managers.OnlineRmiManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -25,7 +23,7 @@ import interfaces.IGameLobby;
 import java.rmi.RemoteException;
 
 //http://badlogicgames.com/forum/viewtopic.php?t=19454&p=81586
-public class MainScreen extends AbstractScreen
+public class GameScreen extends AbstractScreen
 {
     private GameManager gameManager;
 
@@ -43,6 +41,7 @@ public class MainScreen extends AbstractScreen
 
     // Background
     private Texture background;
+    private Texture test;
 
     //Debug
     private Box2DDebugRenderer box2DDebugRenderer;
@@ -57,7 +56,7 @@ public class MainScreen extends AbstractScreen
 
     private InputMultiplexer inputMultiplexer;
 
-    public MainScreen(
+    public GameScreen(
             Main parent,
             IGameLobby gameLobby,
             String playerName,
@@ -132,6 +131,7 @@ public class MainScreen extends AbstractScreen
 
         background = new Texture(Gdx.files.local("/core/assets/textures/seamless space.png"));
         background.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+        test = new Texture(Gdx.files.local("/core/assets/textures/pasmateRs_crosshairs64/crosshairs64.png"));
 
         //
         fpsLabel = new Label("0", skin);
@@ -164,6 +164,7 @@ public class MainScreen extends AbstractScreen
     @Override
     public void render(float delta)
     {
+        // Clear frame
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -178,12 +179,20 @@ public class MainScreen extends AbstractScreen
         }
         camera.update();
 
+        // Draw background and batch items
         batch.begin();
         backGround();
         gameManager.draw(batch);
+
+        Sprite s = new TextureToSprite(test, 8,8 ).getSprite(1,0);
+//        s.setScale(10);
+        s.setX(gameManager.getPlayer().getPosition().x);
+        s.setY(gameManager.getPlayer().getPosition().y);
+        s.draw(batch);
         batch.end();
         gameManager.update(delta);
 
+        // Draw shapes
         shapeRenderer.begin();
         gameManager.draw(shapeRenderer);
         shapeRenderer.end();
@@ -218,8 +227,8 @@ public class MainScreen extends AbstractScreen
         {
 
             case Destroyer:
-                camera.viewportWidth = width;
-                camera.viewportHeight = height;
+                camera.viewportWidth = width * 2;
+                camera.viewportHeight = height * 2;
                 break;
             case Spawner:
                 camera.viewportWidth = width * 4;// TODO dont use hardcoded numbers

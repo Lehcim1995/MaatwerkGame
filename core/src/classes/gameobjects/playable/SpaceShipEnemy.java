@@ -2,15 +2,18 @@ package classes.gameobjects.playable;
 
 import classes.gameobjects.GameObject;
 import classes.gameobjects.unplayble.Projectile;
+import classes.managers.AI.DefaultAIManager;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import interfaces.AIManager;
 import interfaces.IGameObject;
 
 public class SpaceShipEnemy extends Ship
 {
     private GameObject follow;
+    private AIManager aiManager;
 
     protected SpaceShipEnemy()
     {
@@ -44,6 +47,7 @@ public class SpaceShipEnemy extends Ship
         currentSpeedVector = new Vector2(0, 0);
         maxHealth = 100;
         health = maxHealth;
+        aiManager = new DefaultAIManager();
     }
 
     @Override
@@ -66,6 +70,8 @@ public class SpaceShipEnemy extends Ship
 //        sprite.setRotation(rotation);
 
         super.update();
+
+        aiManager.Move();
 
         //noinspection Duplicates
         if (follow != null)

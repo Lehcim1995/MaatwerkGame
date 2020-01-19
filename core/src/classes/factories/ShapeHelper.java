@@ -145,7 +145,11 @@ public class ShapeHelper
     }
 
     public Fixture CreateCircleStatic(GameObject go) {
-        return CreateCircleStatic((int) go.getPosition().x, (int) go.getPosition().y, (int) go.getSprite().getWidth()/2);
+
+        float scale = go.getSprite().getScaleX();
+        float width = go.getSprite().getWidth();
+
+        return CreateCircleStatic((int) go.getPosition().x, (int) go.getPosition().y, (int) (scale * width)/2);
     }
 
     private Body createDynamicBody(

@@ -98,7 +98,7 @@ public class WaveSpawnerPlayer extends GameObject implements InputProcessor
         float radius = 10;
         float angle = 360 / spawn;
         Vector3 vector3 = new Vector3(mousePos.x, mousePos.y, 0);
-        Vector3 screenpos = gameManager.getMainScreen().getCamera().unproject(vector3);
+        Vector3 screenpos = gameManager.getGameScreen().getCamera().unproject(vector3);
         Vector2 middle = new Vector2(screenpos.x, screenpos.y);
 
         for (int i = 0; i < spawn; i++)
@@ -164,7 +164,7 @@ public class WaveSpawnerPlayer extends GameObject implements InputProcessor
 
         if (keycode == Input.Keys.ESCAPE) // Shooting
         {
-            gameManager.getMainScreen().getMain().sceneManager.LoadMainMenuScreen();
+            gameManager.getGameScreen().getMain().sceneManager.LoadMainMenuScreen();
         }
 
         return false;

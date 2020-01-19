@@ -8,7 +8,7 @@ public class SceneManager
 {
     private Main main;
 
-    private MainScreen mainScreen;
+    private GameScreen gameScreen;
     private MainMenuScreen mainMenuScreen;
     private OptionsScreen optionsScreen;
     private LobbyScreen lobbyScreen;
@@ -37,8 +37,8 @@ public class SceneManager
             String playerName,
             GameManager.playerType type)
     {
-        mainScreen = new MainScreen(main, gameLobby, playerName, type);
-        main.setScreen(mainScreen);
+        gameScreen = new GameScreen(main, gameLobby, playerName, type);
+        main.setScreen(gameScreen);
     }
 
     public void LoadMainMenuScreen()

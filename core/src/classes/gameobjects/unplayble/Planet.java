@@ -26,6 +26,8 @@ public class Planet extends GameObject
 
         mass = 50;
         size = 50;
+
+        sprite.setScale(size);
     }
 
     @Override

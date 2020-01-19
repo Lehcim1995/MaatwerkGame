@@ -19,7 +19,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import interfaces.IGameManager;
 import interfaces.IGameObject;
-import screens.MainScreen;
+import screens.GameScreen;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -30,7 +30,7 @@ import static classes.Constants.*;
 public class GameManager implements IGameManager
 {
     // Managers
-    protected MainScreen mainScreen;
+    protected GameScreen gameScreen;
     protected WorldManager worldManager;
     protected SpaceShipTexturesHelper spaceShipTexturesHelper;
     protected ShapeHelper shapeHelper;
@@ -50,7 +50,7 @@ public class GameManager implements IGameManager
 
     public GameManager(
             playerType type,
-            MainScreen mainScreen)
+            GameScreen gameScreen)
     {
         this.worldManager = new WorldManager();
         this.spaceShipTexturesHelper = new SpaceShipTexturesHelper();
@@ -58,7 +58,7 @@ public class GameManager implements IGameManager
         gameObjects = new CopyOnWriteArrayList<>();
 
         this.type = type;
-        this.mainScreen = mainScreen;
+        this.gameScreen = gameScreen;
 
         spawnDefault();
     }
@@ -269,9 +269,9 @@ public class GameManager implements IGameManager
         return waveSpawnerPlayer;
     }
 
-    public MainScreen getMainScreen()
+    public GameScreen getGameScreen()
     {
-        return mainScreen;
+        return gameScreen;
     }
 
     public enum playerType

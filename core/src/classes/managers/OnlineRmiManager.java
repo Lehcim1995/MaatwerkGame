@@ -12,7 +12,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import interfaces.IGameLobby;
 import interfaces.IGameObject;
 import interfaces.ISyncObject;
-import screens.MainScreen;
+import screens.GameScreen;
 
 import java.rmi.RemoteException;
 import java.util.List;
@@ -34,9 +34,9 @@ public class OnlineRmiManager extends GameManager
             IGameLobby gameLobby,
             GameManager.playerType type,
             String playerName,
-            MainScreen mainScreen)
+            GameScreen gameScreen)
     {
-        super(type, mainScreen);
+        super(type, gameScreen);
         this.gameLobby = gameLobby;
         this.playerName = playerName;
         serverGameObjects = new CopyOnWriteArrayList<>();

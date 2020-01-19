@@ -236,7 +236,7 @@ public class SpaceShip extends Ship implements InputProcessor
 
         if (keycode == Input.Keys.ESCAPE) // Move this to the game manager itself
         {
-            gameManager.getMainScreen().getMain().sceneManager.LoadMainMenuScreen();
+            gameManager.getGameScreen().getMain().sceneManager.LoadMainMenuScreen();
         }
 
         return true;
