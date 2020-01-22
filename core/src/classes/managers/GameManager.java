@@ -3,10 +3,7 @@ package classes.managers;
 import classes.CollisionMasks;
 import classes.factories.ShapeCreator;
 import classes.factories.ShapeHelper;
-import classes.gameobjects.playable.SpaceShip;
-import classes.gameobjects.playable.SpaceShipEnemy;
-import classes.gameobjects.playable.Spectator;
-import classes.gameobjects.playable.WaveSpawnerPlayer;
+import classes.gameobjects.playable.*;
 import classes.gameobjects.unplayble.Laser;
 import classes.gameobjects.unplayble.Planet;
 import com.badlogic.gdx.Gdx;
@@ -44,6 +41,7 @@ public class GameManager implements IGameManager
     protected SpaceShip player;
     protected WaveSpawnerPlayer waveSpawnerPlayer;
     protected Spectator spectator;
+    protected Pointer pointer;
 
     // Online stuff
     protected playerType type;
@@ -77,6 +75,14 @@ public class GameManager implements IGameManager
                 // TODO add spectator
                 break;
         }
+
+        Sprite pointerS = new Sprite(new Texture(Gdx.files.internal("core/assets/textures/pasmateRs_crosshairs64/crosshairs64.png")), 0, 0, 64, 64);
+        pointer = new Pointer(this);
+        pointer.setSprite(pointerS);
+
+        gameObjects.add(pointer);
+
+
 
         Sprite p = new Sprite(new Texture(Gdx.files.internal("core/assets/textures/planets/planet1.png")), 54, 54, 192, 192);
 
@@ -245,6 +251,11 @@ public class GameManager implements IGameManager
     public SpaceShip getPlayer()
     {
         return player;
+    }
+
+    public Pointer getPointer()
+    {
+        return pointer;
     }
 
     public WorldManager getWorldManager()

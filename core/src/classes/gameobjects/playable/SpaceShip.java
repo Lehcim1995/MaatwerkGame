@@ -120,6 +120,8 @@ public class SpaceShip extends Ship implements InputProcessor
         {
             isShooting = true;
             //TODO add shooting
+
+
             gameManager.fireLaser(position, 300, rotation);
         }
 

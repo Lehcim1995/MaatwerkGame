@@ -107,15 +107,19 @@ public class GameScreen extends AbstractScreen
         {
 
             case Destroyer:
-                camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+                zoomLevel = 2;
+                camera = new OrthographicCamera(Gdx.graphics.getWidth() * zoomLevel, Gdx.graphics.getHeight() * zoomLevel);
                 inputMultiplexer.addProcessor(gameManager.getPlayer());
+                inputMultiplexer.addProcessor(gameManager.getPointer());
                 break;
             case Spawner:
-                camera = new OrthographicCamera(Gdx.graphics.getWidth() * 4, Gdx.graphics.getHeight() * 4);
+                zoomLevel = 4;
+                camera = new OrthographicCamera(Gdx.graphics.getWidth() * zoomLevel, Gdx.graphics.getHeight() * zoomLevel);
                 inputMultiplexer.addProcessor(gameManager.getWaveSpawnerPlayer());
                 break;
             case Spectator:
-                camera = new OrthographicCamera(Gdx.graphics.getWidth() * 4, Gdx.graphics.getHeight() * 4);
+                zoomLevel = 4;
+                camera = new OrthographicCamera(Gdx.graphics.getWidth() * zoomLevel, Gdx.graphics.getHeight() * zoomLevel);
                 inputMultiplexer.addProcessor(gameManager.getSpectator());
                 break;
         }
@@ -221,12 +225,14 @@ public class GameScreen extends AbstractScreen
         {
 
             case Destroyer:
-                camera.viewportWidth = width * 2;
-                camera.viewportHeight = height * 2;
+                zoomLevel = 2;
+                camera.viewportWidth = width * zoomLevel;
+                camera.viewportHeight = height * zoomLevel;
                 break;
             case Spawner:
-                camera.viewportWidth = width * 4;// TODO dont use hardcoded numbers
-                camera.viewportHeight = height * 4;
+                zoomLevel = 4;
+                camera.viewportWidth = width * zoomLevel;// TODO dont use hardcoded numbers
+                camera.viewportHeight = height * zoomLevel;
                 break;
             case Spectator:
                 break;
@@ -284,8 +290,8 @@ public class GameScreen extends AbstractScreen
         final float textureHeight = this.background.getHeight();
         final float textureWidth = this.background.getWidth();
 
-        final float offSetHeight = textureHeight * 2;
-        final float offSetWidth = textureWidth * 2;
+        final float offSetHeight = textureHeight * zoomLevel;
+        final float offSetWidth = textureWidth * zoomLevel;
 
         final int totalHeight = (int) (textureHeight * 4);
         final int totalWidth = (int) (textureWidth * 4);
@@ -306,6 +312,11 @@ public class GameScreen extends AbstractScreen
         }
 
         batch.draw(this.background, -offSetWidth + (textureWidth * (int) (background.getPosition().x / textureWidth)), -offSetHeight + (textureHeight * (int) (background.getPosition().y / textureHeight)), 0, 0, totalWidth, totalHeight);
+    }
+
+    public float getZoomLevel()
+    {
+        return zoomLevel;
     }
 
     public Camera getCamera()
