@@ -24,7 +24,7 @@ public abstract class Ship extends GameObject
     protected Vector2 currentSpeedVector;
 
     @Override
-    public void update()
+    public void update(float delta)
     {
         this.position = fixture.getBody().getPosition();
         this.rotation = (float) Math.toDegrees(fixture.getBody().getAngle());

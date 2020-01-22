@@ -33,9 +33,9 @@ public class Laser extends Projectile
 
     @SuppressWarnings("Duplicates")
     @Override
-    public void update()
+    public void update(float delta)
     {
-        super.update();
+        super.update(delta);
 
         if (follow != null)
         {
@@ -49,6 +49,12 @@ public class Laser extends Projectile
 
             follow.getPosition().angleRad(towardsPlayer);
         }
+    }
+
+    @Override
+    public void update()
+    {
+
     }
 
     @Override

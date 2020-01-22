@@ -17,7 +17,7 @@ public class Projectile extends GameObject
     private int armorPenetration;
 
     @Override
-    public void update()
+    public void update(float delta)
     {
         this.position = fixture.getBody().getPosition();
         this.rotation = (float) Math.toDegrees(fixture.getBody().getAngle());
@@ -30,6 +30,11 @@ public class Projectile extends GameObject
         {
             toDelete = true;
         }
+    }
+
+    @Override
+    public void update() {
+
     }
 
     @Override

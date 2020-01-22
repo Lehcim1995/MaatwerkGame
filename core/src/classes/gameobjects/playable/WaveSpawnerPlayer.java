@@ -46,7 +46,7 @@ public class WaveSpawnerPlayer extends GameObject implements InputProcessor
     }
 
     @Override
-    public void update()
+    public void update(float delta)
     {
         //TODO change pos when moving
 
@@ -71,6 +71,12 @@ public class WaveSpawnerPlayer extends GameObject implements InputProcessor
         {
             position.y -= speed;
         }
+    }
+
+    @Override
+    public void update()
+    {
+
     }
 
     @Override

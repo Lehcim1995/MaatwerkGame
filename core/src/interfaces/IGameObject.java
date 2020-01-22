@@ -60,6 +60,11 @@ public interface IGameObject
     void update();
 
     /**
+     *
+     */
+    void update(float delta);
+
+    /**
      * @param shapeRenderer
      */
     void Draw(ShapeRenderer shapeRenderer);

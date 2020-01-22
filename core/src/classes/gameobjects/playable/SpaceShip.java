@@ -1,5 +1,6 @@
 package classes.gameobjects.playable;
 
+import classes.gameobjects.Turret;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
@@ -26,6 +27,8 @@ public class SpaceShip extends Ship implements InputProcessor
     private boolean isShooting;
     private float shootingTimer = 0;
     private float shootingDuration = 1 / 5f; // times per second
+
+    private Turret turret;
 
     public SpaceShip(
             Vector2 position,
@@ -64,6 +67,8 @@ public class SpaceShip extends Ship implements InputProcessor
         rotSpeed = 80;
         maxSpaceshipSpeed = 15;
         currentSpeedVector = new Vector2(0, 0);
+
+        turret = new Turret();
     }
 
     @Override
@@ -73,9 +78,9 @@ public class SpaceShip extends Ship implements InputProcessor
     }
 
     @Override
-    public void update()
+    public void update(float delta)
     {
-        super.update();
+        super.update(delta);
 
         final float rotNewtons = fixture.getBody().getMass() * 100;
         final float moveNewtons = fixture.getBody().getMass() * 1000;
@@ -128,6 +133,11 @@ public class SpaceShip extends Ship implements InputProcessor
             }
         }
 
+
+    }
+
+    @Override
+    public void update() {
 
     }
 
