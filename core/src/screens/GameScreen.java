@@ -183,12 +183,6 @@ public class GameScreen extends AbstractScreen
         batch.begin();
         backGround();
         gameManager.draw(batch);
-
-        Sprite s = new TextureToSprite(test, 8,8 ).getSprite(1,0);
-//        s.setScale(10);
-        s.setX(gameManager.getPlayer().getPosition().x);
-        s.setY(gameManager.getPlayer().getPosition().y);
-        s.draw(batch);
         batch.end();
         gameManager.update(delta);
 

@@ -62,14 +62,14 @@ public class SpaceShipEnemy extends Ship
     }
 
     @Override
-    public void update()
+    public void update(float delta)
     {
 //        this.position = fixture.getBody().getPosition();
 //
 //        sprite.setPosition(position.x - (sprite.getWidth() / 2), position.y - (sprite.getHeight() / 2));
 //        sprite.setRotation(rotation);
 
-        super.update();
+        super.update(delta);
 
         aiManager.Move();
 
@@ -101,6 +101,12 @@ public class SpaceShipEnemy extends Ship
         {
             toDelete = true;
         }
+    }
+
+    @Override
+    public void update()
+    {
+
     }
 
     public void setFollow(GameObject follow)

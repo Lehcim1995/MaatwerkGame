@@ -125,7 +125,8 @@ public class GameManager implements IGameManager
         doPhysicsStep(deltaTime);
         for (IGameObject gameObject : gameObjects)
         {
-            gameObject.update();
+//            gameObject.update();
+            gameObject.update(deltaTime);
 
             if (gameObject.isToDelete())
             {

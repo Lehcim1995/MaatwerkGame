@@ -22,15 +22,19 @@ public abstract class GameObject implements IGameObject, Serializable
     protected transient Fixture fixture;
     protected Vector2 position;
 
-    /**
-     * Rotaion in
-     */
+    // Rotation in degrees
     protected float rotation;
 
     // Old hitbox
     protected transient Polygon hitbox; // swap this with fixture
+
+    // Object id
     protected long id;
+
+    // Sprite
     protected transient Sprite sprite;
+
+    // Flag for deletion
     protected boolean toDelete = false;
 
     protected GameObject()
@@ -228,6 +232,12 @@ public abstract class GameObject implements IGameObject, Serializable
      */
     @Override
     public abstract void update();
+
+    /**
+     * For updating this gameobject
+     */
+    @Override
+    public abstract void update(float delta);
 
     /**
      * @param shapeRenderer Shaperendere to draw into

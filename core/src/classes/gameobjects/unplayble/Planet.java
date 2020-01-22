@@ -46,12 +46,17 @@ public class Planet extends GameObject
     }
 
     @Override
-    public void update() {
+    public void update(float delta) {
         this.position = fixture.getBody().getPosition();
         this.rotation = (float) Math.toDegrees(fixture.getBody().getAngle());
 
         sprite.setPosition(position.x - (sprite.getWidth() / 2), position.y - (sprite.getHeight() / 2));
         sprite.setRotation(rotation);
+    }
+
+    @Override
+    public void update() {
+
     }
 
     @Override
