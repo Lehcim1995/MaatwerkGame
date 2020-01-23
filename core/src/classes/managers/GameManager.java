@@ -19,7 +19,6 @@ import interfaces.IGameObject;
 import screens.GameScreen;
 
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import static classes.Constants.*;
 
@@ -36,7 +35,7 @@ public class GameManager implements IGameManager
     protected InputMultiplexer inputMultiplexer = new InputMultiplexer();
 
     // Gameobjects
-    protected List<IGameObject> gameObjects;
+//    protected List<IGameObject> gameObjects;
 
     protected SpaceShip player;
     protected WaveSpawnerPlayer waveSpawnerPlayer;
@@ -53,7 +52,7 @@ public class GameManager implements IGameManager
         this.worldManager = new WorldManager();
         this.spaceShipTexturesHelper = new SpaceShipTexturesHelper();
         shapeHelper = new ShapeHelper(worldManager.world);
-        gameObjects = new CopyOnWriteArrayList<>();
+//        gameObjects = new CopyOnWriteArrayList<>();
 
         this.type = type;
         this.gameScreen = gameScreen;
@@ -80,8 +79,8 @@ public class GameManager implements IGameManager
         pointer = new Pointer(this);
         pointer.setSprite(pointerS);
 
-        gameObjects.add(pointer);
-
+//        gameObjects.add(pointer);
+        ObjectManager.Instantiate(pointer);
 
 
         Sprite p = new Sprite(new Texture(Gdx.files.internal("core/assets/textures/planets/planet1.png")), 54, 54, 192, 192);
@@ -96,7 +95,8 @@ public class GameManager implements IGameManager
 
 
 
-        gameObjects.add(planet);
+//        gameObjects.add(planet);
+        ObjectManager.Instantiate(planet);
     }
 
 
@@ -110,7 +110,8 @@ public class GameManager implements IGameManager
         waveSpawnerPlayer = new WaveSpawnerPlayer(this);
         waveSpawnerPlayer.setPosition(pos);
 
-        gameObjects.add(waveSpawnerPlayer);
+//        gameObjects.add(waveSpawnerPlayer);
+        ObjectManager.Instantiate(waveSpawnerPlayer);
     }
 
     @Override
@@ -129,7 +130,7 @@ public class GameManager implements IGameManager
     public void update(float deltaTime)
     {
         doPhysicsStep(deltaTime);
-        for (IGameObject gameObject : gameObjects)
+        for (IGameObject gameObject : ObjectManager.gameObjects /*gameObjects*/)
         {
 //            gameObject.update();
             gameObject.update(deltaTime);
@@ -139,7 +140,8 @@ public class GameManager implements IGameManager
                 // Deleting this body is useful
                 System.out.println("Deleting object local " + gameObject.getID());
                 worldManager.world.destroyBody(gameObject.getFixture().getBody());
-                gameObjects.remove(gameObject);
+//                gameObjects.remove(gameObject);
+                ObjectManager.Destroy(gameObject);
             }
         }
     }
@@ -159,7 +161,8 @@ public class GameManager implements IGameManager
 
         fixture.setUserData(laser);
 
-        gameObjects.add(laser);
+//        gameObjects.add(laser);
+        ObjectManager.Instantiate(laser);
         return laser;
     }
 
@@ -180,7 +183,8 @@ public class GameManager implements IGameManager
         ship.setFixture(fixture);
         fixture.setUserData(ship);
 
-        gameObjects.add(ship);
+//        gameObjects.add(ship);
+        ObjectManager.Instantiate(ship);
         player = ship;
         return ship;
     }
@@ -201,14 +205,15 @@ public class GameManager implements IGameManager
         enemy.setFixture(fixture);
         fixture.setUserData(enemy);
 
-        gameObjects.add(enemy);
+//        gameObjects.add(enemy);
+        ObjectManager.Instantiate(enemy);
         return enemy;
     }
 
     @Override
     public void draw(Batch batch)
     {
-        for (IGameObject go : gameObjects)
+        for (IGameObject go : ObjectManager.gameObjects/*gameObjects*/)
         {
             go.Draw(batch);
         }
@@ -217,7 +222,7 @@ public class GameManager implements IGameManager
     @Override
     public void draw(ShapeRenderer shapeRenderer)
     {
-        for (IGameObject go : gameObjects)
+        for (IGameObject go : ObjectManager.gameObjects/*gameObjects*/)
         {
             go.Draw(shapeRenderer);
         }
@@ -265,7 +270,7 @@ public class GameManager implements IGameManager
 
     public void dispose()
     {
-        for (IGameObject go : gameObjects)
+        for (IGameObject go : ObjectManager.gameObjects/*gameObjects*/)
         {
             //TODO dispose all game objects
         }

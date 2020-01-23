@@ -65,7 +65,7 @@ public class OnlineRmiManager extends GameManager
 
             try
             {
-                for (IGameObject gameObject : gameObjects)
+                for (IGameObject gameObject : ObjectManager.gameObjects /*gameObjects*/)
                 {
                     gameLobby.addUpdate(playerName, fromGameObjectTOSyncObject(gameObject));
                 }
@@ -257,7 +257,8 @@ public class OnlineRmiManager extends GameManager
 
         fixture.setUserData(laser);
 
-        gameObjects.add(laser);
+//        gameObjects.add(laser);
+        ObjectManager.Instantiate(laser);
         return laser;
     }
 
