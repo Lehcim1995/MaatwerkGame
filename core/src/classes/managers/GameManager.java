@@ -52,7 +52,6 @@ public class GameManager implements IGameManager
         this.worldManager = new WorldManager();
         this.spaceShipTexturesHelper = new SpaceShipTexturesHelper();
         shapeHelper = new ShapeHelper(worldManager.world);
-//        gameObjects = new CopyOnWriteArrayList<>();
 
         this.type = type;
         this.gameScreen = gameScreen;
@@ -79,7 +78,6 @@ public class GameManager implements IGameManager
         pointer = new Pointer(this);
         pointer.setSprite(pointerS);
 
-//        gameObjects.add(pointer);
         ObjectManager.Instantiate(pointer);
 
 
@@ -93,9 +91,6 @@ public class GameManager implements IGameManager
         planet.setFixture(fixture);
         fixture.setUserData(planet);
 
-
-
-//        gameObjects.add(planet);
         ObjectManager.Instantiate(planet);
     }
 
@@ -110,7 +105,6 @@ public class GameManager implements IGameManager
         waveSpawnerPlayer = new WaveSpawnerPlayer(this);
         waveSpawnerPlayer.setPosition(pos);
 
-//        gameObjects.add(waveSpawnerPlayer);
         ObjectManager.Instantiate(waveSpawnerPlayer);
     }
 
@@ -130,9 +124,8 @@ public class GameManager implements IGameManager
     public void update(float deltaTime)
     {
         doPhysicsStep(deltaTime);
-        for (IGameObject gameObject : ObjectManager.gameObjects /*gameObjects*/)
+        for (IGameObject gameObject : ObjectManager.gameObjects)
         {
-//            gameObject.update();
             gameObject.update(deltaTime);
 
             if (gameObject.isToDelete())
@@ -140,13 +133,12 @@ public class GameManager implements IGameManager
                 // Deleting this body is useful
                 System.out.println("Deleting object local " + gameObject.getID());
                 worldManager.world.destroyBody(gameObject.getFixture().getBody());
-//                gameObjects.remove(gameObject);
                 ObjectManager.Destroy(gameObject);
             }
         }
     }
 
-    @Override
+    @Override @Deprecated
     public Laser fireLaser(
             Vector2 pos,
             float speed,
@@ -155,13 +147,11 @@ public class GameManager implements IGameManager
         Laser laser = new Laser(new Vector2(pos), rotation, speed);
         Fixture fixture = shapeHelper.CreateCube(laser);
         fixture.setFilterData(CollisionMasks.PLAYER_FILTER);
-
         laser.setFixture(fixture); // TODO refactor this.
         laser.setSpeed(speed);
 
         fixture.setUserData(laser);
 
-//        gameObjects.add(laser);
         ObjectManager.Instantiate(laser);
         return laser;
     }
@@ -183,7 +173,6 @@ public class GameManager implements IGameManager
         ship.setFixture(fixture);
         fixture.setUserData(ship);
 
-//        gameObjects.add(ship);
         ObjectManager.Instantiate(ship);
         player = ship;
         return ship;
@@ -205,7 +194,6 @@ public class GameManager implements IGameManager
         enemy.setFixture(fixture);
         fixture.setUserData(enemy);
 
-//        gameObjects.add(enemy);
         ObjectManager.Instantiate(enemy);
         return enemy;
     }
@@ -213,7 +201,7 @@ public class GameManager implements IGameManager
     @Override
     public void draw(Batch batch)
     {
-        for (IGameObject go : ObjectManager.gameObjects/*gameObjects*/)
+        for (IGameObject go : ObjectManager.gameObjects)
         {
             go.Draw(batch);
         }
@@ -222,7 +210,7 @@ public class GameManager implements IGameManager
     @Override
     public void draw(ShapeRenderer shapeRenderer)
     {
-        for (IGameObject go : ObjectManager.gameObjects/*gameObjects*/)
+        for (IGameObject go : ObjectManager.gameObjects)
         {
             go.Draw(shapeRenderer);
         }
@@ -270,7 +258,7 @@ public class GameManager implements IGameManager
 
     public void dispose()
     {
-        for (IGameObject go : ObjectManager.gameObjects/*gameObjects*/)
+        for (IGameObject go : ObjectManager.gameObjects)
         {
             //TODO dispose all game objects
         }

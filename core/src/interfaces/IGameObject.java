@@ -91,4 +91,6 @@ public interface IGameObject
     boolean isToDelete();
 
     void setToDelete(boolean delete);
+
+    void CreateFixture();
 }

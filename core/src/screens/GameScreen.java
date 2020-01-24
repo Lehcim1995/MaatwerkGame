@@ -231,7 +231,7 @@ public class GameScreen extends AbstractScreen
                 break;
             case Spawner:
                 zoomLevel = 4;
-                camera.viewportWidth = width * zoomLevel;// TODO dont use hardcoded numbers
+                camera.viewportWidth = width * zoomLevel;
                 camera.viewportHeight = height * zoomLevel;
                 break;
             case Spectator:

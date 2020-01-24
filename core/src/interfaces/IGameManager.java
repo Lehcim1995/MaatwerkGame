@@ -60,5 +60,5 @@ public interface IGameManager
             float speed,
             float rotation);
 
-    //TODO rename parameters and add method add createPlayer
+    //TODO remove object creation functions from gamemanger and add them to object manager
 }

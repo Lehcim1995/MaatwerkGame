@@ -85,6 +85,8 @@ public class SpaceShip extends Ship implements InputProcessor
         final float rotNewtons = fixture.getBody().getMass() * 100;
         final float moveNewtons = fixture.getBody().getMass() * 1000;
 
+
+
         if (up)
         {
             fixture.getBody().applyForceToCenter(getForward().scl(moveNewtons), false);

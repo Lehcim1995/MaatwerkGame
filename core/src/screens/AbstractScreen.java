@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.GdxBuild;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.school.spacegame.Main;
 
-public class AbstractScreen implements Screen //TODO implement this with the other screens
+public class AbstractScreen implements Screen
 {
     protected Stage stage;
     protected Main main;

@@ -1,5 +1,9 @@
 package classes.gameobjects;
 
+import classes.CollisionMasks;
+import classes.factories.ShapeCreator;
+import classes.factories.ShapeHelper;
+import classes.managers.WorldManager;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -109,6 +113,15 @@ public abstract class GameObject implements IGameObject, Serializable
         Vector2 v4 = new Vector2(-x, -y);
 
         return new Vector2[]{v1, v2, v4, v3};
+    }
+
+    @Override
+    public void CreateFixture() {
+
+//        Fixture fixture = shapeHelper.CreateCircleStatic(planet);
+//        fixture.setFilterData(CollisionMasks.ENEMY_FILTER);
+//        planet.setFixture(fixture);
+//        fixture.setUserData(planet);
     }
 
     public Polygon getHitbox()
