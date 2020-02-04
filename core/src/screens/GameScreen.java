@@ -184,6 +184,7 @@ public class GameScreen extends AbstractScreen
         camera.update();
 
         // Draw background and batch items
+
         batch.begin();
         backGround();
         gameManager.draw(batch);

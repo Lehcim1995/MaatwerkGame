@@ -28,7 +28,8 @@ public class SpaceShip extends Ship implements InputProcessor
     private float shootingTimer = 0;
     private float shootingDuration = 1 / 5f; // times per second
 
-    private Turret turret;
+    private Turret[] turrets;
+    private Vector2[] turretOffsets;
 
     public SpaceShip(
             Vector2 position,
@@ -68,7 +69,11 @@ public class SpaceShip extends Ship implements InputProcessor
         maxSpaceshipSpeed = 15;
         currentSpeedVector = new Vector2(0, 0);
 
-        turret = new Turret();
+
+        turrets = new Turret[1];
+        turrets[0] = new Turret();
+        turretOffsets = new Vector2[1];
+        turretOffsets[0] = new Vector2();
     }
 
     @Override
@@ -117,6 +122,7 @@ public class SpaceShip extends Ship implements InputProcessor
 //            fixture.getBody().
             fixture.getBody().applyForceToCenter(dir.scl(moveNewtons), false);
         }
+
 
         if (shoot && !isShooting)
         {

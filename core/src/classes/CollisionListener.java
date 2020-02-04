@@ -9,7 +9,7 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 public class CollisionListener implements ContactListener
 {
     @Override
-    public void beginContact(Contact contact) //TODO fix this bug
+    public void beginContact(Contact contact) //TODO fix this bug || what bug?
     {
         if (contact.getFixtureA().getUserData() instanceof GameObject || contact.getFixtureB().getUserData() instanceof GameObject)
         {

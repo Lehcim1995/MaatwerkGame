@@ -129,6 +129,7 @@ public class MainMenuScreen extends AbstractScreen
                     Actor actor)
             {
                 System.out.println("Settings");
+                main.sceneManager.LoadOptionsScreen();
             }
         });
 

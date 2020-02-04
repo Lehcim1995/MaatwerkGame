@@ -22,6 +22,12 @@ public class SceneManager
         this.main = main;
     }
 
+    public void LoadScreen(String screenName, Object[] ...parms)
+    {
+        // TODO
+
+    }
+
     public void LoadMainScreen()
     {
         LoadMainScreen(null, "", GameManager.playerType.Destroyer);
@@ -71,5 +77,11 @@ public class SceneManager
     {
         lobbyCreateScreen = new LobbyCreateScreen(main);
         main.setScreen(lobbyCreateScreen);
+    }
+
+    public void LoadOptionsScreen()
+    {
+        optionsScreen = new OptionsScreen(main);
+        main.setScreen(optionsScreen);
     }
 }

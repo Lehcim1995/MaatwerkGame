@@ -3,6 +3,8 @@ package classes.managers;
 import classes.CollisionMasks;
 import classes.factories.ShapeCreator;
 import classes.factories.ShapeHelper;
+import classes.gameobjects.GameObject;
+import classes.gameobjects.ShockWave;
 import classes.gameobjects.playable.*;
 import classes.gameobjects.unplayble.Laser;
 import classes.gameobjects.unplayble.Planet;
@@ -27,7 +29,7 @@ public class GameManager implements IGameManager
 {
     // Managers
     protected GameScreen gameScreen;
-    protected WorldManager worldManager;
+    protected WorldManager worldManager; // TODO way for accessing this.
     protected SpaceShipTexturesHelper spaceShipTexturesHelper;
     protected ShapeHelper shapeHelper;
     protected float accumulator;
@@ -83,15 +85,18 @@ public class GameManager implements IGameManager
 
         Sprite p = new Sprite(new Texture(Gdx.files.internal("core/assets/textures/planets/planet1.png")), 54, 54, 192, 192);
 
-        Planet planet = new Planet(new Vector2(-500,0), 0f, p);
+//        Planet planet = new Planet(new Vector2(-500,0), 0f, p);
+//
+//        ShapeCreator sc = new ShapeCreator(worldManager.world);
+//        Fixture fixture = shapeHelper.CreateCircleStatic(planet);
+//        fixture.setFilterData(CollisionMasks.ENEMY_FILTER);
+//        planet.setFixture(fixture);
+//        fixture.setUserData(planet);
+//
+//        ObjectManager.Instantiate(planet);
 
-        ShapeCreator sc = new ShapeCreator(worldManager.world);
-        Fixture fixture = shapeHelper.CreateCircleStatic(planet);
-        fixture.setFilterData(CollisionMasks.ENEMY_FILTER);
-        planet.setFixture(fixture);
-        fixture.setUserData(planet);
-
-        ObjectManager.Instantiate(planet);
+        ShockWave sw = new ShockWave();
+        ObjectManager.Instantiate(sw);
     }
 
 
@@ -124,7 +129,7 @@ public class GameManager implements IGameManager
     public void update(float deltaTime)
     {
         doPhysicsStep(deltaTime);
-        for (IGameObject gameObject : ObjectManager.gameObjects)
+        for (IGameObject gameObject : ObjectManager.getGameObjects())
         {
             gameObject.update(deltaTime);
 
@@ -201,7 +206,7 @@ public class GameManager implements IGameManager
     @Override
     public void draw(Batch batch)
     {
-        for (IGameObject go : ObjectManager.gameObjects)
+        for (IGameObject go : ObjectManager.getGameObjects())
         {
             go.Draw(batch);
         }
@@ -210,7 +215,7 @@ public class GameManager implements IGameManager
     @Override
     public void draw(ShapeRenderer shapeRenderer)
     {
-        for (IGameObject go : ObjectManager.gameObjects)
+        for (IGameObject go : ObjectManager.getGameObjects())
         {
             go.Draw(shapeRenderer);
         }
@@ -258,9 +263,10 @@ public class GameManager implements IGameManager
 
     public void dispose()
     {
-        for (IGameObject go : ObjectManager.gameObjects)
+        for (IGameObject go : ObjectManager.getGameObjects())
         {
             //TODO dispose all game objects
+            go.dispose();
         }
     }
 

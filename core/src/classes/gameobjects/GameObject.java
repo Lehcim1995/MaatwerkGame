@@ -374,4 +374,9 @@ public abstract class GameObject implements IGameObject, Serializable
     {
         toDelete = delete;
     }
+
+    @Override
+    public void dispose() {
+
+    }
 }

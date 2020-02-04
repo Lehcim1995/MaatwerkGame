@@ -65,7 +65,7 @@ public class OnlineRmiManager extends GameManager
 
             try
             {
-                for (IGameObject gameObject : ObjectManager.gameObjects /*gameObjects*/)
+                for (IGameObject gameObject : ObjectManager.getGameObjects() /*gameObjects*/)
                 {
                     gameLobby.addUpdate(playerName, fromGameObjectTOSyncObject(gameObject));
                 }
