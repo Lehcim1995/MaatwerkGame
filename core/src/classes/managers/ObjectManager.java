@@ -43,4 +43,9 @@ public class ObjectManager
     {
         gameObjects.remove(go);
     }
+
+    public static void Clear()
+    {
+        gameObjects = new CopyOnWriteArrayList<>();
+    }
 }

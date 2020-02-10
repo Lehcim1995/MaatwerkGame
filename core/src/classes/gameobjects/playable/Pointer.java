@@ -41,11 +41,7 @@ public class Pointer extends GameObject implements InputProcessor
 
     @Override
     public void update(float delta) {
-        position.x = (gm.getGameScreen().getCamera().position.x + (screenX * 2)) - (Gdx.graphics.getWidth()) ;
-        position.y = (gm.getGameScreen().getCamera().position.y - (screenY * 2)) + (Gdx.graphics.getHeight());
 
-        sprite.setPosition(position.x - (sprite.getWidth() / 2), position.y - (sprite.getHeight() / 2));
-        sprite.setRotation(rotation);
     }
 
     @Override
@@ -55,6 +51,11 @@ public class Pointer extends GameObject implements InputProcessor
 
     @Override
     public void Draw(Batch batch) {
+        position.x = (gm.getGameScreen().getCamera().position.x + (screenX * 2)) - (Gdx.graphics.getWidth()) ;
+        position.y = (gm.getGameScreen().getCamera().position.y - (screenY * 2)) + (Gdx.graphics.getHeight());
+
+        sprite.setPosition(position.x - (sprite.getWidth() / 2), position.y - (sprite.getHeight() / 2));
+        sprite.setRotation(rotation);
         sprite.draw(batch);
     }
 
