@@ -80,7 +80,7 @@ public class ShockWave extends GameObject
     public void Draw(Batch batch) {
 
         batch.setShader(shaderProgram);
-//        batch.draw(texture, position.x, position.y);
+        batch.draw(texture, position.x, position.y);
         shaderProgram.begin();
         shaderProgram.setUniformf("time", time);
         //shaderProgram.setUniformf("center", new Vector2(0.5f, 0.5f));

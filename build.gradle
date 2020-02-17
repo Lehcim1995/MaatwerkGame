@@ -20,7 +20,7 @@ allprojects {
     version = '1.0'
     ext {
         appName = "SpaceGame"
-        gdxVersion = '1.9.6'
+        gdxVersion = '1.9.10'
         roboVMVersion = '2.3.1'
         box2DLightsVersion = '1.4'
         ashleyVersion = '1.7.0'
@@ -47,7 +47,8 @@ project(":desktop") {
         compile "com.badlogicgames.gdx:gdx-controllers-desktop:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-controllers-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
-        
+        // https://mvnrepository.com/artifact/org.ini4j/ini4j
+        compile group: 'org.ini4j', name: 'ini4j', version: '0.5.1'
     }
 }
 

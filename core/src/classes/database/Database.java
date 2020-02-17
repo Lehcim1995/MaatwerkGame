@@ -7,6 +7,8 @@
 //
 ////import com.sun.istack.internal.Nullable;
 //
+//import com.sun.istack.internal.Nullable;
+//
 //import java.sql.*;
 //import java.util.ArrayList;
 //import java.util.Date;
@@ -166,7 +168,7 @@
 //    public <T> List<T> getFromDatabase(String sql, DatabaseReturn<T> returnFunction, Object... arguments)
 //    throws SQLException
 //    {
-//        ArrayList<T> objList = new ArrayList<>();
+//        List<T> objList = new ArrayList<>();
 //
 //        Connection conn = null;
 //        PreparedStatement psta = null;
