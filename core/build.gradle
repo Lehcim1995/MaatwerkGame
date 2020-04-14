@@ -12,4 +12,5 @@ eclipse.project {
 
 dependencies {
     compile 'junit:junit:4.12'
+    compile group: 'org.ini4j', name: 'ini4j', version: '0.5.1'
 }
