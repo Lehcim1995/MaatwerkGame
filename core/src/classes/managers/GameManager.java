@@ -3,7 +3,6 @@ package classes.managers;
 import classes.CollisionMasks;
 import classes.factories.ShapeCreator;
 import classes.factories.ShapeHelper;
-import classes.gameobjects.GameObject;
 import classes.gameobjects.ShockWave;
 import classes.gameobjects.playable.*;
 import classes.gameobjects.unplayble.Laser;
@@ -85,15 +84,15 @@ public class GameManager implements IGameManager
 
         Sprite p = new Sprite(new Texture(Gdx.files.internal("core/assets/textures/planets/planet1.png")), 54, 54, 192, 192);
 
-//        Planet planet = new Planet(new Vector2(-500,0), 0f, p);
-//
-//        ShapeCreator sc = new ShapeCreator(worldManager.world);
-//        Fixture fixture = shapeHelper.CreateCircleStatic(planet);
-//        fixture.setFilterData(CollisionMasks.ENEMY_FILTER);
-//        planet.setFixture(fixture);
-//        fixture.setUserData(planet);
-//
-//        ObjectManager.Instantiate(planet);
+        Planet planet = new Planet(new Vector2(-500,0), 0f, p);
+
+        ShapeCreator sc = new ShapeCreator(worldManager.world);
+        Fixture fixture = shapeHelper.CreateCircleStatic(planet);
+        fixture.setFilterData(CollisionMasks.ENEMY_FILTER);
+        planet.setFixture(fixture);
+        fixture.setUserData(planet);
+
+        ObjectManager.Instantiate(planet);
 
         ShockWave sw = new ShockWave();
         ObjectManager.Instantiate(sw);

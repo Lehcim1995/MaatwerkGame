@@ -1,6 +1,7 @@
 package classes.gameobjects.playable;
 
 import classes.gameobjects.Turret;
+import classes.managers.GameManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
@@ -26,7 +27,7 @@ public class SpaceShip extends Ship implements InputProcessor
 
     private boolean isShooting;
     private float shootingTimer = 0;
-    private float shootingDuration = 1 / 5f; // times per second
+    private float shootingDuration = 1 / 10f; // times per second
 
     private Turret[] turrets;
     private Vector2[] turretOffsets;
@@ -61,7 +62,7 @@ public class SpaceShip extends Ship implements InputProcessor
     // TODO translate these values to something useful and less abstract.
     private void setDefaults()
     {
-        maxSpeed = 10;
+        maxSpeed = 300;
         speed = 0;
         acceleration = 1.1f;
         deAcceleration = 0.9f;
@@ -123,14 +124,26 @@ public class SpaceShip extends Ship implements InputProcessor
             fixture.getBody().applyForceToCenter(dir.scl(moveNewtons), false);
         }
 
+        if (fixture.getBody().getLinearVelocity().len() > maxSpeed)
+        {
+            System.out.println(fixture.getBody().getLinearVelocity().len());
+            System.out.println("TO FAST");
+            fixture.getBody().setLinearVelocity(fixture.getBody().getLinearVelocity().setLength(maxSpeed));
+        }
+
 
         if (shoot && !isShooting)
         {
             isShooting = true;
             //TODO add shooting
 
+            //
+            Vector2 curpos = ((GameManager)gameManager).getPointer().getPosition();
+            Vector2 aim = curpos.sub(position);
 
-            gameManager.fireLaser(position, 300, rotation);
+            float rot = aim.angle();
+
+            gameManager.fireLaser(position, 1600, rot);
         }
 
         if (isShooting)
@@ -213,10 +226,10 @@ public class SpaceShip extends Ship implements InputProcessor
             halt = true;
         }
 
-        if (keycode == Input.Keys.V) // Shooting
-        {
-            shoot = true;
-        }
+//        if (keycode == Input.Keys.V ) // Shooting
+//        {
+//            shoot = true;
+//        }
 
         return false;
     }
@@ -249,10 +262,10 @@ public class SpaceShip extends Ship implements InputProcessor
             halt = false;
         }
 
-        if (keycode == Input.Keys.V) // Shooting
-        {
-            shoot = false;
-        }
+//        if (keycode == Input.Keys.V ) // Shooting
+//        {
+//            shoot = false;
+//        }
 
         if (keycode == Input.Keys.ESCAPE) // Move this to the game manager itself
         {
@@ -275,6 +288,11 @@ public class SpaceShip extends Ship implements InputProcessor
             int pointer,
             int button)
     {
+
+        if (button == Input.Buttons.LEFT) // Shooting
+        {
+            shoot = true;
+        }
         return false;
     }
 
@@ -285,6 +303,11 @@ public class SpaceShip extends Ship implements InputProcessor
             int pointer,
             int button)
     {
+        if (button == Input.Buttons.LEFT) // Shooting
+        {
+            shoot = false;
+        }
+
         return false;
     }
 

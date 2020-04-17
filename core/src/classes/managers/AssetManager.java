@@ -18,7 +18,6 @@ public class AssetManager
         TextureLocationMap = new HashMap<>();
         TextureLocationMap.put("Spaceships", "");
 
-
         Textures = new HashMap<>();
 
         for (Map.Entry<String, String> entry : TextureLocationMap.entrySet())
